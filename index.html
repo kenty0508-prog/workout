@@ -1,31 +1,256 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#111827"><link rel="manifest" href="manifest.webmanifest"><title>Workout Log</title><style>
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,'Noto Sans JP',sans-serif;background:#f5f7fa;color:#111827}button,input,select{font:inherit}button{min-height:48px;border:0;border-radius:14px}.app{max-width:640px;margin:auto;padding:16px 14px 92px}.top{display:flex;justify-content:space-between;align-items:center;margin:4px 0 16px}.title{font-weight:800;font-size:24px}.sub{font-size:12px;color:#6b7280}.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:14px}.tab{background:#e5e7eb;color:#374151;font-weight:700}.tab.on{background:#111827;color:#fff}.card{background:white;border:1px solid #e5e7eb;border-radius:20px;padding:16px;margin-bottom:12px}.row{display:flex;justify-content:space-between;gap:12px;align-items:start}.muted{color:#6b7280;font-size:12px}.ex{font-size:21px;font-weight:800}.prev{font-weight:700;text-align:right}.goal{margin:14px 0;background:#eef2ff;border-radius:14px;padding:12px}.goal b{font-size:19px}.sets{display:grid;gap:9px}.set{display:grid;grid-template-columns:34px 1fr 1fr;gap:8px;align-items:center}.set input{width:100%;min-width:0;height:50px;border:1px solid #d1d5db;border-radius:12px;text-align:center;font-size:18px;background:#fff}.labels{font-size:11px;color:#6b7280}.actions{display:grid;grid-template-columns:1fr 1.6fr;gap:8px;margin-top:14px}.secondary{background:#e5e7eb}.primary{background:#111827;color:#fff;font-weight:800}.bottom{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.96);border-top:1px solid #e5e7eb;padding:8px 12px calc(8px + env(safe-area-inset-bottom));display:flex;justify-content:center;gap:8px}.nav{width:min(31%,190px);background:#f3f4f6;font-size:13px}.nav.on{background:#111827;color:#fff}.hide{display:none}.historyItem{border-bottom:1px solid #eee;padding:11px 0}.big{font-size:28px;font-weight:850}.sharecard{background:#111827;color:#fff;border-radius:18px;padding:16px}.sharegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.metric{background:#1f2937;border-radius:12px;padding:10px}.metric b{font-size:18px}.note{font-size:12px;color:#d1d5db}.danger{background:#fee2e2;color:#991b1b;padding:10px;border-radius:12px;font-size:12px;margin-top:10px}.full{width:100%;margin-top:10px}textarea{width:100%;min-height:80px;border:1px solid #d1d5db;border-radius:12px;padding:10px;font:inherit}.pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#e5e7eb;font-size:12px;margin-right:4px}@media(max-width:360px){.app{padding-left:10px;padding-right:10px}.tab{font-size:12px}.ex{font-size:18px}}
-</style></head><body><main class="app">
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Workout Log</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,'Noto Sans JP',sans-serif;background:#f5f7fa;color:#111827}
+button,input,select,textarea{font:inherit}button{min-height:46px;border:0;border-radius:14px}.app{max-width:640px;margin:auto;padding:16px 14px 98px}
+.top{display:flex;justify-content:space-between;align-items:center;margin:4px 0 16px}.title{font-weight:850;font-size:24px}.sub,.muted{font-size:12px;color:#6b7280}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:12px}.tab{background:#e5e7eb;color:#374151;font-weight:750}.tab.on{background:#111827;color:#fff}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:16px;margin-bottom:12px}.row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.ex{font-size:21px;font-weight:850}.prev{font-weight:750;text-align:right}.goal{margin:14px 0;background:#eef2ff;border-radius:14px;padding:12px}.goal b{font-size:19px}
+.sets{display:grid;gap:9px}.set{display:grid;grid-template-columns:34px 1fr 1fr;gap:8px;align-items:center}.set input,.field{width:100%;min-width:0;height:50px;border:1px solid #d1d5db;border-radius:12px;padding:0 10px;background:#fff;font-size:16px}.set input{text-align:center;font-size:18px}
+.labels{font-size:11px;color:#6b7280}.actions{display:grid;grid-template-columns:1fr 1.6fr;gap:8px;margin-top:14px}.secondary{background:#e5e7eb;color:#111827}.primary{background:#111827;color:#fff;font-weight:800}.outline{background:#fff;border:1px solid #d1d5db}.dangerBtn{background:#fee2e2;color:#991b1b}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.97);border-top:1px solid #e5e7eb;padding:8px 10px calc(8px + env(safe-area-inset-bottom));display:flex;justify-content:center;gap:6px}
+.nav{width:min(24%,150px);background:#f3f4f6;font-size:12px}.nav.on{background:#111827;color:#fff}.hide{display:none}.historyItem{border-bottom:1px solid #eee;padding:12px 0}.historyItem:last-child{border-bottom:0}
+.big{font-size:28px;font-weight:850}.sharecard{background:#111827;color:#fff;border-radius:18px;padding:16px}.sharegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.metric{background:#1f2937;border-radius:12px;padding:10px}.metric b{font-size:18px}.note{font-size:12px;color:#d1d5db}.full{width:100%;margin-top:10px}
+textarea{width:100%;min-height:80px;border:1px solid #d1d5db;border-radius:12px;padding:10px;background:#fff}.pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#e5e7eb;font-size:12px;margin:3px 4px 0 0}
+.editList{display:grid;gap:8px;margin-top:12px}.editItem{border:1px solid #e5e7eb;border-radius:14px;padding:12px}.editTop{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+.miniGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:9px}.miniGrid label{font-size:11px;color:#6b7280}.miniGrid input{margin-top:4px;height:42px}
+.iconBtn{min-width:44px;background:#f3f4f6}.move{display:flex;gap:6px;margin-top:8px}.move button{min-height:38px;flex:1}
+.compare{margin:10px 0 14px;border-top:1px solid #374151;padding-top:10px}.compare b{font-size:16px}.deltaUp{color:#86efac}.deltaDown{color:#fca5a5}.deltaSame{color:#d1d5db}
+.banner{background:#ecfdf5;color:#166534;padding:10px 12px;border-radius:12px;font-size:12px;margin-bottom:12px}
+.fileLabel{display:block;text-align:center;padding:14px;border-radius:14px;background:#e5e7eb;font-weight:700;margin-top:10px}
+@media(max-width:380px){.app{padding-left:10px;padding-right:10px}.tab{font-size:11px}.ex{font-size:18px}.miniGrid{grid-template-columns:1fr 1fr}.nav{font-size:11px}}
+</style>
+</head>
+<body>
+<main class="app">
 <div class="top"><div><div class="title">Workout Log</div><div class="sub" id="today"></div></div><div class="sub">端末内保存</div></div>
-<section id="workoutView"><div class="tabs" id="tabs"></div><div class="card"><div class="row"><div><div class="muted" id="count"></div><div class="ex" id="exName"></div></div><div><div class="muted" style="text-align:right">前回</div><div class="prev" id="prev"></div></div></div><div class="goal"><div class="muted">今日の目標</div><b id="goal"></b></div><div class="set labels"><span></span><span style="text-align:center">重量 kg</span><span style="text-align:center">Reps</span></div><div class="sets" id="sets"></div><div style="margin-top:10px"><label class="muted">RIR</label><select id="rir" style="width:100%;height:48px;border:1px solid #d1d5db;border-radius:12px;padding:0 10px"><option value="">未入力</option><option>0</option><option>1</option><option selected>2</option><option>3</option><option>4+</option></select></div><div class="actions"><button class="secondary" id="back">← 前</button><button class="primary" id="save">保存して次へ</button></div></div><div class="card"><div class="muted">今日の進捗</div><div><span class="pill" id="progress"></span><span class="pill" id="volume"></span></div></div></section>
-<section id="historyView" class="hide"><div class="card"><div class="row"><div><div class="muted">トレーニング履歴</div><div class="big" id="sessionCount">0回</div></div><button class="secondary" id="exportBtn">JSON出力</button></div><div id="historyList"></div></div></section>
-<section id="shareView" class="hide"><div class="sharecard" id="shareCard"><div class="muted" style="color:#9ca3af">ChatGPTフィードバック用</div><div class="big">トレーニング記録</div><div id="shareDate" class="note"></div><div class="sharegrid"><div class="metric"><div class="note">直近セッション</div><b id="shareSession">—</b></div><div class="metric"><div class="note">総ボリューム</div><b id="shareVolume">—</b></div><div class="metric"><div class="note">Bench e1RM</div><b id="benchE">—</b></div><div class="metric"><div class="note">SQ / DL e1RM</div><b id="lowerE">—</b></div></div><div id="shareExercises" style="margin-top:14px"></div><div class="note" style="margin-top:12px">この画面をスクリーンショットしてChatGPTに送ってください。</div></div><div class="card"><div class="muted">フィードバック時に伝えたいこと</div><textarea id="memo" placeholder="例：ベンチ3セット目がかなり重かった。左胸の効きが弱い。"></textarea><button class="primary full" id="saveMemo">メモ保存</button></div></section>
-</main><nav class="bottom"><button class="nav on" data-view="workoutView">トレーニング</button><button class="nav" data-view="historyView">履歴</button><button class="nav" data-view="shareView">共有用</button></nav>
+
+<section id="workoutView">
+  <div class="tabs" id="tabs"></div>
+  <div class="card">
+    <div class="row"><div><div class="muted" id="count"></div><div class="ex" id="exName"></div></div><div><div class="muted" style="text-align:right">前回</div><div class="prev" id="prev"></div></div></div>
+    <div class="goal"><div class="muted">今日の目標（自動提案）</div><b id="goal"></b><div class="muted" id="goalWhy" style="margin-top:3px"></div></div>
+    <div class="set labels"><span></span><span style="text-align:center">重量 kg</span><span style="text-align:center">Reps</span></div>
+    <div class="sets" id="sets"></div>
+    <div style="margin-top:10px"><label class="muted">最後のセットのRIR</label><select id="rir" class="field"><option value="">未入力</option><option>0</option><option>1</option><option selected>2</option><option>3</option><option>4+</option></select></div>
+    <div class="actions"><button class="secondary" id="back">← 前</button><button class="primary" id="save">保存して次へ</button></div>
+  </div>
+  <div class="card"><div class="muted">今日の進捗</div><div><span class="pill" id="progress"></span><span class="pill" id="volume"></span></div></div>
+</section>
+
+<section id="historyView" class="hide">
+  <div class="card"><div class="row"><div><div class="muted">トレーニング履歴</div><div class="big" id="sessionCount">0回</div></div></div><div id="historyList"></div></div>
+</section>
+
+<section id="shareView" class="hide">
+  <div class="sharecard" id="shareCard">
+    <div class="muted" style="color:#9ca3af">ChatGPTフィードバック用</div><div class="big">前回 → 今回</div><div id="shareDate" class="note"></div>
+    <div class="sharegrid"><div class="metric"><div class="note">直近セッション</div><b id="shareSession">—</b></div><div class="metric"><div class="note">総ボリューム</div><b id="shareVolume">—</b></div><div class="metric"><div class="note">Bench e1RM</div><b id="benchE">—</b></div><div class="metric"><div class="note">SQ / DL e1RM</div><b id="lowerE">—</b></div></div>
+    <div id="shareExercises" style="margin-top:14px"></div>
+    <div class="note" style="margin-top:12px">この画面をスクリーンショットしてChatGPTに送ってください。</div>
+  </div>
+  <div class="card"><div class="muted">フィードバック時に伝えたいこと</div><textarea id="memo" placeholder="例：ベンチ3セット目がかなり重かった。左胸の効きが弱い。"></textarea><button class="primary full" id="saveMemo">メモ保存</button></div>
+</section>
+
+<section id="settingsView" class="hide">
+  <div class="banner">ここでメニューを変えても、過去のトレーニング履歴はそのまま残ります。</div>
+  <div class="card">
+    <div class="row"><div><div class="muted">メニュー編集</div><div class="ex" id="editSessionName">Upper A</div></div><select id="editSession" class="field" style="width:auto;height:46px"></select></div>
+    <div id="editList" class="editList"></div>
+    <button class="outline full" id="addExercise">＋ 種目を追加</button>
+    <button class="primary full" id="saveProgram">メニューを保存</button>
+  </div>
+  <div class="card">
+    <div class="muted">データ管理</div>
+    <button class="secondary full" id="exportBtn">データをバックアップ</button>
+    <label class="fileLabel">バックアップから復元<input id="importFile" type="file" accept="application/json,.json" hidden></label>
+    <button class="dangerBtn full" id="resetProgram">メニューだけ初期状態に戻す</button>
+  </div>
+</section>
+</main>
+
+<nav class="bottom">
+<button class="nav on" data-view="workoutView">トレーニング</button>
+<button class="nav" data-view="historyView">履歴</button>
+<button class="nav" data-view="shareView">共有用</button>
+<button class="nav" data-view="settingsView">設定</button>
+</nav>
+
 <script>
-const PROGRAM={
-'Upper A':[['ベンチプレス',65,8],['インクラインベンチプレス',40,8],['ロー→ハイ ケーブルフライ',6.25,15],['サイドレイズ',6,15],['ディップス',0,10]],
-'Upper B':[['アシストチンニング',0,8],['シーテッドロー',35,12],['フェイスプル',15,15],['サイドレイズ',6,15],['プリーチャーカール',17.5,8]],
-'Lower A':[['バーベルスクワット',62.5,8],['レッグプレス',70,12],['シーテッドレッグカール',27.5,12],['アブドミナル',40,15]],
-'Lower B':[['デッドリフト',77.5,8],['レッグプレス',70,12],['シーテッドレッグカール',28.5,12],['アブドミナル',40,12]]};
-let state=JSON.parse(localStorage.getItem('workout-log-v1')||'{"logs":[],"memo":""}');let session='Upper A',idx=0;
-const $=s=>document.querySelector(s);const dateStr=()=>new Date().toLocaleDateString('ja-JP',{year:'numeric',month:'short',day:'numeric'});$('#today').textContent=dateStr();
-function latest(name){for(let i=state.logs.length-1;i>=0;i--){const e=state.logs[i].exercises.find(x=>x.name===name);if(e)return e}return null}
-function target(ex){const p=latest(ex[0]);if(!p)return {w:ex[1],r:ex[2]};const best=Math.max(...p.sets.map(s=>s.r));let w=p.sets[0].w,r=ex[2];if(best>=ex[2]){w=w===0?0:Math.round((w+(w<20?1:2.5))*4)/4}else r=Math.min(ex[2],best+1);return {w,r}}
-function tabs(){const el=$('#tabs');el.innerHTML='';Object.keys(PROGRAM).forEach(n=>{const b=document.createElement('button');b.className='tab'+(n===session?' on':'');b.textContent=n;b.onclick=()=>{session=n;idx=0;render()};el.appendChild(b)})}
-function render(){tabs();const list=PROGRAM[session],ex=list[idx],p=latest(ex[0]),t=target(ex);$('#count').textContent=`${idx+1} / ${list.length}`;$('#exName').textContent=ex[0];$('#prev').textContent=p?`${p.sets[0].w||'自重'}kg × ${Math.max(...p.sets.map(s=>s.r))}`:'未記録';$('#goal').textContent=`${t.w||'自重'}${t.w?'kg':''} × ${t.r}`;$('#sets').innerHTML='';for(let i=1;i<=3;i++){const d=document.createElement('div');d.className='set';d.innerHTML=`<b>${i}</b><input inputmode="decimal" type="number" step="0.25" min="0" value="${t.w||''}"><input inputmode="numeric" type="number" min="0" max="100" value="${t.r}">`;$('#sets').appendChild(d)}$('#back').disabled=idx===0;updateProgress()}
-function activeLog(){const d=new Date().toISOString().slice(0,10);let l=state.logs.findLast?.(x=>x.date===d&&x.session===session);if(!l){for(let i=state.logs.length-1;i>=0;i--)if(state.logs[i].date===d&&state.logs[i].session===session){l=state.logs[i];break}}if(!l){l={date:d,session,exercises:[]};state.logs.push(l)}return l}
-$('#save').onclick=()=>{const ex=PROGRAM[session][idx],rows=[...$('#sets').children],sets=rows.map(r=>({w:+r.children[1].value||0,r:+r.children[2].value||0}));const log=activeLog();const old=log.exercises.findIndex(x=>x.name===ex[0]);const item={name:ex[0],sets,rir:$('#rir').value};if(old>=0)log.exercises[old]=item;else log.exercises.push(item);persist();if(idx<PROGRAM[session].length-1)idx++;render()};$('#back').onclick=()=>{if(idx>0){idx--;render()}};
-function persist(){localStorage.setItem('workout-log-v1',JSON.stringify(state));updateProgress();renderHistory();renderShare()}
-function updateProgress(){const d=new Date().toISOString().slice(0,10),l=state.logs.find(x=>x.date===d&&x.session===session),done=l?l.exercises.length:0;$('#progress').textContent=`${done}/${PROGRAM[session].length} 種目`;let v=0;if(l)l.exercises.forEach(e=>e.sets.forEach(s=>v+=s.w*s.r));$('#volume').textContent=`${Math.round(v).toLocaleString()} kg`}
-function renderHistory(){const box=$('#historyList');box.innerHTML='';$('#sessionCount').textContent=state.logs.length+'回';[...state.logs].reverse().slice(0,20).forEach(l=>{const v=l.exercises.reduce((a,e)=>a+e.sets.reduce((x,s)=>x+s.w*s.r,0),0);const d=document.createElement('div');d.className='historyItem';d.innerHTML=`<div class="row"><b>${l.date} · ${l.session}</b><span>${Math.round(v).toLocaleString()}kg</span></div><div class="muted">${l.exercises.map(e=>e.name).join(' / ')}</div>`;box.appendChild(d)})}
-function e1(name){const p=latest(name);if(!p)return null;let best=0;p.sets.forEach(s=>best=Math.max(best,s.w*(1+s.r/30)));return best?best.toFixed(1):null}
-function renderShare(){const l=state.logs[state.logs.length-1];$('#shareDate').textContent=dateStr();$('#shareSession').textContent=l?l.session:'—';let v=0;if(l)l.exercises.forEach(e=>e.sets.forEach(s=>v+=s.w*s.r));$('#shareVolume').textContent=l?Math.round(v).toLocaleString()+' kg':'—';$('#benchE').textContent=e1('ベンチプレス')?e1('ベンチプレス')+' kg':'—';const sq=e1('バーベルスクワット'),dl=e1('デッドリフト');$('#lowerE').textContent=`${sq||'—'} / ${dl||'—'} kg`;$('#shareExercises').innerHTML=l?l.exercises.map(e=>`<div style="margin:8px 0"><b>${e.name}</b><div class="note">${e.sets.map(s=>`${s.w||'自重'}${s.w?'kg':''}×${s.r}`).join(' ｜ ')}${e.rir?' · RIR '+e.rir:''}</div></div>`).join(''):'まだ記録がありません';$('#memo').value=state.memo||''}
-$('#saveMemo').onclick=()=>{state.memo=$('#memo').value.slice(0,500);persist();alert('保存しました')};$('#exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='workout-log.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
-document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{document.querySelectorAll('main section[id$="View"]').forEach(v=>v.classList.add('hide'));$('#'+b.dataset.view).classList.remove('hide');document.querySelectorAll('.nav').forEach(x=>x.classList.toggle('on',x===b));if(b.dataset.view==='shareView')renderShare()});
-render();renderHistory();renderShare();if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
-</script></body></html>
+const DEFAULT_PROGRAM={
+'Upper A':[
+ {name:'ベンチプレス',weight:65,min:6,max:8,sets:3,step:2.5},
+ {name:'インクラインベンチプレス',weight:40,min:8,max:10,sets:3,step:2.5},
+ {name:'ロー→ハイ ケーブルフライ',weight:6.25,min:12,max:15,sets:3,step:1.25},
+ {name:'サイドレイズ',weight:6,min:12,max:20,sets:3,step:1},
+ {name:'ディップス',weight:0,min:8,max:12,sets:3,step:0}
+],
+'Upper B':[
+ {name:'アシストチンニング',weight:0,min:6,max:10,sets:3,step:0},
+ {name:'シーテッドロー',weight:35,min:8,max:12,sets:3,step:2.5},
+ {name:'フェイスプル',weight:15,min:12,max:15,sets:3,step:2.5},
+ {name:'サイドレイズ',weight:6,min:12,max:20,sets:3,step:1},
+ {name:'プリーチャーカール',weight:17.5,min:8,max:12,sets:3,step:2.5}
+],
+'Lower A':[
+ {name:'バーベルスクワット',weight:62.5,min:6,max:8,sets:4,step:2.5},
+ {name:'レッグプレス',weight:70,min:10,max:15,sets:3,step:5},
+ {name:'シーテッドレッグカール',weight:27.5,min:10,max:15,sets:3,step:2.5},
+ {name:'アブドミナル',weight:40,min:10,max:15,sets:3,step:2.5}
+],
+'Lower B':[
+ {name:'デッドリフト',weight:77.5,min:5,max:8,sets:3,step:2.5},
+ {name:'レッグプレス',weight:70,min:10,max:15,sets:3,step:5},
+ {name:'シーテッドレッグカール',weight:28.5,min:10,max:15,sets:3,step:2.5},
+ {name:'アブドミナル',weight:40,min:10,max:15,sets:3,step:2.5}
+]};
+const clone=x=>JSON.parse(JSON.stringify(x));
+let state;
+try{state=JSON.parse(localStorage.getItem('workout-log-v2')||'null')}catch(e){}
+if(!state){
+  let old=null;try{old=JSON.parse(localStorage.getItem('workout-log-v1')||'null')}catch(e){}
+  state={logs:old?.logs||[],memo:old?.memo||'',program:clone(DEFAULT_PROGRAM)};
+}
+if(!state.program)state.program=clone(DEFAULT_PROGRAM);
+if(!Array.isArray(state.logs))state.logs=[];
+let session=Object.keys(state.program)[0]||'Upper A',idx=0;
+const $=s=>document.querySelector(s);
+const isoToday=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const dateStr=()=>new Date().toLocaleDateString('ja-JP',{year:'numeric',month:'short',day:'numeric'});
+$('#today').textContent=dateStr();
+
+function normalizeProgram(){
+ Object.keys(state.program).forEach(k=>{
+   state.program[k]=(state.program[k]||[]).map(e=>({
+     name:String(e.name||'種目').slice(0,40),
+     weight:Math.max(0,+e.weight||0),min:Math.max(1,+e.min||8),max:Math.max(1,+e.max||12),
+     sets:Math.max(1,Math.min(5,+e.sets||3)),step:Math.max(0,+e.step||0)
+   })).map(e=>{if(e.max<e.min)e.max=e.min;return e})
+ })
+}
+normalizeProgram();
+
+function logsForExercise(name,excludeLast=false){
+ const arr=[];for(const l of state.logs){const e=(l.exercises||[]).find(x=>x.name===name);if(e)arr.push({log:l,ex:e})}
+ return excludeLast?arr.slice(0,-1):arr
+}
+function latest(name){const a=logsForExercise(name);return a.length?a[a.length-1].ex:null}
+function previousBefore(name,currentLog){let found=[];for(const l of state.logs){if(l===currentLog)break;const e=(l.exercises||[]).find(x=>x.name===name);if(e)found.push(e)}return found.length?found[found.length-1]:null}
+function bestE1(e){if(!e)return 0;return Math.max(0,...e.sets.map(s=>(+s.w||0)*(1+(+s.r||0)/30)))}
+function fmtSet(s){return `${s.w?trimNum(s.w)+'kg':'自重'}×${s.r}`}
+function trimNum(n){return Number(n).toLocaleString('ja-JP',{maximumFractionDigits:2})}
+
+function target(ex){
+ const p=latest(ex.name);
+ if(!p)return {w:ex.weight,r:ex.min,why:'初期設定'};
+ const reps=p.sets.map(s=>+s.r||0), allMax=reps.length>=ex.sets && reps.slice(0,ex.sets).every(r=>r>=ex.max);
+ const lastRir=parseFloat(p.rir), safeRir=Number.isFinite(lastRir)?lastRir>=1:true;
+ const w=+p.sets[0]?.w||0;
+ if(allMax && safeRir && ex.step>0)return {w:Math.round((w+ex.step)*100)/100,r:ex.min,why:`前回 ${ex.max}回以上を達成 → +${ex.step}kg`};
+ if(allMax && ex.step===0)return {w, r:Math.min(ex.max,reps[0]+1),why:'回数を伸ばす'};
+ const next=Math.min(ex.max,Math.max(ex.min,Math.min(...reps.filter(Boolean),ex.max)+1||ex.min));
+ return {w,r:next,why:'同重量で回数を伸ばす'};
+}
+function tabs(){
+ const el=$('#tabs');el.innerHTML='';
+ Object.keys(state.program).forEach(n=>{const b=document.createElement('button');b.className='tab'+(n===session?' on':'');b.textContent=n;b.addEventListener('click',()=>{session=n;idx=0;render()});el.appendChild(b)})
+}
+function render(){
+ normalizeProgram();tabs();const list=state.program[session]||[];
+ if(!list.length){$('#count').textContent='';$('#exName').textContent='種目がありません';$('#prev').textContent='';$('#goal').textContent='設定から追加してください';$('#goalWhy').textContent='';$('#sets').innerHTML='';return}
+ if(idx>=list.length)idx=list.length-1;
+ const ex=list[idx],p=latest(ex.name),t=target(ex);
+ $('#count').textContent=`${idx+1} / ${list.length}`;$('#exName').textContent=ex.name;
+ $('#prev').textContent=p?p.sets.map(fmtSet).join(' / '):'未記録';
+ $('#goal').textContent=`${t.w?trimNum(t.w)+'kg':'自重'} × ${t.r}–${ex.max}`;
+ $('#goalWhy').textContent=t.why;$('#sets').innerHTML='';
+ for(let i=1;i<=ex.sets;i++){const d=document.createElement('div');d.className='set';d.innerHTML=`<b>${i}</b><input aria-label="セット${i}重量" inputmode="decimal" type="number" step="0.25" min="0" value="${t.w||''}"><input aria-label="セット${i}回数" inputmode="numeric" type="number" min="0" max="100" value="${t.r}">`;$('#sets').appendChild(d)}
+ $('#back').disabled=idx===0;updateProgress()
+}
+function activeLog(){
+ const d=isoToday();let l=null;for(let i=state.logs.length-1;i>=0;i--)if(state.logs[i].date===d&&state.logs[i].session===session){l=state.logs[i];break}
+ if(!l){l={date:d,session,exercises:[]};state.logs.push(l)}return l
+}
+$('#save').addEventListener('click',()=>{
+ const ex=state.program[session][idx],rows=[...$('#sets').children],sets=rows.map(r=>({w:Math.max(0,+r.children[1].value||0),r:Math.max(0,+r.children[2].value||0)}));
+ const log=activeLog(),old=log.exercises.findIndex(x=>x.name===ex.name),item={name:ex.name,sets,rir:$('#rir').value};
+ if(old>=0)log.exercises[old]=item;else log.exercises.push(item);persist();if(idx<state.program[session].length-1)idx++;render()
+});
+$('#back').addEventListener('click',()=>{if(idx>0){idx--;render()}});
+function persist(){localStorage.setItem('workout-log-v2',JSON.stringify(state));updateProgress();renderHistory();renderShare()}
+function updateProgress(){
+ const d=isoToday(),l=[...state.logs].reverse().find(x=>x.date===d&&x.session===session),done=l?l.exercises.length:0;
+ $('#progress').textContent=`${done}/${(state.program[session]||[]).length} 種目`;let v=0;if(l)l.exercises.forEach(e=>e.sets.forEach(s=>v+=(+s.w||0)*(+s.r||0)));$('#volume').textContent=`${Math.round(v).toLocaleString()} kg`
+}
+function renderHistory(){
+ const box=$('#historyList');box.innerHTML='';$('#sessionCount').textContent=state.logs.length+'回';
+ [...state.logs].reverse().slice(0,30).forEach((l,revIdx)=>{
+   const realIdx=state.logs.length-1-revIdx,v=l.exercises.reduce((a,e)=>a+e.sets.reduce((x,s)=>x+(+s.w||0)*(+s.r||0),0),0),d=document.createElement('div');d.className='historyItem';
+   d.innerHTML=`<div class="row"><div><b>${l.date} · ${l.session}</b><div class="muted">${l.exercises.map(e=>e.name).join(' / ')}</div></div><div style="text-align:right"><b>${Math.round(v).toLocaleString()}kg</b><br><button class="dangerBtn" data-del="${realIdx}" style="min-height:34px;margin-top:6px">削除</button></div></div>`;
+   box.appendChild(d)
+ });
+ box.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>{if(confirm('このトレーニング記録を削除しますか？')){state.logs.splice(+b.dataset.del,1);persist()}}))
+}
+function latestE1(name){const p=latest(name);return p?bestE1(p).toFixed(1):null}
+function renderShare(){
+ const l=state.logs[state.logs.length-1];$('#shareDate').textContent=dateStr();$('#shareSession').textContent=l?l.session:'—';
+ let v=0;if(l)l.exercises.forEach(e=>e.sets.forEach(s=>v+=(+s.w||0)*(+s.r||0)));$('#shareVolume').textContent=l?Math.round(v).toLocaleString()+' kg':'—';
+ $('#benchE').textContent=latestE1('ベンチプレス')?latestE1('ベンチプレス')+' kg':'—';
+ const sq=latestE1('バーベルスクワット'),dl=latestE1('デッドリフト');$('#lowerE').textContent=`${sq||'—'} / ${dl||'—'} kg`;
+ if(!l){$('#shareExercises').innerHTML='まだ記録がありません';return}
+ $('#shareExercises').innerHTML=l.exercises.map(e=>{
+   const p=previousBefore(e.name,l),curE=bestE1(e),preE=bestE1(p),delta=preE?curE-preE:0,cls=delta>0.05?'deltaUp':delta<-0.05?'deltaDown':'deltaSame';
+   const deltaText=preE?`${delta>=0?'+':''}${delta.toFixed(1)}kg`:'初回';
+   return `<div class="compare"><b>${e.name}</b>${p?`<div class="note">前回　${p.sets.map(fmtSet).join(' ｜ ')}${p.rir?' · RIR '+p.rir:''}</div>`:'<div class="note">前回　記録なし</div>'}<div class="note">今回　${e.sets.map(fmtSet).join(' ｜ ')}${e.rir?' · RIR '+e.rir:''}</div>${curE>0?`<div class="note">e1RM　${preE?preE.toFixed(1)+' → ':''}${curE.toFixed(1)}kg <span class="${cls}">(${deltaText})</span></div>`:''}</div>`
+ }).join('');
+ $('#memo').value=state.memo||''
+}
+$('#saveMemo').addEventListener('click',()=>{state.memo=$('#memo').value.slice(0,500);persist();alert('メモを保存しました')});
+
+function renderEditor(){
+ const sel=$('#editSession');sel.innerHTML=Object.keys(state.program).map(k=>`<option${k===sel.value?' selected':''}>${k}</option>`).join('');
+ if(!sel.value||!state.program[sel.value])sel.value=session;
+ $('#editSessionName').textContent=sel.value;const list=state.program[sel.value]||[],box=$('#editList');box.innerHTML='';
+ list.forEach((e,i)=>{
+   const d=document.createElement('div');d.className='editItem';d.dataset.i=i;
+   d.innerHTML=`<div class="editTop"><input class="field ename" value="${escapeHtml(e.name)}" aria-label="種目名"><button class="dangerBtn remove" type="button">削除</button></div>
+   <div class="miniGrid"><label>初期重量<input class="field eweight" type="number" step=".25" min="0" value="${e.weight}"></label><label>Reps 下限<input class="field emin" type="number" min="1" max="100" value="${e.min}"></label><label>Reps 上限<input class="field emax" type="number" min="1" max="100" value="${e.max}"></label><label>セット数<input class="field esets" type="number" min="1" max="5" value="${e.sets}"></label><label>重量刻み kg<input class="field estep" type="number" step=".25" min="0" value="${e.step}"></label></div>
+   <div class="move"><button class="secondary up" type="button">↑ 上へ</button><button class="secondary down" type="button">↓ 下へ</button></div>`;
+   box.appendChild(d)
+ });
+ box.querySelectorAll('.remove').forEach(b=>b.addEventListener('click',()=>{const i=+b.closest('.editItem').dataset.i;state.program[sel.value].splice(i,1);renderEditor()}));
+ box.querySelectorAll('.up').forEach(b=>b.addEventListener('click',()=>{const i=+b.closest('.editItem').dataset.i;if(i>0){[state.program[sel.value][i-1],state.program[sel.value][i]]=[state.program[sel.value][i],state.program[sel.value][i-1]];renderEditor()}}));
+ box.querySelectorAll('.down').forEach(b=>b.addEventListener('click',()=>{const i=+b.closest('.editItem').dataset.i;if(i<state.program[sel.value].length-1){[state.program[sel.value][i+1],state.program[sel.value][i]]=[state.program[sel.value][i],state.program[sel.value][i+1]];renderEditor()}}))
+}
+function readEditor(){
+ const key=$('#editSession').value,rows=[...$('#editList').children];
+ state.program[key]=rows.map(r=>({name:r.querySelector('.ename').value.trim()||'種目',weight:+r.querySelector('.eweight').value||0,min:+r.querySelector('.emin').value||8,max:+r.querySelector('.emax').value||12,sets:+r.querySelector('.esets').value||3,step:+r.querySelector('.estep').value||0}));
+ normalizeProgram()
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+$('#editSession').addEventListener('change',()=>renderEditor());
+$('#addExercise').addEventListener('click',()=>{readEditor();state.program[$('#editSession').value].push({name:'新しい種目',weight:0,min:8,max:12,sets:3,step:2.5});renderEditor()});
+$('#saveProgram').addEventListener('click',()=>{readEditor();persist();session=$('#editSession').value;idx=0;render();alert('メニューを保存しました')});
+$('#resetProgram').addEventListener('click',()=>{if(confirm('過去の履歴は残したまま、メニューだけ初期状態に戻しますか？')){state.program=clone(DEFAULT_PROGRAM);session='Upper A';idx=0;persist();renderEditor();render()}});
+$('#exportBtn').addEventListener('click',()=>{
+ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`workout-backup-${isoToday()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)
+});
+$('#importFile').addEventListener('change',e=>{
+ const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x||!Array.isArray(x.logs))throw 0;if(!confirm('現在のデータをバックアップ内容で置き換えますか？'))return;state={logs:x.logs,memo:x.memo||'',program:x.program||clone(DEFAULT_PROGRAM)};normalizeProgram();persist();renderEditor();render();alert('復元しました')}catch(_){alert('このバックアップファイルは読み込めませんでした')}};r.readAsText(f);e.target.value=''
+});
+document.querySelectorAll('.nav').forEach(b=>b.addEventListener('click',()=>{
+ document.querySelectorAll('main section[id$="View"]').forEach(v=>v.classList.add('hide'));$('#'+b.dataset.view).classList.remove('hide');document.querySelectorAll('.nav').forEach(x=>x.classList.toggle('on',x===b));
+ if(b.dataset.view==='shareView')renderShare();if(b.dataset.view==='settingsView')renderEditor();if(b.dataset.view==='historyView')renderHistory()
+}));
+render();renderHistory();renderShare();renderEditor();persist();
+if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body></html>
