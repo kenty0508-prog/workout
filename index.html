@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111827">
 <link rel="manifest" href="manifest.webmanifest">
-<title>Workout Log v3</title>
+<title>Workout Log v3.1</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,'Noto Sans JP',sans-serif;background:#f5f7fa;color:#111827}
 button,input,select,textarea{font:inherit}button{min-height:46px;border:0;border-radius:14px}.app{max-width:640px;margin:auto;padding:16px 14px 98px}
@@ -61,7 +61,7 @@ details.cond{margin-bottom:12px}.cond summary{cursor:pointer;font-weight:800;lis
     <div style="margin-top:10px"><label class="muted">最後のセットのRIR</label><select id="rir" class="field"><option value="">未入力</option><option>0</option><option>1</option><option selected>2</option><option>3</option><option>4+</option></select></div>
     <div class="actions"><button class="secondary" id="back">← 前</button><button class="primary" id="save">保存して次へ</button></div>
   </div>
-  <div class="card"><div class="muted">今日の進捗</div><div><span class="pill" id="progress"></span><span class="pill" id="volume"></span></div></div>
+  <div class="card"><div class="muted">今日の進捗</div><div><span class="pill" id="progress"></span></div></div>
 </section>
 
 <section id="historyView" class="hide">
@@ -71,7 +71,7 @@ details.cond{margin-bottom:12px}.cond summary{cursor:pointer;font-weight:800;lis
 <section id="shareView" class="hide">
   <div class="sharecard" id="shareCard">
     <div class="muted" style="color:#9ca3af">ChatGPTフィードバック用</div><div class="big">前回 → 今回</div><div id="shareDate" class="note"></div>
-    <div class="sharegrid"><div class="metric"><div class="note">直近セッション</div><b id="shareSession">—</b></div><div class="metric"><div class="note">総ボリューム</div><b id="shareVolume">—</b><div id="volumeDelta" class="sessionDelta note"></div></div><div class="metric"><div class="note">Bench e1RM</div><b id="benchE">—</b></div><div class="metric"><div class="note">SQ / DL e1RM</div><b id="lowerE">—</b></div></div>
+    <div class="sharegrid"><div class="metric"><div class="note">直近セッション</div><b id="shareSession">—</b></div><div class="metric"><div class="note">コンディション</div><b id="conditionShort">—</b></div><div class="metric"><div class="note">Bench e1RM</div><b id="benchE">—</b></div><div class="metric"><div class="note">SQ / DL e1RM</div><b id="lowerE">—</b></div></div>
     <div id="conditionSummary" class="note" style="margin-top:10px"></div>
     <div id="shareExercises" style="margin-top:14px"></div>
     <div class="note" style="margin-top:12px">この画面をスクリーンショットしてChatGPTに送ってください。</div>
@@ -133,9 +133,10 @@ const DEFAULT_PROGRAM={
 ]};
 const clone=x=>JSON.parse(JSON.stringify(x));
 let state;
-try{state=JSON.parse(localStorage.getItem('workout-log-v3')||'null')}catch(e){}
+try{state=JSON.parse(localStorage.getItem('workout-log-v31')||'null')}catch(e){}
 if(!state){
-  let old=null;try{old=JSON.parse(localStorage.getItem('workout-log-v2')||'null')}catch(e){}
+  let old=null;try{old=JSON.parse(localStorage.getItem('workout-log-v3')||'null')}catch(e){}
+  if(!old){try{old=JSON.parse(localStorage.getItem('workout-log-v2')||'null')}catch(e){}}
   if(!old){try{old=JSON.parse(localStorage.getItem('workout-log-v1')||'null')}catch(e){}}
   state={logs:old?.logs||[],memo:old?.memo||'',program:old?.program||clone(DEFAULT_PROGRAM),conditions:old?.conditions||{}};
 }
@@ -200,6 +201,8 @@ function tabs(){
  Object.keys(state.program).forEach(n=>{const b=document.createElement('button');b.className='tab'+(n===session?' on':'');b.textContent=n;b.addEventListener('click',()=>{session=n;idx=0;render()});el.appendChild(b)})
 }
 function render(){
+ detailedRir=false;
+ if($('#rirToggle')) $('#rirToggle').textContent='＋ 各セットのRIRを入力';
  normalizeProgram();tabs();const list=state.program[session]||[];
  if(!list.length){$('#count').textContent='';$('#exName').textContent='種目がありません';$('#prev').textContent='';$('#goal').textContent='設定から追加してください';$('#goalWhy').textContent='';$('#sets').innerHTML='';return}
  if(idx>=list.length)idx=list.length-1;
@@ -230,10 +233,10 @@ $('#save').addEventListener('click',()=>{
  if(old>=0)log.exercises[old]=item;else log.exercises.push(item);persist();if(idx<state.program[session].length-1)idx++;render()
 });
 $('#back').addEventListener('click',()=>{if(idx>0){idx--;render()}});
-function persist(){localStorage.setItem('workout-log-v3',JSON.stringify(state));updateProgress();renderHistory();renderShare()}
+function persist(){localStorage.setItem('workout-log-v31',JSON.stringify(state));updateProgress();renderHistory();renderShare()}
 function updateProgress(){
  const d=isoToday(),l=[...state.logs].reverse().find(x=>x.date===d&&x.session===session),done=l?l.exercises.length:0;
- $('#progress').textContent=`${done}/${(state.program[session]||[]).length} 種目`;let v=0;if(l)l.exercises.forEach(e=>e.sets.forEach(s=>v+=(+s.w||0)*(+s.r||0)));$('#volume').textContent=`${Math.round(v).toLocaleString()} kg`
+ $('#progress').textContent=`${done}/${(state.program[session]||[]).length} 種目`
 }
 
 let detailedRir=false;
@@ -261,7 +264,7 @@ function renderHistory(){
  [...state.logs].reverse().slice(0,30).forEach((l,revIdx)=>{
    const realIdx=state.logs.length-1-revIdx,v=l.exercises.reduce((a,e)=>a+e.sets.reduce((x,s)=>x+(+s.w||0)*(+s.r||0),0),0),d=document.createElement('div');d.className='historyItem';
    const detail=(l.exercises||[]).map(e=>`<div><b>${e.name}</b>　${e.sets.map(fmtSet).join(' / ')}${e.rir?' · RIR '+e.rir:''}</div>`).join('');
-   d.innerHTML=`<div class="row"><div><b>${l.date} · ${l.session}</b><div class="muted">${l.exercises.map(e=>e.name).join(' / ')}</div></div><div style="text-align:right"><b>${Math.round(v).toLocaleString()}kg</b><br><button class="smallBtn" data-detail="${realIdx}">詳細</button> <button class="dangerBtn" data-del="${realIdx}" style="min-height:34px;margin-top:6px">削除</button></div></div><div class="historyDetail" id="hd-${realIdx}">${detail}</div>`;
+   d.innerHTML=`<div class="row"><div><b>${l.date} · ${l.session}</b><div class="muted">${l.exercises.map(e=>e.name).join(' / ')}</div></div><div style="text-align:right"><button class="smallBtn" data-detail="${realIdx}">詳細</button> <button class="dangerBtn" data-del="${realIdx}" style="min-height:34px;margin-top:6px">削除</button></div></div><div class="historyDetail" id="hd-${realIdx}">${detail}</div>`;
    box.appendChild(d)
  });
  box.querySelectorAll('[data-detail]').forEach(b=>b.addEventListener('click',()=>document.getElementById('hd-'+b.dataset.detail).classList.toggle('show')));
@@ -269,24 +272,53 @@ function renderHistory(){
 }
 function latestE1(name){const p=latest(name);return p?bestE1(p).toFixed(1):null}
 function renderShare(){
- const l=state.logs[state.logs.length-1];$('#shareDate').textContent=dateStr();$('#shareSession').textContent=l?l.session:'—';
- let v=0;if(l)l.exercises.forEach(e=>e.sets.forEach(s=>v+=(+s.w||0)*(+s.r||0)));
- let prevSession=null;if(l){for(let i=state.logs.length-2;i>=0;i--){if(state.logs[i].session===l.session){prevSession=state.logs[i];break}}}
- let pv=0;if(prevSession)prevSession.exercises.forEach(e=>e.sets.forEach(s=>pv+=(+s.w||0)*(+s.r||0)));
- $('#shareVolume').textContent=l?Math.round(v).toLocaleString()+' kg':'—';
- $('#volumeDelta').textContent=l&&prevSession?`前回比 ${v-pv>=0?'+':''}${Math.round(v-pv).toLocaleString()} kg`:'';
+ const l=state.logs[state.logs.length-1];
+ $('#shareDate').textContent=dateStr();
+ $('#shareSession').textContent=l?l.session:'—';
+
  $('#benchE').textContent=latestE1('ベンチプレス')?latestE1('ベンチプレス')+' kg':'—';
- const sq=latestE1('バーベルスクワット'),dl=latestE1('デッドリフト');$('#lowerE').textContent=`${sq||'—'} / ${dl||'—'} kg`;
+ const sq=latestE1('バーベルスクワット'),dl=latestE1('デッドリフト');
+ $('#lowerE').textContent=`${sq||'—'} / ${dl||'—'} kg`;
+
  const c=l?.condition||state.conditions[l?.date]||{};
+ const condBits=[];
+ if(c.bodyweight)condBits.push(`${c.bodyweight}kg`);
+ if(c.sleep)condBits.push(`${c.sleep}h`);
+ if(c.fatigue)condBits.push(`疲労${c.fatigue}/5`);
+ $('#conditionShort').textContent=condBits.length?condBits.join(' · '):'未入力';
  $('#conditionSummary').textContent=l?`体重 ${c.bodyweight||'—'}kg　睡眠 ${c.sleep||'—'}h　疲労 ${c.fatigue||'—'}/5`:'';
+
  if(!l){$('#shareExercises').innerHTML='まだ記録がありません';return}
+
+ const big3=new Set(['ベンチプレス','バーベルスクワット','デッドリフト']);
  $('#shareExercises').innerHTML=l.exercises.map(e=>{
-   const p=previousBefore(e.name,l),curE=bestE1(e),preE=bestE1(p),delta=preE?curE-preE:0,cls=delta>0.05?'deltaUp':delta<-0.05?'deltaDown':'deltaSame';
-   let allPrev=[];for(const x of state.logs){if(x===l)break;const z=(x.exercises||[]).find(q=>q.name===e.name);if(z)allPrev.push(bestE1(z))}
-   const priorBest=allPrev.length?Math.max(...allPrev):0,pr=curE>0&&curE>priorBest+.05;
-   const deltaText=preE?`${delta>=0?'+':''}${delta.toFixed(1)}kg`:'初回';
+   const p=previousBefore(e.name,l);
+   const curE=big3.has(e.name)?bestE1(e):0;
+   const preE=big3.has(e.name)?bestE1(p):0;
+   const delta=preE?curE-preE:0;
+   const cls=delta>0.05?'deltaUp':delta<-0.05?'deltaDown':'deltaSame';
+
+   let priorBest=0;
+   if(big3.has(e.name)){
+     const allPrev=[];
+     for(const x of state.logs){
+       if(x===l)break;
+       const z=(x.exercises||[]).find(q=>q.name===e.name);
+       if(z)allPrev.push(bestE1(z));
+     }
+     priorBest=allPrev.length?Math.max(...allPrev):0;
+   }
+   const hasPrior=!!p;
+   const pr=big3.has(e.name) && hasPrior && curE>priorBest+.05;
+   const deltaText=preE?`${delta>=0?'+':''}${delta.toFixed(1)}kg`:'初回記録';
    const setText=x=>x.sets.map(s=>`${fmtSet(s)}${s.rir!==undefined&&s.rir!==''?'(RIR'+s.rir+')':''}`).join(' ｜ ');
-   return `<div class="compare"><div class="compareHead"><b>${e.name}</b>${pr?'<span class="tagPR">e1RM PR</span>':''}</div>${p?`<div class="note">前回　${setText(p)}${p.rir?' · 最終RIR '+p.rir:''}</div>`:'<div class="note">前回　記録なし</div>'}<div class="note">今回　${setText(e)}${e.rir?' · 最終RIR '+e.rir:''}</div>${curE>0?`<div class="note">e1RM　${preE?preE.toFixed(1)+' → ':''}${curE.toFixed(1)}kg <span class="${cls}">(${deltaText})</span></div>`:''}</div>`
+
+   return `<div class="compare">
+     <div class="compareHead"><b>${e.name}</b>${pr?'<span class="tagPR">e1RM PR</span>':''}</div>
+     ${p?`<div class="note">前回　${setText(p)}${p.rir?' · 最終RIR '+p.rir:''}</div>`:'<div class="note">前回　記録なし</div>'}
+     <div class="note">今回　${setText(e)}${e.rir?' · 最終RIR '+e.rir:''}</div>
+     ${big3.has(e.name)&&curE>0?`<div class="note">e1RM　${preE?preE.toFixed(1)+' → ':''}${curE.toFixed(1)}kg <span class="${cls}">(${deltaText})</span></div>`:''}
+   </div>`
  }).join('');
  $('#memo').value=state.memo||''
 }
