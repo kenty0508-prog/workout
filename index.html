@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f5f5f7">
 <link rel="manifest" href="manifest.webmanifest">
-<title>Workout Log v3.5.1</title>
+<title>Workout Log v3.5.3</title>
 <style>
 :root{
   --bg:#f5f5f7;--surface:#ffffff;--text:#111111;--muted:#6e6e73;--line:#dedee3;
@@ -21,7 +21,7 @@
 button,input,select,textarea{font:inherit;color:inherit}button{border:0;cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 45%,transparent);outline-offset:2px}
 .app{max-width:680px;margin:0 auto;padding:18px 16px 118px}.topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:4px 2px 14px}.brand{font-size:28px;letter-spacing:-.03em;font-weight:780}.date{font-size:13px;color:var(--muted)}
 .sessionStrip{display:flex;gap:8px;overflow:auto;padding:0 0 14px;scrollbar-width:none}.sessionStrip::-webkit-scrollbar{display:none}.sessionBtn{flex:0 0 auto;min-height:44px;padding:0 14px;border-radius:999px;background:var(--soft);color:var(--muted);font-size:13px;font-weight:650}.sessionBtn.on{background:var(--text);color:var(--surface)}
-.hero{padding:6px 2px 14px}.eyebrow{font-size:13px;color:var(--muted);font-weight:600}.exerciseName{font-size:30px;line-height:1.15;letter-spacing:-.035em;font-weight:760;margin-top:3px}.subline{font-size:13px;color:var(--muted);margin-top:7px;line-height:1.55}.subline strong{color:var(--text);font-weight:650}.targetToggle{display:block;width:100%;padding:0;background:transparent;text-align:left;min-height:32px}.targetReason{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45}
+.hero{padding:6px 2px 14px}.eyebrow{font-size:13px;color:var(--muted);font-weight:600}.exercisePickerTrigger{display:inline-flex;align-items:center;gap:5px;min-height:44px;margin:-9px 0 -5px -10px;padding:0 10px;border-radius:11px;background:transparent;color:var(--muted);font-size:13px;font-weight:600}.exercisePickerTrigger:active{background:var(--soft)}.exerciseName{font-size:30px;line-height:1.15;letter-spacing:-.035em;font-weight:760;margin-top:3px}.subline{font-size:13px;color:var(--muted);margin-top:7px;line-height:1.55}.subline strong{color:var(--text);font-weight:650}.targetToggle{display:block;width:100%;padding:0;background:transparent;text-align:left;min-height:32px}.targetReason{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45}
 .divider{height:1px;background:var(--line);margin:2px 0 14px}.setHeader,.setRow{display:grid;grid-template-columns:30px minmax(0,1fr) minmax(0,1fr) 50px;gap:9px;align-items:center}.setHeader{padding:0 2px 7px;color:var(--muted);font-size:11px;text-align:center}.setHeader span:first-child{text-align:left}.setRows{display:grid;gap:8px}.setRow{min-height:58px}.setIndex{font-size:14px;color:var(--muted);font-weight:650}.num{width:100%;height:54px;border:1px solid var(--line);border-radius:14px;background:var(--surface);text-align:center;font-size:21px;font-weight:650;padding:0 8px;transition:.15s}.num:focus{border-color:var(--accent)}.check{height:50px;width:50px;border-radius:50%;background:var(--soft);color:var(--muted);font-size:21px;font-weight:800;display:grid;place-items:center;transition:.16s}.check.done{background:var(--good);color:#fff;transform:scale(.96)}.check:disabled{opacity:.34;cursor:default}.sessionBtn:active,.primaryAction:active,.secondaryAction:active,.ghostAction:active,.restBtn:active,.rirChoice:active,.navBtn:active{opacity:.68}
 .rirArea{margin-top:12px}.rirSummary{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:46px;border-radius:12px;background:transparent;color:var(--muted);padding:0 2px;font-size:13px}.rirSummary b{color:var(--text);font-weight:650}.rirPicker{display:none;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:7px}.rirPicker.show{display:grid}.rirChoice{min-height:44px;border-radius:11px;background:var(--soft);color:var(--text);font-size:13px}.rirChoice.on{background:var(--text);color:var(--surface)}
 .primaryAction{width:100%;min-height:54px;border-radius:16px;background:var(--text);color:var(--surface);font-size:16px;font-weight:700;margin-top:16px}.secondaryAction{width:100%;min-height:48px;border-radius:14px;background:var(--soft);color:var(--text);font-weight:650}.ghostAction{min-height:44px;border-radius:12px;background:transparent;color:var(--accent);font-weight:650;padding:0 10px}.dangerAction{min-height:44px;border-radius:12px;background:color-mix(in srgb,var(--danger) 11%,transparent);color:var(--danger);font-weight:650;padding:0 12px}
@@ -30,7 +30,7 @@ button,input,select,textarea{font:inherit;color:inherit}button{border:0;cursor:p
 .nav{position:fixed;left:0;right:0;bottom:0;z-index:25;border-top:1px solid color-mix(in srgb,var(--line) 78%,transparent);background:var(--nav);-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);padding:7px 12px calc(7px + env(safe-area-inset-bottom));display:flex;justify-content:center;gap:4px}.navBtn{width:min(31%,160px);min-height:52px;background:transparent;color:var(--muted);display:grid;place-items:center;gap:1px;font-size:11px}.navIcon{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.navBtn.on{color:var(--accent)}
 .view{display:none}.view.on{display:block}.sectionTitle{font-size:28px;font-weight:760;letter-spacing:-.03em;margin:4px 0 16px}.group{background:var(--surface);border-radius:18px;overflow:hidden;margin-bottom:14px;border:1px solid color-mix(in srgb,var(--line) 72%,transparent)}.groupRow{min-height:58px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line)}.groupRow:last-child{border-bottom:0}.groupLabel{font-size:15px;font-weight:620}.groupMeta{font-size:12px;color:var(--muted);margin-top:2px}.chev{color:var(--muted);font-size:20px}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}.metric{background:var(--surface);border:1px solid color-mix(in srgb,var(--line) 72%,transparent);border-radius:18px;padding:14px}.metric span{font-size:11px;color:var(--muted)}.metric b{display:block;font-size:24px;letter-spacing:-.03em;margin-top:4px}.metric small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.history{background:var(--surface);border-radius:18px;border:1px solid color-mix(in srgb,var(--line) 72%,transparent);overflow:hidden}.historyItem{padding:13px 14px;border-bottom:1px solid var(--line)}.historyItem:last-child{border-bottom:0}.historyHead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.historyTitle{font-size:14px;font-weight:650}.historyMeta{font-size:11px;color:var(--muted);margin-top:4px}.historyDetail{display:none;padding-top:9px;color:var(--muted);font-size:12px;line-height:1.7}.historyDetail.show{display:block}
 .settingSection{margin-bottom:20px}.settingHeader{font-size:12px;color:var(--muted);padding:0 8px 7px}.editor{display:none;padding:10px 14px 14px;background:var(--surface);border-top:1px solid var(--line)}.editor.show{display:block}.editorList{display:grid;gap:9px}.editorItem{border-bottom:1px solid var(--line);padding:4px 0 12px}.editorItem:last-child{border-bottom:0}.editorTop{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}.editorGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:8px}.editorGrid label{font-size:10px;color:var(--muted)}.editorGrid input{margin-top:4px;height:42px}.moveRow{display:flex;gap:6px;margin-top:8px}.moveRow button{flex:1;min-height:44px;border-radius:10px;background:var(--soft);color:var(--muted)}
-.sheet{position:fixed;inset:0;z-index:60;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.35);padding:0}.sheet.show{display:flex}.sheetPanel{width:min(100%,680px);max-height:86%;overflow:auto;background:var(--bg);border-radius:24px 24px 0 0;padding:14px 16px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -10px 40px rgba(0,0,0,.18)}.sheetHandle{width:38px;height:5px;border-radius:999px;background:var(--line);margin:0 auto 12px}.shareCard{background:#0d1117;color:#fff;border-radius:22px;padding:18px}.shareCard .mutedDark{color:#9ca3af;font-size:11px}.shareCard h2{font-size:30px;margin:5px 0 2px;letter-spacing:-.03em}.shareGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:14px 0}.shareMetric{background:#1f2937;border-radius:14px;padding:10px}.shareMetric span{display:block;color:#9ca3af;font-size:11px}.shareMetric b{display:block;font-size:18px;margin-top:3px}.compare{padding:10px 0;border-top:1px solid #374151}.compare:first-of-type{border-top:0}.compare b{font-size:15px}.compare div{font-size:12px;color:#d1d5db;line-height:1.6}.shareHelp{font-size:11px;color:#9ca3af;margin-top:10px}.sheetActions{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:12px}
+.sheet{position:fixed;inset:0;z-index:60;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.35);padding:0}.sheet.show{display:flex}.sheetPanel{width:min(100%,680px);max-height:86%;overflow:auto;background:var(--bg);border-radius:24px 24px 0 0;padding:14px 16px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -10px 40px rgba(0,0,0,.18)}.sheetHandle{width:38px;height:5px;border-radius:999px;background:var(--line);margin:0 auto 12px}.exercisePickerList{background:var(--surface);border:1px solid color-mix(in srgb,var(--line) 72%,transparent);border-radius:18px;overflow:hidden}.exercisePick{width:100%;min-height:64px;padding:10px 14px;background:transparent;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;border-bottom:1px solid var(--line)}.exercisePick:last-child{border-bottom:0}.exercisePick.current{background:var(--accent-soft)}.exercisePickName{font-size:15px;font-weight:650}.exercisePick.current .exercisePickName{color:var(--accent)}.exercisePickStatus{flex:0 0 auto;font-size:12px;color:var(--muted)}.exercisePickStatus.done{color:var(--good);font-weight:650}.exercisePickDot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:6px;vertical-align:1px}.shareCard{background:#0d1117;color:#fff;border-radius:22px;padding:18px}.shareCard .mutedDark{color:#9ca3af;font-size:11px}.shareCard h2{font-size:30px;margin:5px 0 2px;letter-spacing:-.03em}.shareGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:14px 0}.shareMetric{background:#1f2937;border-radius:14px;padding:10px}.shareMetric span{display:block;color:#9ca3af;font-size:11px}.shareMetric b{display:block;font-size:18px;margin-top:3px}.compare{padding:10px 0;border-top:1px solid #374151}.compare:first-of-type{border-top:0}.compare b{font-size:15px}.compare div{font-size:12px;color:#d1d5db;line-height:1.6}.shareHelp{font-size:11px;color:#9ca3af;margin-top:10px}.sheetActions{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:12px}
 .historyEditExercise{background:var(--surface);border:1px solid color-mix(in srgb,var(--line) 72%,transparent);border-radius:18px;padding:14px;margin-bottom:10px}.historyEditExercise h3{font-size:16px;margin:0 0 10px}.historyEditSet{display:grid;grid-template-columns:28px minmax(0,1fr) minmax(0,1fr) 54px;gap:7px;align-items:center;margin-bottom:7px}.historyEditSet input{height:46px}.removeSet{min-height:42px;border-radius:11px;background:color-mix(in srgb,var(--danger) 10%,transparent);color:var(--danger);font-size:12px}.historyRir{margin-top:8px}
 .toast{position:fixed;left:50%;bottom:88px;z-index:90;transform:translate(-50%,15px);background:var(--text);color:var(--surface);padding:10px 14px;border-radius:999px;font-size:12px;font-weight:650;opacity:0;pointer-events:none;transition:.18s;box-shadow:var(--shadow);white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}
 .empty{padding:26px 14px;text-align:center;color:var(--muted);font-size:13px}.inlineActions{display:flex;gap:8px;margin-top:10px}.inlineActions>*{flex:1}.hidden{display:none!important}
@@ -48,7 +48,7 @@ button,input,select,textarea{font:inherit;color:inherit}button{border:0;cursor:p
   <section id="workoutView" class="view on">
     <div class="sessionStrip" id="sessionStrip"></div>
     <div class="hero">
-      <div class="eyebrow" id="positionText">1 / 4</div>
+      <button class="exercisePickerTrigger" id="positionText" type="button" aria-label="種目を選ぶ">1 / 4　種目一覧</button>
       <div class="exerciseName" id="exerciseName">—</div>
       <div class="subline" id="previousLine">前回 <strong>—</strong></div>
       <button class="subline targetToggle" id="targetLine" type="button">目標 <strong>—</strong></button><div class="targetReason hidden" id="targetReason"></div>
@@ -119,7 +119,7 @@ button,input,select,textarea{font:inherit;color:inherit}button{border:0;cursor:p
         <button class="groupRow" id="resetProgram" type="button" style="width:100%;background:transparent;text-align:left"><div><div class="groupLabel" style="color:var(--danger)">メニューを初期状態に戻す</div><div class="groupMeta">履歴は残ります</div></div><div class="chev">›</div></button>
       </div>
     </div>
-    <div class="date" style="text-align:center;padding:8px 0 20px">Workout Log v3.5.1 · データは端末内に保存</div>
+    <div class="date" style="text-align:center;padding:8px 0 20px">Workout Log v3.5.3 · データは端末内に保存</div>
   </section>
 </main>
 
@@ -141,6 +141,18 @@ button,input,select,textarea{font:inherit;color:inherit}button{border:0;cursor:p
     <svg class="navIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21h-4v-.1A1.7 1.7 0 0 0 8 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 3.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H2v-4h.1A1.7 1.7 0 0 0 3.6 8a1.7 1.7 0 0 0-.34-1.88L3.2 6.06l2.83-2.83.06.06A1.7 1.7 0 0 0 8 3.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V2h4v.1A1.7 1.7 0 0 0 15 3.6a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 20.4 8a1.7 1.7 0 0 0 .6 1 1.7 1.7 0 0 0 1.1.4h.1v4h-.1a1.7 1.7 0 0 0-1.1.4 1.7 1.7 0 0 0-.6 1.2Z"/></svg><span>設定</span>
   </button>
 </nav>
+
+
+<div class="sheet" id="exercisePickerSheet" role="dialog" aria-modal="true" aria-label="種目を選ぶ">
+  <div class="sheetPanel">
+    <div class="sheetHandle"></div>
+    <div class="sectionTitle" style="font-size:24px;margin-bottom:4px">種目を選ぶ</div>
+    <div class="date" id="exercisePickerHint" style="margin-bottom:12px">空いている種目から始められます</div>
+    <div class="exercisePickerList" id="exercisePickerList"></div>
+    <button class="secondaryAction" id="closeExercisePicker" type="button" style="margin-top:12px">キャンセル</button>
+    <button class="ghostAction" id="finishFromPicker" type="button" style="width:100%;margin-top:4px">トレーニングを終了</button>
+  </div>
+</div>
 
 <div class="sheet" id="shareSheet" role="dialog" aria-modal="true" aria-label="ChatGPT共有">
   <div class="sheetPanel">
@@ -219,7 +231,7 @@ function defaultRestSec(name){const n=String(name||'');if(/ベンチ|スクワ�
 
 let raw=null;try{raw=JSON.parse(localStorage.getItem('workout-log-v35')||'null')}catch(_){}
 if(!raw){for(const key of ['workout-log-v34','workout-log-v33','workout-log-v32','workout-log-v31','workout-log-v3','workout-log-v2','workout-log-v1']){try{const x=JSON.parse(localStorage.getItem(key)||'null');if(x){raw=x;break}}catch(_){}}}
-let state={version:351,logs:[],memo:'',program:clone(DEFAULT_PROGRAM),conditions:{},active:null,timer:null,timerSettings:{vibrate:true,sound:false}};
+let state={version:353,logs:[],memo:'',program:clone(DEFAULT_PROGRAM),conditions:{},active:null,timer:null,timerSettings:{vibrate:true,sound:false}};
 if(raw){state.logs=Array.isArray(raw.logs)?raw.logs:[];state.memo=raw.memo||'';state.program=raw.program||clone(DEFAULT_PROGRAM);state.conditions=raw.conditions||{};state.timerSettings=raw.timerSettings||{vibrate:true,sound:false};state.active=raw.active||null;state.timer=raw.timer||null}
 if(state.timerSettings.vibrate===undefined)state.timerSettings.vibrate=true;if(state.timerSettings.sound===undefined)state.timerSettings.sound=false;
 if(state.timer&&!state.active)state.timer=null;
@@ -232,6 +244,7 @@ function migrate(){
   if(!state.program||!Object.keys(state.program).length)state.program=clone(DEFAULT_PROGRAM);
 }
 migrate();
+if(state.active?.drafts&&!Object.values(state.active.drafts).some(d=>(d.sets||[]).some(s=>s.done)))state.active.startedAt=null;
 let session=state.active?.date===isoToday()&&state.active?.session&&state.program[state.active.session]?state.active.session:(Object.keys(state.program)[0]||'Upper A');
 let idx=state.active?.date===isoToday()&&state.active?.session===session?Math.max(0,+state.active.currentIndex||0):0;
 let rirOpen=false,restTick=null,audioCtx=null,toastTimer=null;
@@ -242,11 +255,11 @@ function persist(){localStorage.setItem('workout-log-v35',JSON.stringify(state))
 function showToast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),1500)}
 function ensureActive(){
   if(state.active&&state.active.date===isoToday()&&state.active.session===session)return state.active;
-  state.active={id:uid(),date:isoToday(),session,startedAt:Date.now(),currentIndex:idx,drafts:{}};persist();return state.active
+  state.active={id:uid(),date:isoToday(),session,startedAt:null,currentIndex:idx,drafts:{}};persist();return state.active
 }
 function activeLog(create=false){
   const a=state.active;if(!a)return null;let l=state.logs.find(x=>x.id===a.id);
-  if(!l&&create){l={id:a.id,date:a.date,session:a.session,startedAt:a.startedAt,endedAt:null,exercises:[],condition:state.conditions[a.date]||{}};state.logs.push(l)}
+  if(!l&&create){l={id:a.id,date:a.date,session:a.session,startedAt:a.startedAt||Date.now(),endedAt:null,exercises:[],condition:state.conditions[a.date]||{}};state.logs.push(l)}
   return l
 }
 function prevExercise(ex){
@@ -257,19 +270,19 @@ function fmtSetWithRest(s){return `${fmtSet(s)}${s.restAfter?`（休${fmtTime(s.
 function bestE1(e){if(!e?.sets?.length)return 0;return Math.max(0,...e.sets.map(s=>(+s.w||0)*(1+(+s.r||0)/30)))}
 function latestExerciseById(id,name){for(let i=state.logs.length-1;i>=0;i--){const e=(state.logs[i].exercises||[]).find(x=>x.id===id||x.name===name);if(e)return e}return null}
 function target(ex){
-  const p=prevExercise(ex);if(!p)return {weights:Array(ex.sets).fill(+ex.weight||0),reps:Array(ex.sets).fill(ex.min),why:'初回設定',mixed:false};
-  const ps=(p.sets||[]).filter(s=>s.done!==false).slice(0,ex.sets);if(!ps.length)return {weights:Array(ex.sets).fill(+ex.weight||0),reps:Array(ex.sets).fill(ex.min),why:'前回の実績なし',mixed:false};
+  const p=prevExercise(ex);if(!p)return {weights:Array(ex.sets).fill(+ex.weight||0),reps:Array(ex.sets).fill(ex.min),why:'初回設定',mixed:false,manual:false};
+  const ps=(p.sets||[]).filter(s=>s.done!==false).slice(0,ex.sets);if(!ps.length)return {weights:Array(ex.sets).fill(+ex.weight||0),reps:Array(ex.sets).fill(ex.min),why:'前回の実績なし',mixed:false,manual:false};
   const ws=ps.map(s=>+s.w||0),unique=[...new Set(ws.map(x=>String(x)))];
-  if(unique.length>1){const weights=Array.from({length:ex.sets},(_,i)=>ws[i]??ws[ws.length-1]??(+ex.weight||0));const reps=Array.from({length:ex.sets},(_,i)=>Math.max(ex.min,+ps[i]?.r||ex.min));return {weights,reps,why:'前回は重量が混在 · 自動増量を保留',mixed:true}}
+  if(unique.length>1){return {weights:Array(ex.sets).fill(0),reps:Array(ex.sets).fill(ex.min),why:'前回は重量が混在 · 今回の重量は手動で設定',mixed:true,manual:true}}
   const w=ws[0]??(+ex.weight||0),reps=Array.from({length:ex.sets},(_,i)=>Math.max(0,+ps[i]?.r||ex.min));
   const enough=ps.length>=ex.sets,allMax=enough&&reps.every(r=>r>=ex.max);let finalRir=p.rir;if(finalRir===''||finalRir===undefined){const last=ps[ps.length-1];finalRir=last?.rir}
-  const rirNum=parseFloat(finalRir),rirKnown=Number.isFinite(rirNum),safe=rirKnown&&rirNum>=1;
-  if(allMax&&safe&&ex.step>0&&w>0)return {weights:Array(ex.sets).fill(Math.round((w+ex.step)*100)/100),reps:Array(ex.sets).fill(ex.min),why:`上限達成 · +${ex.step}kg`,mixed:false};
-  if(allMax&&!rirKnown)return {weights:Array(ex.sets).fill(w),reps:Array(ex.sets).fill(ex.max),why:'上限達成 · RIR未入力のため重量維持',mixed:false};
-  if(allMax&&rirKnown&&!safe)return {weights:Array(ex.sets).fill(w),reps:Array(ex.sets).fill(ex.max),why:'上限達成 · 同重量でRIR1以上の余力を作る',mixed:false};
-  if(!enough||reps.some(r=>r<ex.min))return {weights:Array(ex.sets).fill(w),reps:Array(ex.sets).fill(ex.min),why:`${ex.min}回×${ex.sets}セットを安定させる`,mixed:false};
+  const rirNum=parseFloat(finalRir),rirKnown=Number.isFinite(rirNum),minRir=['ex-bench','ex-squat','ex-deadlift'].includes(ex.id)?1:0,safe=rirKnown&&rirNum>=minRir;
+  if(allMax&&safe&&ex.step>0&&w>0)return {weights:Array(ex.sets).fill(Math.round((w+ex.step)*100)/100),reps:Array(ex.sets).fill(ex.min),why:`上限達成 · +${ex.step}kg`,mixed:false,manual:false};
+  if(allMax&&!rirKnown)return {weights:Array(ex.sets).fill(w),reps:Array(ex.sets).fill(ex.max),why:'上限達成 · RIR未入力のため重量維持',mixed:false,manual:false};
+  if(allMax&&rirKnown&&!safe)return {weights:Array(ex.sets).fill(w),reps:Array(ex.sets).fill(ex.max),why:`上限達成 · 同重量でRIR${minRir}以上の余力を作る`,mixed:false,manual:false};
+  if(!enough||reps.some(r=>r<ex.min))return {weights:Array(ex.sets).fill(w),reps:Array(ex.sets).fill(ex.min),why:`${ex.min}回×${ex.sets}セットを安定させる`,mixed:false,manual:false};
   const next=reps.slice();let best=-1,bestVal=Infinity;for(let i=0;i<next.length;i++){if(next[i]<ex.max&&next[i]<bestVal){best=i;bestVal=next[i]}}if(best>=0)next[best]++;
-  return {weights:Array(ex.sets).fill(w),reps:next,why:'前回重量を維持 · 合計Reps +1',mixed:false}
+  return {weights:Array(ex.sets).fill(w),reps:next,why:'前回重量を維持 · 合計Reps +1',mixed:false,manual:false}
 }
 function ensureDraft(ex){
   const a=ensureActive();if(!a.drafts)a.drafts={};if(a.drafts[ex.id])return a.drafts[ex.id];const t=target(ex);
@@ -281,29 +294,37 @@ function syncActiveExercise(ex){
   l.condition=state.conditions[a.date]||{};persist();renderProgress()
 }
 function hasWork(a=state.active){if(!a)return false;return Object.values(a.drafts||{}).some(d=>d.dirty||(d.sets||[]).some(s=>s.done))}
+function exerciseDoneCount(ex){const d=state.active?.drafts?.[ex.id];return (d?.sets||[]).filter(s=>s.done).length}
+function exerciseIsComplete(ex){return exerciseDoneCount(ex)>=Math.max(1,+ex.sets||1)}
+function nextIncompleteIndex(fromIdx){const list=state.program[session]||[];if(list.length<=1)return null;for(let step=1;step<list.length;step++){const j=(fromIdx+step)%list.length;if(!exerciseIsComplete(list[j]))return j}return null}
+function remainingSetCount(){const list=state.program[session]||[];return list.reduce((sum,ex)=>sum+Math.max(0,(+ex.sets||0)-exerciseDoneCount(ex)),0)}
+function goToExercise(newIdx){const list=state.program[session]||[];if(newIdx<0||newIdx>=list.length||newIdx===idx)return;if(state.timer){cancelRest();showToast('休憩タイマーを停止しました')}idx=newIdx;ensureActive().currentIndex=idx;persist();rirOpen=false;closeExercisePicker();renderWorkout()}
+function renderExercisePicker(){const list=state.program[session]||[],box=$('#exercisePickerList');box.innerHTML='';list.forEach((ex,i)=>{const done=exerciseDoneCount(ex),total=Math.max(1,+ex.sets||1),complete=done>=total,b=document.createElement('button');b.type='button';b.className='exercisePick'+(i===idx?' current':'');const status=complete?'完了':done>0?`${done}/${total}セット`:'未着手';b.innerHTML=`<div><div class="exercisePickName">${i===idx?'<span class="exercisePickDot"></span>':''}${esc(ex.name)}</div></div><div class="exercisePickStatus${complete?' done':''}">${complete?'✓ ':''}${status}</div>`;b.addEventListener('click',()=>{if(i===idx){closeExercisePicker();return}goToExercise(i)});box.appendChild(b)});const remain=remainingSetCount();$('#exercisePickerHint').textContent=remain?`残り ${remain}セット · 空いている種目から選べます`:'すべての予定セットが完了しています'}
+function openExercisePicker(){renderExercisePicker();$('#exercisePickerSheet').classList.add('show')}
+function closeExercisePicker(){$('#exercisePickerSheet').classList.remove('show')}
 
 function renderSessions(){const strip=$('#sessionStrip');strip.innerHTML='';Object.keys(state.program).forEach(name=>{const b=document.createElement('button');b.className='sessionBtn'+(name===session?' on':'');b.textContent=name;b.type='button';b.addEventListener('click',()=>switchSession(name));strip.appendChild(b)})}
 function switchSession(name){if(name===session)return;if(state.active&&state.active.date===isoToday()&&hasWork(state.active)){if(!confirm('現在のトレーニングを終了してセッションを切り替えますか？'))return;finishWorkout(false)}session=name;idx=0;state.active=null;cancelRest();renderWorkout()}
 function renderWorkout(){
   renderSessions();$('#topTitle').textContent=session;const list=state.program[session]||[];if(!list.length){$('#exerciseName').textContent='種目がありません';$('#setRows').innerHTML='';return}if(idx>=list.length)idx=list.length-1;if(idx<0)idx=0;
   const ex=list[idx],p=prevExercise(ex),t=target(ex),d=ensureDraft(ex);state.active.currentIndex=idx;persist();
-  $('#topTitle').textContent=session;$('#positionText').textContent=`${idx+1} / ${list.length}`;$('#exerciseName').textContent=ex.name;
+  $('#topTitle').textContent=session;$('#positionText').textContent=`${idx+1} / ${list.length}　種目一覧`;$('#exerciseName').textContent=ex.name;
   $('#previousLine').innerHTML=`前回 <strong>${p?(p.sets||[]).map(fmtSet).join(' / '):'未記録'}</strong>`;
-  $('#targetLine').innerHTML=`目標 <strong>${t.mixed?'前回実績を再現':`${t.weights[0]?trimNum(t.weights[0])+'kg':'自重'} × ${t.reps.join(' / ')}回`}</strong>`;$('#targetReason').textContent=t.why;$('#targetReason').classList.add('hidden');
+  $('#targetLine').innerHTML=`目標 <strong>${t.manual?'手動調整':`${t.weights[0]?trimNum(t.weights[0])+'kg':'自重'} × ${t.reps.join(' / ')}回`}</strong>`;$('#targetReason').textContent=t.why;$('#targetReason').classList.add('hidden');
   const rows=$('#setRows');rows.innerHTML='';
   const nextIncomplete=d.sets.findIndex(s=>!s.done);d.sets.forEach((s,i)=>{const row=document.createElement('div');row.className='setRow';const disabled=!s.done&&nextIncomplete>=0&&i!==nextIncomplete;row.innerHTML=`<div class="setIndex">${i+1}</div><input class="num weightInput" data-i="${i}" type="number" inputmode="decimal" step=".25" min="0" value="${s.w||''}" aria-label="${i+1}セット目 重量"><input class="num repsInput" data-i="${i}" type="number" inputmode="numeric" min="0" max="100" value="${s.r||''}" aria-label="${i+1}セット目 回数"><button class="check${s.done?' done':''}" data-i="${i}" type="button" aria-label="${i+1}セット目 完了"${disabled?' disabled':''}>${s.done?'✓':'○'}</button>`;rows.appendChild(row)});
   $$('.weightInput,.repsInput').forEach(inp=>inp.addEventListener('input',()=>{const i=+inp.dataset.i,s=d.sets[i];if(inp.classList.contains('weightInput'))s.w=Math.max(0,+inp.value||0);else s.r=Math.max(0,+inp.value||0);d.dirty=true;persist();if(s.done)syncActiveExercise(ex)}));
   $$('.check').forEach(b=>b.addEventListener('click',()=>toggleSet(ex,+b.dataset.i)));
   $('#rirValue').textContent=d.rir===''?'未入力':`RIR ${d.rir}`;renderRirPicker(d,ex);
-  $('#nextExercise').textContent=idx===list.length-1?'トレーニング完了':'次の種目';$('#previousExercise').classList.toggle('hidden',idx===0);renderCondition();renderRest();
+  const nextIdx=nextIncompleteIndex(idx),currentComplete=exerciseIsComplete(ex),remain=remainingSetCount();$('#nextExercise').textContent=!currentComplete&&nextIdx===null?'残りセットを実施':remain===0?'トレーニング完了':'次の種目';$('#previousExercise').classList.toggle('hidden',idx===0);renderCondition();renderRest();
 }
 function renderRirPicker(d,ex){const box=$('#rirPicker');box.innerHTML='';['','0','1','2','3','4+'].forEach(v=>{const b=document.createElement('button');b.type='button';b.className='rirChoice'+(String(d.rir)===v?' on':'');b.textContent=v===''?'—':v;b.addEventListener('click',()=>{d.rir=v;d.dirty=true;const done=d.sets.filter(s=>s.done);if(done.length)done[done.length-1].rir=v;persist();syncActiveExercise(ex);rirOpen=false;$('#rirPicker').classList.remove('show');$('#rirValue').textContent=v===''?'未入力':`RIR ${v}`});box.appendChild(b)});box.classList.toggle('show',rirOpen)}
 $('#rirSummary').addEventListener('click',()=>{rirOpen=!rirOpen;$('#rirPicker').classList.toggle('show',rirOpen)});
 $('#targetLine').addEventListener('click',()=>$('#targetReason').classList.toggle('hidden'));
 
-function toggleSet(ex,i){const d=ensureDraft(ex),s=d.sets[i];d.dirty=true;if(s.done){if(d.sets.slice(i+1).some(x=>x.done)){showToast('後のセットを先に取り消してください');return}if(state.timer&&state.timer.exerciseId===ex.id&&state.timer.setIndex===i)cancelRest();s.done=false;s.restAfter=null;if(d.rir!==''&&i===d.sets.filter(x=>x.done).length)d.rir='';syncActiveExercise(ex);renderWorkout();showToast('完了を取り消しました');return}
+function toggleSet(ex,i){const d=ensureDraft(ex),s=d.sets[i];d.dirty=true;ensureAudio();if(s.done){if(d.sets.slice(i+1).some(x=>x.done)){showToast('後のセットを先に取り消してください');return}if(state.timer&&state.timer.exerciseId===ex.id&&state.timer.setIndex===i)cancelRest();s.done=false;s.restAfter=null;if(d.rir!==''){d.rir='';d.sets.forEach(x=>x.rir='')}syncActiveExercise(ex);renderWorkout();showToast('完了を取り消しました');return}
   if(state.timer){if(!confirm('休憩タイマーが進行中です。今の時点で休憩終了として記録しますか？'))return;if(!finishRest(true))return}
-  s.done=true;syncActiveExercise(ex);const isLast=i===d.sets.length-1;if(!isLast)startRest(ex,i);renderWorkout();showToast(`${i+1}セット目を記録`)
+  const a=ensureActive();if(!a.startedAt)a.startedAt=Date.now();if(d.rir!==''){d.rir='';d.sets.forEach(x=>x.rir='')}s.done=true;syncActiveExercise(ex);const isLast=i===d.sets.length-1;if(!isLast)startRest(ex,i);renderWorkout();showToast(`${i+1}セット目を記録`)
 }
 
 function startRest(ex,setIndex){cancelRest(false);const sec=Math.max(30,Math.min(600,+ex.restSec||defaultRestSec(ex.name))),now=Date.now();state.timer={startedAt:now,endAt:now+sec*1000,plannedSec:sec,exerciseId:ex.id,exerciseName:ex.name,setIndex,session,date:isoToday(),alerted:false};persist();startRestTicker();renderRest()}
@@ -317,9 +338,14 @@ $('#restPlus').addEventListener('click',()=>{if(!state.timer)return;state.timer.
 $('#restEnd').addEventListener('click',()=>finishRest(true));
 
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)renderRest()});
-$('#nextExercise').addEventListener('click',()=>{const list=state.program[session]||[],ex=list[idx],d=ensureDraft(ex),done=d.sets.filter(s=>s.done).length;if(done<d.sets.length&&!confirm(`${done}/${d.sets.length}セット完了です。このまま進みますか？`))return;if(state.timer)cancelRest();if(idx<list.length-1){idx++;state.active.currentIndex=idx;persist();rirOpen=false;renderWorkout()}else finishWorkout(true)});
-$('#previousExercise').addEventListener('click',()=>{if(state.timer)cancelRest();if(idx>0){idx--;state.active.currentIndex=idx;persist();rirOpen=false;renderWorkout()}});
+$('#nextExercise').addEventListener('click',()=>{const list=state.program[session]||[],ex=list[idx],d=ensureDraft(ex),done=d.sets.filter(s=>s.done).length,nextIdx=nextIncompleteIndex(idx),currentComplete=done>=d.sets.length;if(!currentComplete&&nextIdx===null){showToast('この種目の残りセットを完了してください');return}if(!currentComplete&&nextIdx!==null&&!confirm(`${done}/${d.sets.length}セット完了です。この種目はあとで戻れます。次へ進みますか？`))return;if(state.timer)cancelRest();if(nextIdx!==null){goToExercise(nextIdx)}else finishWorkout(true)});
+$('#previousExercise').addEventListener('click',()=>{if(idx>0)goToExercise(idx-1)});
 function finishWorkout(showSheet=true){if(!state.active)return;const l=activeLog(false);if(l)l.endedAt=Date.now();state.active=null;cancelRest(false);persist();renderProgress();if(showSheet&&l){showToast('トレーニング完了');openShare()}idx=0}
+
+$('#positionText').addEventListener('click',openExercisePicker);
+$('#closeExercisePicker').addEventListener('click',closeExercisePicker);
+$('#exercisePickerSheet').addEventListener('click',e=>{if(e.target===$('#exercisePickerSheet'))closeExercisePicker()});
+$('#finishFromPicker').addEventListener('click',()=>{const remain=remainingSetCount();if(remain>0&&!confirm(`予定セットがあと${remain}セット残っています。トレーニングを終了しますか？`))return;closeExercisePicker();finishWorkout(true)});
 
 function renderCondition(){const c=state.conditions[isoToday()]||{};$('#bodyweight').value=c.bodyweight??'';$('#sleep').value=c.sleep??'';$('#fatigue').value=c.fatigue??'';const bits=[];if(c.bodyweight)bits.push(`${c.bodyweight}kg`);if(c.sleep)bits.push(`${c.sleep}h`);if(c.fatigue)bits.push(`疲労${c.fatigue}`);$('#conditionSummary').textContent=bits.length?bits.join(' · '):'未入力'}
 function saveCondition(){const c={bodyweight:Math.max(0,+$('#bodyweight').value||0)||'',sleep:Math.max(0,Math.min(24,+$('#sleep').value||0))||'',fatigue:$('#fatigue').value||''};state.conditions[isoToday()]=c;state.logs.filter(l=>l.date===isoToday()).forEach(l=>l.condition=c);persist();renderCondition();renderProgress()}
@@ -356,14 +382,16 @@ $('#quickShare').addEventListener('click',openShare);$('#shareFromProgress').add
 function beginProgramEdit(){programEditDraft=clone(state.program);editSessionKey=state.program[session]?session:(Object.keys(state.program)[0]||'Upper A');renderEditor()}
 function readEditorToDraft(key=editSessionKey){if(!programEditDraft||!key)return;const rows=[...$('#editorList').children],old=programEditDraft[key]||[];programEditDraft[key]=rows.map((r,i)=>({id:old[i]?.id||uid(),name:r.querySelector('.ename').value.trim()||'種目',weight:+r.querySelector('.eweight').value||0,min:+r.querySelector('.emin').value||8,max:+r.querySelector('.emax').value||12,sets:+r.querySelector('.esets').value||3,step:+r.querySelector('.estep').value||0,restSec:+r.querySelector('.erest').value||defaultRestSec(r.querySelector('.ename').value)}))}
 function renderEditor(){if(!programEditDraft)programEditDraft=clone(state.program);if(!editSessionKey||!programEditDraft[editSessionKey])editSessionKey=Object.keys(programEditDraft)[0]||'Upper A';const sel=$('#editSession');sel.innerHTML=Object.keys(programEditDraft).map(k=>`<option${k===editSessionKey?' selected':''}>${esc(k)}</option>`).join('');sel.value=editSessionKey;const list=programEditDraft[editSessionKey]||[],box=$('#editorList');box.innerHTML='';list.forEach((e,i)=>{const d=document.createElement('div');d.className='editorItem';d.dataset.i=i;d.innerHTML=`<div class="editorTop"><input class="field ename" value="${esc(e.name)}" aria-label="種目名"><button class="dangerAction remove" type="button">削除</button></div><div class="editorGrid"><label>初回重量<input class="field eweight" type="number" step=".25" min="0" value="${e.weight}"></label><label>Reps下限<input class="field emin" type="number" min="1" value="${e.min}"></label><label>Reps上限<input class="field emax" type="number" min="1" value="${e.max}"></label><label>セット<input class="field esets" type="number" min="1" max="6" value="${e.sets}"></label><label>重量刻み<input class="field estep" type="number" step=".25" min="0" value="${e.step}"></label><label>休憩秒<input class="field erest" type="number" step="30" min="30" max="600" value="${e.restSec}"></label></div><div class="moveRow"><button class="up" type="button">↑ 上へ</button><button class="down" type="button">↓ 下へ</button></div>`;box.appendChild(d)});box.querySelectorAll('.remove').forEach(b=>b.addEventListener('click',()=>{readEditorToDraft();const i=+b.closest('.editorItem').dataset.i;programEditDraft[editSessionKey].splice(i,1);renderEditor()}));box.querySelectorAll('.up').forEach(b=>b.addEventListener('click',()=>{readEditorToDraft();const i=+b.closest('.editorItem').dataset.i;if(i>0){[programEditDraft[editSessionKey][i-1],programEditDraft[editSessionKey][i]]=[programEditDraft[editSessionKey][i],programEditDraft[editSessionKey][i-1]];renderEditor()}}));box.querySelectorAll('.down').forEach(b=>b.addEventListener('click',()=>{readEditorToDraft();const i=+b.closest('.editorItem').dataset.i;if(i<programEditDraft[editSessionKey].length-1){[programEditDraft[editSessionKey][i+1],programEditDraft[editSessionKey][i]]=[programEditDraft[editSessionKey][i],programEditDraft[editSessionKey][i+1]];renderEditor()}}))}
-$('#programToggle').addEventListener('click',()=>{const ed=$('#programEditor');if(!ed.classList.contains('show')){beginProgramEdit();ed.classList.add('show')}else{ed.classList.remove('show');programEditDraft=null;editSessionKey=null}});
+$('#programToggle').addEventListener('click',()=>{if(state.active?.startedAt){showToast('トレーニング終了後に変更できます');return}const ed=$('#programEditor');if(!ed.classList.contains('show')){beginProgramEdit();ed.classList.add('show')}else{ed.classList.remove('show');programEditDraft=null;editSessionKey=null}});
 $('#editSession').addEventListener('change',()=>{readEditorToDraft(editSessionKey);editSessionKey=$('#editSession').value;renderEditor()});
 $('#addExercise').addEventListener('click',()=>{readEditorToDraft();programEditDraft[editSessionKey].push({id:uid(),name:'新しい種目',weight:0,min:8,max:12,sets:3,step:2.5,restSec:120});renderEditor()});
-$('#saveProgram').addEventListener('click',()=>{readEditorToDraft();state.program=clone(programEditDraft);migrate();persist();programEditDraft=null;editSessionKey=null;$('#programEditor').classList.remove('show');renderWorkout();showToast('メニューを反映しました')});
+$('#saveProgram').addEventListener('click',()=>{if(state.active?.startedAt){showToast('トレーニング終了後に変更できます');return}readEditorToDraft();state.program=clone(programEditDraft);migrate();persist();programEditDraft=null;editSessionKey=null;$('#programEditor').classList.remove('show');renderWorkout();showToast('メニューを反映しました')});
 $('#timerVibrate').checked=!!state.timerSettings.vibrate;$('#timerSound').checked=!!state.timerSettings.sound;$('#timerVibrate').addEventListener('change',()=>{state.timerSettings.vibrate=$('#timerVibrate').checked;persist()});$('#timerSound').addEventListener('change',()=>{state.timerSettings.sound=$('#timerSound').checked;ensureAudio();persist()});
-$('#resetProgram').addEventListener('click',()=>{if(confirm('履歴を残したまま、メニューだけ初期状態に戻しますか？')){state.program=clone(DEFAULT_PROGRAM);state.active=null;programEditDraft=null;editSessionKey=null;session='Upper A';idx=0;persist();renderWorkout();showToast('メニューを初期化しました')}});
+$('#resetProgram').addEventListener('click',()=>{if(state.active?.startedAt){showToast('トレーニング終了後に変更できます');return}if(confirm('履歴を残したまま、メニューだけ初期状態に戻しますか？')){state.program=clone(DEFAULT_PROGRAM);state.active=null;programEditDraft=null;editSessionKey=null;session='Upper A';idx=0;persist();renderWorkout();showToast('メニューを初期化しました')}});
 $('#exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`workout-backup-${isoToday()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});
-$('#importFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x||!Array.isArray(x.logs))throw new Error();if(!confirm('現在のデータをバックアップ内容で置き換えますか？'))return;state={version:351,logs:x.logs||[],memo:x.memo||'',program:x.program||clone(DEFAULT_PROGRAM),conditions:x.conditions||{},active:null,timer:null,timerSettings:x.timerSettings||{vibrate:true,sound:false}};programEditDraft=null;editSessionKey=null;migrate();persist();session=Object.keys(state.program)[0]||'Upper A';idx=0;renderAll();showToast('バックアップを復元しました')}catch(_){alert('このバックアップは読み込めませんでした')}};r.readAsText(f);e.target.value=''});
+$('#importFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x||!Array.isArray(x.logs))throw new Error();if(!confirm('現在のデータをバックアップ内容で置き換えますか？'))return;state={version:353,logs:x.logs||[],memo:x.memo||'',program:x.program||clone(DEFAULT_PROGRAM),conditions:x.conditions||{},active:null,timer:null,timerSettings:x.timerSettings||{vibrate:true,sound:false}};programEditDraft=null;editSessionKey=null;migrate();persist();session=Object.keys(state.program)[0]||'Upper A';idx=0;renderAll();showToast('バックアップを復元しました')}catch(_){alert('このバックアップは読み込めませんでした')}};r.readAsText(f);e.target.value=''});
+
+document.addEventListener('pointerdown',()=>{if(state.timerSettings.sound)ensureAudio()},{once:true,capture:true});
 
 $$('.navBtn').forEach(b=>b.addEventListener('click',()=>{$$('.view').forEach(v=>v.classList.remove('on'));$('#'+b.dataset.view).classList.add('on');$$('.navBtn').forEach(x=>x.classList.toggle('on',x===b));if(b.dataset.view==='progressView')renderProgress();if(b.dataset.view==='settingsView'&&$('#programEditor').classList.contains('show'))beginProgramEdit()}));
 function renderAll(){renderWorkout();renderProgress();renderShare();renderCondition();renderRest()}
