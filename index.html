@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f5f5f7">
 <link rel="manifest" href="manifest.webmanifest">
-<title>Workout Log v3.5.9</title>
+<title>Workout Log v3.6.0</title>
 <style>
 :root{
   --bg:#f5f5f7;--surface:#ffffff;--text:#111111;--muted:#6e6e73;--line:#dedee3;
@@ -41,7 +41,7 @@ button,input,select,textarea{font:inherit;color:inherit}button{border:0;cursor:p
 <body>
 <main class="app">
   <header class="topbar">
-    <div><div class="brand" id="topTitle">Upper A</div><div class="date" id="today"></div></div>
+    <div><div class="brand" id="topTitle">Day 1 胸＋二頭</div><div class="date" id="today"></div></div>
     <button class="ghostAction" id="quickShare" type="button">共有</button>
   </header>
 
@@ -120,7 +120,7 @@ button,input,select,textarea{font:inherit;color:inherit}button{border:0;cursor:p
         <button class="groupRow" id="resetProgram" type="button" style="width:100%;background:transparent;text-align:left"><div><div class="groupLabel" style="color:var(--danger)">メニューを初期状態に戻す</div><div class="groupMeta">履歴は残ります</div></div><div class="chev">›</div></button>
       </div>
     </div>
-    <div class="date" style="text-align:center;padding:8px 0 20px">Workout Log v3.5.9 · データは端末内に保存</div>
+    <div class="date" style="text-align:center;padding:8px 0 20px">Workout Log v3.6.0 · データは端末内に保存</div>
   </section>
 </main>
 
@@ -207,42 +207,43 @@ button,input,select,textarea{font:inherit;color:inherit}button{border:0;cursor:p
 
 <script>
 const DEFAULT_PROGRAM={
-  'Upper A':[
-    {id:'ex-bench',name:'ベンチプレス',weight:70,min:6,max:8,sets:2,step:2.5,restSec:180},
-    {id:'ex-inclineplate',name:'プレートロード・インクラインチェストプレス',weight:0,min:6,max:10,sets:3,step:2.5,restSec:150},
-    {id:'ex-lat',name:'ラットプルダウンマシン',weight:45,min:8,max:12,sets:3,step:2.5,restSec:120},
-    {id:'ex-chestpress',name:'チェストプレスマシン',weight:0,min:8,max:12,sets:2,step:2.5,restSec:120},
-    {id:'ex-chestsupportedrow',name:'チェストサポート・ロー',weight:0,min:8,max:12,sets:3,step:2.5,restSec:120},
-    {id:'ex-multiside',name:'Standing Multi Flight サイドレイズ',weight:0,min:12,max:20,sets:3,step:2.5,restSec:90},
-    {id:'ex-preacher',name:'プリーチャーカールマシン',weight:0,min:8,max:12,sets:2,step:2.5,restSec:90},
-    {id:'ex-triceps',name:'トライセプスプレスダウン',weight:0,min:10,max:15,sets:2,step:2.5,restSec:90}
+  'Day 1 胸＋二頭':[
+    {id:'ex-bench',name:'ベンチプレス',weight:70,min:5,max:8,sets:2,step:2.5,restSec:180},
+    {id:'ex-inclineplate',name:'プレートロード・インクラインチェストプレス',weight:0,min:8,max:12,sets:3,step:2.5,restSec:150},
+    {id:'ex-chestpress',name:'チェストプレスマシン',weight:0,min:8,max:12,sets:3,step:2.5,restSec:120},
+    {id:'ex-pecfly',name:'ペックフライ',weight:40,min:12,max:15,sets:2,step:2.5,restSec:90},
+    {id:'ex-preacher',name:'プリーチャーカールマシン',weight:0,min:8,max:12,sets:3,step:2.5,restSec:90}
   ],
-  'Lower A':[
-    {id:'ex-squat',name:'バーベルスクワット',weight:72.5,min:6,max:8,sets:2,step:2.5,restSec:180},
+  'Day 2 脚A':[
+    {id:'ex-squat',name:'バーベルスクワット',weight:72.5,min:5,max:8,sets:2,step:2.5,restSec:180},
     {id:'ex-legpress45',name:'45°プレートロード・レッグプレス',weight:0,min:8,max:12,sets:3,step:5,restSec:150},
     {id:'ex-legext',name:'レッグエクステンション',weight:40,min:10,max:15,sets:3,step:2.5,restSec:90},
     {id:'ex-legcurl',name:'シーテッドレッグカール',weight:0,min:8,max:12,sets:3,step:2.5,restSec:120},
-    {id:'ex-hipthrust',name:'ヒップスラスト／グルートドライブ',weight:0,min:8,max:12,sets:2,step:5,restSec:120},
-    {id:'ex-calf',name:'スタンディングカーフレイズ',weight:0,min:8,max:15,sets:3,step:5,restSec:90},
+    {id:'ex-calf',name:'スタンディングカーフレイズ',weight:0,min:10,max:15,sets:3,step:5,restSec:90},
     {id:'ex-abs',name:'アブドミナルマシン',weight:0,min:10,max:15,sets:2,step:2.5,restSec:75}
   ],
-  'Upper B':[
+  'Day 3 背中':[
+    {id:'ex-lat',name:'ラットプルダウンマシン',weight:45,min:8,max:12,sets:3,step:2.5,restSec:120},
     {id:'ex-platepulldown',name:'プレートロード式プルダウン',weight:0,min:8,max:12,sets:3,step:2.5,restSec:120},
-    {id:'ex-platerow',name:'プレートロード式ロー',weight:0,min:8,max:12,sets:3,step:2.5,restSec:120},
-    {id:'ex-chestpress',name:'チェストプレスマシン',weight:0,min:8,max:12,sets:3,step:2.5,restSec:120},
-    {id:'ex-pecfly',name:'ペックフライ',weight:40,min:10,max:15,sets:2,step:2.5,restSec:90},
-    {id:'ex-shoulderpress',name:'ショルダープレスマシン',weight:0,min:8,max:12,sets:2,step:2.5,restSec:120},
-    {id:'ex-multiside',name:'Standing Multi Flight サイドレイズ',weight:0,min:12,max:20,sets:3,step:2.5,restSec:90},
-    {id:'ex-rear',name:'リアデルトマシン',weight:0,min:12,max:20,sets:2,step:2.5,restSec:90},
-    {id:'ex-preacher',name:'プリーチャーカールマシン',weight:0,min:8,max:12,sets:2,step:2.5,restSec:90},
-    {id:'ex-triceps',name:'トライセプスプレスダウン',weight:0,min:10,max:15,sets:2,step:2.5,restSec:90}
+    {id:'ex-chestsupportedrow',name:'チェストサポート・ロー',weight:0,min:8,max:12,sets:3,step:2.5,restSec:120},
+    {id:'ex-platerow',name:'プレートロード式ロー',weight:0,min:10,max:15,sets:2,step:2.5,restSec:120},
+    {id:'ex-rear',name:'リアデルトマシン',weight:0,min:12,max:20,sets:3,step:2.5,restSec:90},
+    {id:'ex-preacher',name:'プリーチャーカールマシン',weight:0,min:10,max:15,sets:2,step:2.5,restSec:90}
   ],
-  'Lower B':[
-    {id:'ex-deadlift',name:'デッドリフト',weight:82.5,min:5,max:8,sets:1,step:2.5,restSec:180},
-    {id:'ex-legpress45',name:'45°プレートロード・レッグプレス',weight:0,min:10,max:15,sets:3,step:5,restSec:150},
+  'Day 4 肩＋腕＋胸':[
+    {id:'ex-shoulderpress',name:'ショルダープレスマシン',weight:0,min:8,max:12,sets:3,step:2.5,restSec:120},
+    {id:'ex-multiside',name:'Standing Multi Flight サイドレイズ',weight:0,min:12,max:20,sets:4,step:2.5,restSec:90},
+    {id:'ex-rear',name:'リアデルトマシン',weight:0,min:12,max:20,sets:2,step:2.5,restSec:90},
+    {id:'ex-inclineplate',name:'プレートロード・インクラインチェストプレス',weight:0,min:10,max:15,sets:2,step:2.5,restSec:120},
+    {id:'ex-triceps',name:'トライセプスプレスダウン',weight:0,min:10,max:15,sets:3,step:2.5,restSec:90},
+    {id:'ex-preacher',name:'プリーチャーカールマシン',weight:0,min:10,max:15,sets:2,step:2.5,restSec:90}
+  ],
+  'Day 5 脚B':[
+    {id:'ex-deadlift',name:'デッドリフト',weight:82.5,min:4,max:6,sets:2,step:2.5,restSec:180},
     {id:'ex-pronecurl',name:'プローンレッグカール',weight:40,min:8,max:12,sets:3,step:2.5,restSec:120},
-    {id:'ex-rdl',name:'ルーマニアンデッドリフト',weight:0,min:6,max:10,sets:2,step:2.5,restSec:150},
-    {id:'ex-legext',name:'レッグエクステンション',weight:40,min:10,max:15,sets:2,step:2.5,restSec:90},
+    {id:'ex-hipthrust',name:'ヒップスラスト／グルートドライブ',weight:0,min:8,max:12,sets:3,step:5,restSec:120},
+    {id:'ex-legpress45',name:'45°プレートロード・レッグプレス（足位置高め）',weight:0,min:10,max:15,sets:2,step:5,restSec:150},
+    {id:'ex-legcurl',name:'シーテッドレッグカール',weight:0,min:10,max:15,sets:2,step:2.5,restSec:90},
     {id:'ex-calf',name:'スタンディングカーフレイズ',weight:0,min:10,max:15,sets:3,step:5,restSec:90},
     {id:'ex-abs',name:'アブドミナルマシン',weight:0,min:10,max:15,sets:2,step:2.5,restSec:75}
   ]
@@ -253,7 +254,7 @@ const dateText=()=>new Date().toLocaleDateString('ja-JP',{year:'numeric',month:'
 const uid=()=>`w-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,8)}`;
 const hashName=s=>{let h=2166136261;for(const c of String(s)){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return 'ex-'+(h>>>0).toString(36)};
 const temporaryExerciseId=(name,replacedId='')=>'alt-'+hashName(`${replacedId}|${String(name).trim()}`).slice(3);
-function canonicalId(name){const n=String(name||'');if(n==='ベンチプレス')return 'ex-bench';if(n==='プレートロード・インクラインチェストプレス')return 'ex-inclineplate';if(/インクラインベンチプレス/.test(n))return 'ex-incline';if(n==='ラットプルダウン')return 'ex-lat';if(n==='シーテッドロー')return 'ex-row';if(n==='バーベルスクワット')return 'ex-squat';if(n==='レッグプレス')return 'ex-legpress';if(n==='シーテッドレッグカール')return 'ex-legcurl';if(n==='プローンレッグカール')return 'ex-pronecurl';if(n==='Standing Multi Flight サイドレイズ')return 'ex-multiside';if(/サイドレイズ/.test(n))return 'ex-side';if(n==='リアデルト')return 'ex-rear';if(n==='チェストプレス')return 'ex-chestpress';if(n==='ペックフライ')return 'ex-pecfly';if(n==='プリーチャーカール')return 'ex-preacher';if(n==='デッドリフト')return 'ex-deadlift';if(n==='レッグエクステンション')return 'ex-legext';if(n==='プレートロード・ロー')return 'ex-platerow';if(n==='Standing Multi Flight サイドレイズ')return 'ex-multiside';if(n==='トライセプスプレスダウン')return 'ex-triceps';if(n==='ショルダープレス')return 'ex-shoulderpress';if(n==='スタンディングカーフレイズ')return 'ex-calf';if(n==='ヒップスラストマシン')return 'ex-hipthrust';if(n==='アブドミナル'||n==='アブドミナルマシン')return 'ex-abs';if(n==='ラットプルダウンマシン')return 'ex-lat';if(n==='チェストプレスマシン')return 'ex-chestpress';if(n==='チェストサポート・ロー')return 'ex-chestsupportedrow';if(n==='プリーチャーカールマシン')return 'ex-preacher';if(n==='45°プレートロード・レッグプレス')return 'ex-legpress45';if(n==='ヒップスラスト／グルートドライブ')return 'ex-hipthrust';if(n==='プレートロード式プルダウン')return 'ex-platepulldown';if(n==='プレートロード式ロー')return 'ex-platerow';if(n==='ショルダープレスマシン')return 'ex-shoulderpress';if(n==='リアデルトマシン')return 'ex-rear';if(n==='ルーマニアンデッドリフト')return 'ex-rdl';return null}
+function canonicalId(name){const n=String(name||'');if(n==='ベンチプレス')return 'ex-bench';if(n==='プレートロード・インクラインチェストプレス')return 'ex-inclineplate';if(/インクラインベンチプレス/.test(n))return 'ex-incline';if(n==='ラットプルダウン')return 'ex-lat';if(n==='シーテッドロー')return 'ex-row';if(n==='バーベルスクワット')return 'ex-squat';if(n==='レッグプレス')return 'ex-legpress';if(n==='シーテッドレッグカール')return 'ex-legcurl';if(n==='プローンレッグカール')return 'ex-pronecurl';if(n==='Standing Multi Flight サイドレイズ')return 'ex-multiside';if(/サイドレイズ/.test(n))return 'ex-side';if(n==='リアデルト')return 'ex-rear';if(n==='チェストプレス')return 'ex-chestpress';if(n==='ペックフライ')return 'ex-pecfly';if(n==='プリーチャーカール')return 'ex-preacher';if(n==='デッドリフト')return 'ex-deadlift';if(n==='レッグエクステンション')return 'ex-legext';if(n==='プレートロード・ロー')return 'ex-platerow';if(n==='Standing Multi Flight サイドレイズ')return 'ex-multiside';if(n==='トライセプスプレスダウン')return 'ex-triceps';if(n==='ショルダープレス')return 'ex-shoulderpress';if(n==='スタンディングカーフレイズ')return 'ex-calf';if(n==='ヒップスラストマシン')return 'ex-hipthrust';if(n==='アブドミナル'||n==='アブドミナルマシン')return 'ex-abs';if(n==='ラットプルダウンマシン')return 'ex-lat';if(n==='チェストプレスマシン')return 'ex-chestpress';if(n==='チェストサポート・ロー')return 'ex-chestsupportedrow';if(n==='プリーチャーカールマシン')return 'ex-preacher';if(n==='45°プレートロード・レッグプレス'||n==='45°プレートロード・レッグプレス（足位置高め）')return 'ex-legpress45';if(n==='ヒップスラスト／グルートドライブ')return 'ex-hipthrust';if(n==='プレートロード式プルダウン')return 'ex-platepulldown';if(n==='プレートロード式ロー')return 'ex-platerow';if(n==='ショルダープレスマシン')return 'ex-shoulderpress';if(n==='リアデルトマシン')return 'ex-rear';if(n==='ルーマニアンデッドリフト')return 'ex-rdl';return null}
 const trimNum=n=>Number(n).toLocaleString('ja-JP',{maximumFractionDigits:2});
 const fmtTime=sec=>{sec=Math.max(0,Math.round(+sec||0));return `${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`};
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
@@ -261,14 +262,14 @@ function defaultRestSec(name){const n=String(name||'');if(/ベンチ|スクワ�
 
 let raw=null;try{raw=JSON.parse(localStorage.getItem('workout-log-v35')||'null')}catch(_){}
 if(!raw){for(const key of ['workout-log-v34','workout-log-v33','workout-log-v32','workout-log-v31','workout-log-v3','workout-log-v2','workout-log-v1']){try{const x=JSON.parse(localStorage.getItem(key)||'null');if(x){raw=x;break}}catch(_){}}}
-let state={version:359,logs:[],memo:'',program:clone(DEFAULT_PROGRAM),conditions:{},active:null,timer:null,timerSettings:{vibrate:true,sound:false}};
+let state={version:360,logs:[],memo:'',program:clone(DEFAULT_PROGRAM),conditions:{},active:null,timer:null,timerSettings:{vibrate:true,sound:false}};
 if(raw){state.logs=Array.isArray(raw.logs)?raw.logs:[];state.memo=raw.memo||'';state.program=raw.program||clone(DEFAULT_PROGRAM);state.conditions=raw.conditions||{};state.timerSettings=raw.timerSettings||{vibrate:true,sound:false};state.active=raw.active||null;state.timer=raw.timer||null}
-// v3.5.9: hypertrophy-first program with low-volume BIG3 retained. Keep history and in-progress workout intact.
-if(raw && (+raw.version||0)<359){
+// v3.6.0: five-day hypertrophy-first split with low-volume BIG3 retained. Keep history and in-progress workout intact.
+if(raw && (+raw.version||0)<360){
   // Upgrade the formal program without discarding an in-progress workout.
   // Active workout keeps its own exercise snapshot/drafts and can be finished safely.
   state.program=clone(DEFAULT_PROGRAM);
-  state.version=359;
+  state.version=360;
 }
 if(state.timerSettings.vibrate===undefined)state.timerSettings.vibrate=true;if(state.timerSettings.sound===undefined)state.timerSettings.sound=false;
 if(state.timer&&!state.active)state.timer=null;
@@ -283,7 +284,7 @@ function migrate(){
 }
 migrate();
 if(state.active?.drafts&&!Object.values(state.active.drafts).some(d=>(d.sets||[]).some(s=>s.done)))state.active.startedAt=null;
-let session=state.active?.date===isoToday()&&state.active?.session&&state.program[state.active.session]?state.active.session:(Object.keys(state.program)[0]||'Upper A');
+let session=state.active?.date===isoToday()&&state.active?.session&&state.program[state.active.session]?state.active.session:(Object.keys(state.program)[0]||'Day 1 胸＋二頭');
 let idx=state.active?.date===isoToday()&&state.active?.session===session?Math.max(0,+state.active.currentIndex||0):0;
 let rirOpen=false,restTick=null,audioCtx=null,toastTimer=null;
 let programEditDraft=null,editSessionKey=null;
@@ -460,17 +461,17 @@ function closeShare(){$('#shareSheet').classList.remove('show')}
 function renderShare(){const l=[...state.logs].reverse().find(x=>(x.exercises||[]).length);$('#shareDate').textContent=l?.date||isoToday();$('#shareSession').textContent=l?.session||'—';const c=l?.condition||{};const bits=[];if(c.bodyweight)bits.push(`${c.bodyweight}kg`);if(c.sleep)bits.push(`${c.sleep}h`);if(c.fatigue)bits.push(`疲労${c.fatigue}/5`);$('#shareCondition').textContent=bits.length?bits.join(' · '):'未入力';const bench=latestE1('ex-bench','ベンチプレス'),sq=latestE1('ex-squat','バーベルスクワット'),dl=latestE1('ex-deadlift','デッドリフト');$('#shareBench').textContent=bench?bench.toFixed(1)+' kg':'—';$('#shareLower').textContent=(sq||dl)?`${sq?sq.toFixed(1):'—'} / ${dl?dl.toFixed(1):'—'}`:'—';const box=$('#shareExercises');if(!l){box.innerHTML='<div class="mutedDark">まだ記録がありません</div>';return}box.innerHTML=(l.exercises||[]).map(e=>{const p=previousBefore(e,l),setText=x=>(x.sets||[]).map(fmtSetWithRest).join(' ｜ ');return `<div class="compare"><b>${esc(e.name)}${e.temporary?'（代替）':''}</b>${e.temporary&&e.replacedName?`<div>元の種目　${esc(e.replacedName)}</div>`:''}${p?`<div>前回　${esc(setText(p))}${p.rir!==''&&p.rir!==undefined?` · 最終RIR ${esc(p.rir)}`:''}</div>`:'<div>前回　記録なし</div>'}<div>今回　${esc(setText(e))}${e.rir!==''&&e.rir!==undefined?` · 最終RIR ${esc(e.rir)}`:''}</div></div>`}).join('')}
 $('#quickShare').addEventListener('click',openShare);$('#shareFromProgress').addEventListener('click',openShare);$('#closeShare').addEventListener('click',closeShare);$('#closeShare2').addEventListener('click',closeShare);$('#shareSheet').addEventListener('click',e=>{if(e.target===$('#shareSheet'))closeShare()});
 
-function beginProgramEdit(){programEditDraft=clone(state.program);editSessionKey=state.program[session]?session:(Object.keys(state.program)[0]||'Upper A');renderEditor()}
+function beginProgramEdit(){programEditDraft=clone(state.program);editSessionKey=state.program[session]?session:(Object.keys(state.program)[0]||'Day 1 胸＋二頭');renderEditor()}
 function readEditorToDraft(key=editSessionKey){if(!programEditDraft||!key)return;const rows=[...$('#editorList').children],old=programEditDraft[key]||[];programEditDraft[key]=rows.map((r,i)=>({id:old[i]?.id||uid(),name:r.querySelector('.ename').value.trim()||'種目',weight:+r.querySelector('.eweight').value||0,min:+r.querySelector('.emin').value||8,max:+r.querySelector('.emax').value||12,sets:+r.querySelector('.esets').value||3,step:+r.querySelector('.estep').value||0,restSec:+r.querySelector('.erest').value||defaultRestSec(r.querySelector('.ename').value)}))}
-function renderEditor(){if(!programEditDraft)programEditDraft=clone(state.program);if(!editSessionKey||!programEditDraft[editSessionKey])editSessionKey=Object.keys(programEditDraft)[0]||'Upper A';const sel=$('#editSession');sel.innerHTML=Object.keys(programEditDraft).map(k=>`<option${k===editSessionKey?' selected':''}>${esc(k)}</option>`).join('');sel.value=editSessionKey;const list=programEditDraft[editSessionKey]||[],box=$('#editorList');box.innerHTML='';list.forEach((e,i)=>{const d=document.createElement('div');d.className='editorItem';d.dataset.i=i;d.innerHTML=`<div class="editorTop"><input class="field ename" value="${esc(e.name)}" aria-label="種目名"><button class="dangerAction remove" type="button">削除</button></div><div class="editorGrid"><label>初回重量<input class="field eweight" type="number" step=".25" min="0" value="${e.weight}"></label><label>Reps下限<input class="field emin" type="number" min="1" value="${e.min}"></label><label>Reps上限<input class="field emax" type="number" min="1" value="${e.max}"></label><label>セット<input class="field esets" type="number" min="1" max="6" value="${e.sets}"></label><label>重量刻み<input class="field estep" type="number" step=".25" min="0" value="${e.step}"></label><label>休憩秒<input class="field erest" type="number" step="30" min="30" max="600" value="${e.restSec}"></label></div><div class="moveRow"><button class="up" type="button">↑ 上へ</button><button class="down" type="button">↓ 下へ</button></div>`;box.appendChild(d)});box.querySelectorAll('.remove').forEach(b=>b.addEventListener('click',()=>{readEditorToDraft();const i=+b.closest('.editorItem').dataset.i;programEditDraft[editSessionKey].splice(i,1);renderEditor()}));box.querySelectorAll('.up').forEach(b=>b.addEventListener('click',()=>{readEditorToDraft();const i=+b.closest('.editorItem').dataset.i;if(i>0){[programEditDraft[editSessionKey][i-1],programEditDraft[editSessionKey][i]]=[programEditDraft[editSessionKey][i],programEditDraft[editSessionKey][i-1]];renderEditor()}}));box.querySelectorAll('.down').forEach(b=>b.addEventListener('click',()=>{readEditorToDraft();const i=+b.closest('.editorItem').dataset.i;if(i<programEditDraft[editSessionKey].length-1){[programEditDraft[editSessionKey][i+1],programEditDraft[editSessionKey][i]]=[programEditDraft[editSessionKey][i],programEditDraft[editSessionKey][i+1]];renderEditor()}}))}
+function renderEditor(){if(!programEditDraft)programEditDraft=clone(state.program);if(!editSessionKey||!programEditDraft[editSessionKey])editSessionKey=Object.keys(programEditDraft)[0]||'Day 1 胸＋二頭';const sel=$('#editSession');sel.innerHTML=Object.keys(programEditDraft).map(k=>`<option${k===editSessionKey?' selected':''}>${esc(k)}</option>`).join('');sel.value=editSessionKey;const list=programEditDraft[editSessionKey]||[],box=$('#editorList');box.innerHTML='';list.forEach((e,i)=>{const d=document.createElement('div');d.className='editorItem';d.dataset.i=i;d.innerHTML=`<div class="editorTop"><input class="field ename" value="${esc(e.name)}" aria-label="種目名"><button class="dangerAction remove" type="button">削除</button></div><div class="editorGrid"><label>初回重量<input class="field eweight" type="number" step=".25" min="0" value="${e.weight}"></label><label>Reps下限<input class="field emin" type="number" min="1" value="${e.min}"></label><label>Reps上限<input class="field emax" type="number" min="1" value="${e.max}"></label><label>セット<input class="field esets" type="number" min="1" max="6" value="${e.sets}"></label><label>重量刻み<input class="field estep" type="number" step=".25" min="0" value="${e.step}"></label><label>休憩秒<input class="field erest" type="number" step="30" min="30" max="600" value="${e.restSec}"></label></div><div class="moveRow"><button class="up" type="button">↑ 上へ</button><button class="down" type="button">↓ 下へ</button></div>`;box.appendChild(d)});box.querySelectorAll('.remove').forEach(b=>b.addEventListener('click',()=>{readEditorToDraft();const i=+b.closest('.editorItem').dataset.i;programEditDraft[editSessionKey].splice(i,1);renderEditor()}));box.querySelectorAll('.up').forEach(b=>b.addEventListener('click',()=>{readEditorToDraft();const i=+b.closest('.editorItem').dataset.i;if(i>0){[programEditDraft[editSessionKey][i-1],programEditDraft[editSessionKey][i]]=[programEditDraft[editSessionKey][i],programEditDraft[editSessionKey][i-1]];renderEditor()}}));box.querySelectorAll('.down').forEach(b=>b.addEventListener('click',()=>{readEditorToDraft();const i=+b.closest('.editorItem').dataset.i;if(i<programEditDraft[editSessionKey].length-1){[programEditDraft[editSessionKey][i+1],programEditDraft[editSessionKey][i]]=[programEditDraft[editSessionKey][i],programEditDraft[editSessionKey][i+1]];renderEditor()}}))}
 $('#programToggle').addEventListener('click',()=>{if(state.active?.startedAt){showToast('トレーニング終了後に変更できます');return}const ed=$('#programEditor');if(!ed.classList.contains('show')){beginProgramEdit();ed.classList.add('show')}else{ed.classList.remove('show');programEditDraft=null;editSessionKey=null}});
 $('#editSession').addEventListener('change',()=>{readEditorToDraft(editSessionKey);editSessionKey=$('#editSession').value;renderEditor()});
 $('#addExercise').addEventListener('click',()=>{readEditorToDraft();programEditDraft[editSessionKey].push({id:uid(),name:'新しい種目',weight:0,min:8,max:12,sets:3,step:2.5,restSec:120});renderEditor()});
 $('#saveProgram').addEventListener('click',()=>{if(state.active?.startedAt){showToast('トレーニング終了後に変更できます');return}readEditorToDraft();state.program=clone(programEditDraft);migrate();persist();programEditDraft=null;editSessionKey=null;$('#programEditor').classList.remove('show');renderWorkout();showToast('メニューを反映しました')});
 $('#timerVibrate').checked=!!state.timerSettings.vibrate;$('#timerSound').checked=!!state.timerSettings.sound;$('#timerVibrate').addEventListener('change',()=>{state.timerSettings.vibrate=$('#timerVibrate').checked;persist()});$('#timerSound').addEventListener('change',()=>{state.timerSettings.sound=$('#timerSound').checked;ensureAudio();persist()});
-$('#resetProgram').addEventListener('click',()=>{if(state.active?.startedAt){showToast('トレーニング終了後に変更できます');return}if(confirm('履歴を残したまま、メニューだけ初期状態に戻しますか？')){state.program=clone(DEFAULT_PROGRAM);state.active=null;programEditDraft=null;editSessionKey=null;session='Upper A';idx=0;persist();renderWorkout();showToast('メニューを初期化しました')}});
+$('#resetProgram').addEventListener('click',()=>{if(state.active?.startedAt){showToast('トレーニング終了後に変更できます');return}if(confirm('履歴を残したまま、メニューだけ初期状態に戻しますか？')){state.program=clone(DEFAULT_PROGRAM);state.active=null;programEditDraft=null;editSessionKey=null;session='Day 1 胸＋二頭';idx=0;persist();renderWorkout();showToast('メニューを初期化しました')}});
 $('#exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`workout-backup-${isoToday()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});
-$('#importFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x||!Array.isArray(x.logs))throw new Error();if(!confirm('現在のデータをバックアップ内容で置き換えますか？'))return;state={version:359,logs:x.logs||[],memo:x.memo||'',program:x.program||clone(DEFAULT_PROGRAM),conditions:x.conditions||{},active:null,timer:null,timerSettings:x.timerSettings||{vibrate:true,sound:false}};programEditDraft=null;editSessionKey=null;migrate();persist();session=Object.keys(state.program)[0]||'Upper A';idx=0;renderAll();showToast('バックアップを復元しました')}catch(_){alert('このバックアップは読み込めませんでした')}};r.readAsText(f);e.target.value=''});
+$('#importFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x||!Array.isArray(x.logs))throw new Error();if(!confirm('現在のデータをバックアップ内容で置き換えますか？'))return;state={version:360,logs:x.logs||[],memo:x.memo||'',program:x.program||clone(DEFAULT_PROGRAM),conditions:x.conditions||{},active:null,timer:null,timerSettings:x.timerSettings||{vibrate:true,sound:false}};programEditDraft=null;editSessionKey=null;migrate();persist();session=Object.keys(state.program)[0]||'Day 1 胸＋二頭';idx=0;renderAll();showToast('バックアップを復元しました')}catch(_){alert('このバックアップは読み込めませんでした')}};r.readAsText(f);e.target.value=''});
 
 document.addEventListener('pointerdown',()=>{if(state.timerSettings.sound)ensureAudio()},{once:true,capture:true});
 
