@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f5f5f7">
 <link rel="manifest" href="manifest.webmanifest">
-<title>Workout Log v3.6.0</title>
+<title>Workout Log v3.7.1</title>
 <style>
 :root{
   --bg:#f5f5f7;--surface:#ffffff;--text:#111111;--muted:#6e6e73;--line:#dedee3;
@@ -120,7 +120,7 @@ button,input,select,textarea{font:inherit;color:inherit}button{border:0;cursor:p
         <button class="groupRow" id="resetProgram" type="button" style="width:100%;background:transparent;text-align:left"><div><div class="groupLabel" style="color:var(--danger)">メニューを初期状態に戻す</div><div class="groupMeta">履歴は残ります</div></div><div class="chev">›</div></button>
       </div>
     </div>
-    <div class="date" style="text-align:center;padding:8px 0 20px">Workout Log v3.6.0 · データは端末内に保存</div>
+    <div class="date" style="text-align:center;padding:8px 0 20px">Workout Log v3.7.1 · データは端末内に保存</div>
   </section>
 </main>
 
@@ -209,10 +209,10 @@ button,input,select,textarea{font:inherit;color:inherit}button{border:0;cursor:p
 const DEFAULT_PROGRAM={
   'Day 1 胸＋二頭':[
     {id:'ex-bench',name:'ベンチプレス',weight:70,min:5,max:8,sets:2,step:2.5,restSec:180},
-    {id:'ex-inclineplate',name:'プレートロード・インクラインチェストプレス',weight:0,min:8,max:12,sets:3,step:2.5,restSec:150},
+    {id:'ex-inclineplate',name:'プレートロード・インクラインチェストプレス',weight:60,min:8,max:12,sets:3,step:2.5,restSec:150},
     {id:'ex-chestpress',name:'チェストプレスマシン',weight:0,min:8,max:12,sets:3,step:2.5,restSec:120},
-    {id:'ex-pecfly',name:'ペックフライ',weight:40,min:12,max:15,sets:2,step:2.5,restSec:90},
-    {id:'ex-preacher',name:'プリーチャーカールマシン',weight:0,min:8,max:12,sets:3,step:2.5,restSec:90}
+    {id:'ex-pecfly',name:'ペックフライ',weight:50,min:12,max:15,sets:2,step:2.5,restSec:90},
+    {id:'ex-preacher',name:'プリーチャーカールマシン',weight:35,min:8,max:12,sets:3,step:2.5,restSec:90}
   ],
   'Day 2 脚A':[
     {id:'ex-squat',name:'バーベルスクワット',weight:72.5,min:5,max:8,sets:2,step:2.5,restSec:180},
@@ -223,20 +223,20 @@ const DEFAULT_PROGRAM={
     {id:'ex-abs',name:'アブドミナルマシン',weight:0,min:10,max:15,sets:2,step:2.5,restSec:75}
   ],
   'Day 3 背中':[
-    {id:'ex-lat',name:'ラットプルダウンマシン',weight:45,min:8,max:12,sets:3,step:2.5,restSec:120},
     {id:'ex-platepulldown',name:'プレートロード式プルダウン',weight:0,min:8,max:12,sets:3,step:2.5,restSec:120},
     {id:'ex-chestsupportedrow',name:'チェストサポート・ロー',weight:0,min:8,max:12,sets:3,step:2.5,restSec:120},
+    {id:'ex-lat',name:'ラットプルダウンマシン',weight:45,min:8,max:12,sets:3,step:2.5,restSec:120},
     {id:'ex-platerow',name:'プレートロード式ロー',weight:0,min:10,max:15,sets:2,step:2.5,restSec:120},
     {id:'ex-rear',name:'リアデルトマシン',weight:0,min:12,max:20,sets:3,step:2.5,restSec:90},
-    {id:'ex-preacher',name:'プリーチャーカールマシン',weight:0,min:10,max:15,sets:2,step:2.5,restSec:90}
+    {id:'ex-preacher',name:'プリーチャーカールマシン',weight:35,min:10,max:15,sets:2,step:2.5,restSec:90}
   ],
   'Day 4 肩＋腕＋胸':[
-    {id:'ex-shoulderpress',name:'ショルダープレスマシン',weight:0,min:8,max:12,sets:3,step:2.5,restSec:120},
     {id:'ex-multiside',name:'Standing Multi Flight サイドレイズ',weight:0,min:12,max:20,sets:4,step:2.5,restSec:90},
+    {id:'ex-shoulderpress',name:'ショルダープレスマシン',weight:0,min:8,max:12,sets:3,step:2.5,restSec:120},
+    {id:'ex-inclineplate',name:'プレートロード・インクラインチェストプレス',weight:60,min:10,max:15,sets:2,step:2.5,restSec:120},
     {id:'ex-rear',name:'リアデルトマシン',weight:0,min:12,max:20,sets:2,step:2.5,restSec:90},
-    {id:'ex-inclineplate',name:'プレートロード・インクラインチェストプレス',weight:0,min:10,max:15,sets:2,step:2.5,restSec:120},
     {id:'ex-triceps',name:'トライセプスプレスダウン',weight:0,min:10,max:15,sets:3,step:2.5,restSec:90},
-    {id:'ex-preacher',name:'プリーチャーカールマシン',weight:0,min:10,max:15,sets:2,step:2.5,restSec:90}
+    {id:'ex-preacher',name:'プリーチャーカールマシン',weight:35,min:10,max:15,sets:2,step:2.5,restSec:90}
   ],
   'Day 5 脚B':[
     {id:'ex-deadlift',name:'デッドリフト',weight:82.5,min:4,max:6,sets:2,step:2.5,restSec:180},
@@ -262,14 +262,15 @@ function defaultRestSec(name){const n=String(name||'');if(/ベンチ|スクワ�
 
 let raw=null;try{raw=JSON.parse(localStorage.getItem('workout-log-v35')||'null')}catch(_){}
 if(!raw){for(const key of ['workout-log-v34','workout-log-v33','workout-log-v32','workout-log-v31','workout-log-v3','workout-log-v2','workout-log-v1']){try{const x=JSON.parse(localStorage.getItem(key)||'null');if(x){raw=x;break}}catch(_){}}}
-let state={version:360,logs:[],memo:'',program:clone(DEFAULT_PROGRAM),conditions:{},active:null,timer:null,timerSettings:{vibrate:true,sound:false}};
+let state={version:371,logs:[],memo:'',program:clone(DEFAULT_PROGRAM),conditions:{},active:null,timer:null,timerSettings:{vibrate:true,sound:false}};
 if(raw){state.logs=Array.isArray(raw.logs)?raw.logs:[];state.memo=raw.memo||'';state.program=raw.program||clone(DEFAULT_PROGRAM);state.conditions=raw.conditions||{};state.timerSettings=raw.timerSettings||{vibrate:true,sound:false};state.active=raw.active||null;state.timer=raw.timer||null}
-// v3.6.0: five-day hypertrophy-first split with low-volume BIG3 retained. Keep history and in-progress workout intact.
-if(raw && (+raw.version||0)<360){
+if(raw && (+raw.version||0)<371 && !state.active?.startedAt){state.program=clone(DEFAULT_PROGRAM);state.active=null;}
+// v3.7.1: bodybuilding 5-day split. Preserve history and any workout already in progress; refresh the formal program when safe.
+if(raw && (+raw.version||0)<361){
   // Upgrade the formal program without discarding an in-progress workout.
   // Active workout keeps its own exercise snapshot/drafts and can be finished safely.
   state.program=clone(DEFAULT_PROGRAM);
-  state.version=360;
+  state.version=361;
 }
 if(state.timerSettings.vibrate===undefined)state.timerSettings.vibrate=true;if(state.timerSettings.sound===undefined)state.timerSettings.sound=false;
 if(state.timer&&!state.active)state.timer=null;
@@ -471,7 +472,7 @@ $('#saveProgram').addEventListener('click',()=>{if(state.active?.startedAt){show
 $('#timerVibrate').checked=!!state.timerSettings.vibrate;$('#timerSound').checked=!!state.timerSettings.sound;$('#timerVibrate').addEventListener('change',()=>{state.timerSettings.vibrate=$('#timerVibrate').checked;persist()});$('#timerSound').addEventListener('change',()=>{state.timerSettings.sound=$('#timerSound').checked;ensureAudio();persist()});
 $('#resetProgram').addEventListener('click',()=>{if(state.active?.startedAt){showToast('トレーニング終了後に変更できます');return}if(confirm('履歴を残したまま、メニューだけ初期状態に戻しますか？')){state.program=clone(DEFAULT_PROGRAM);state.active=null;programEditDraft=null;editSessionKey=null;session='Day 1 胸＋二頭';idx=0;persist();renderWorkout();showToast('メニューを初期化しました')}});
 $('#exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`workout-backup-${isoToday()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});
-$('#importFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x||!Array.isArray(x.logs))throw new Error();if(!confirm('現在のデータをバックアップ内容で置き換えますか？'))return;state={version:360,logs:x.logs||[],memo:x.memo||'',program:x.program||clone(DEFAULT_PROGRAM),conditions:x.conditions||{},active:null,timer:null,timerSettings:x.timerSettings||{vibrate:true,sound:false}};programEditDraft=null;editSessionKey=null;migrate();persist();session=Object.keys(state.program)[0]||'Day 1 胸＋二頭';idx=0;renderAll();showToast('バックアップを復元しました')}catch(_){alert('このバックアップは読み込めませんでした')}};r.readAsText(f);e.target.value=''});
+$('#importFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x||!Array.isArray(x.logs))throw new Error();if(!confirm('現在のデータをバックアップ内容で置き換えますか？'))return;state={version:371,logs:x.logs||[],memo:x.memo||'',program:x.program||clone(DEFAULT_PROGRAM),conditions:x.conditions||{},active:null,timer:null,timerSettings:x.timerSettings||{vibrate:true,sound:false}};programEditDraft=null;editSessionKey=null;migrate();persist();session=Object.keys(state.program)[0]||'Day 1 胸＋二頭';idx=0;renderAll();showToast('バックアップを復元しました')}catch(_){alert('このバックアップは読み込めませんでした')}};r.readAsText(f);e.target.value=''});
 
 document.addEventListener('pointerdown',()=>{if(state.timerSettings.sound)ensureAudio()},{once:true,capture:true});
 
