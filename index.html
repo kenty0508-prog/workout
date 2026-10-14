@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f5f5f7">
 <link rel="manifest" href="manifest.webmanifest">
-<title>Workout Log v3.7.4</title>
+<title>Workout Log v3.7.5</title>
 <style>
 :root{
   --bg:#f5f5f7;--surface:#ffffff;--text:#111111;--muted:#6e6e73;--line:#dedee3;
@@ -120,7 +120,7 @@ button,input,select,textarea{font:inherit;color:inherit}button{border:0;cursor:p
         <button class="groupRow" id="resetProgram" type="button" style="width:100%;background:transparent;text-align:left"><div><div class="groupLabel" style="color:var(--danger)">メニューを初期状態に戻す</div><div class="groupMeta">履歴は残ります</div></div><div class="chev">›</div></button>
       </div>
     </div>
-    <div class="date" style="text-align:center;padding:8px 0 20px">Workout Log v3.7.4 · データは端末内に保存</div>
+    <div class="date" style="text-align:center;padding:8px 0 20px">Workout Log v3.7.5 · データは端末内に保存</div>
   </section>
 </main>
 
@@ -217,7 +217,7 @@ button,input,select,textarea{font:inherit;color:inherit}button{border:0;cursor:p
 const DEFAULT_PROGRAM={
   'Day 1 ベンチ重め＋胸・二頭':[
     {id:'ex-bench',name:'ベンチプレス',weight:75,min:3,max:5,sets:3,step:2.5,restSec:240},
-    {id:'ex-inclineplate',name:'プレートロード・インクラインチェストプレス',weight:60,min:8,max:12,sets:3,step:2.5,restSec:150},
+    {id:'ex-inclinedb',name:'インクラインダンベルプレス',weight:20,min:8,max:12,sets:3,step:2,restSec:150},
     {id:'ex-chestpress',name:'チェストプレスマシン',weight:60,min:8,max:12,sets:2,step:2.5,restSec:150},
     {id:'ex-pecfly',name:'ペックフライ',weight:50,min:10,max:15,sets:2,step:2.5,restSec:90},
     {id:'ex-dbcurl',name:'ダンベルカール',weight:0,min:8,max:12,sets:3,step:1,restSec:120}
@@ -235,12 +235,14 @@ const DEFAULT_PROGRAM={
     {id:'ex-squat',name:'バーベルスクワット',weight:62.5,min:5,max:5,sets:2,step:2.5,restSec:150},
     {id:'ex-platepulldown',name:'プレートロード式プルダウン',weight:60,min:8,max:12,sets:3,step:2.5,restSec:150},
     {id:'ex-rowmachine',name:'ローマシン',weight:0,min:8,max:12,sets:3,step:2.5,restSec:150},
+    {id:'ex-lat',name:'ラットプルダウン',weight:0,min:10,max:15,sets:2,step:2.5,restSec:120},
     {id:'ex-rear',name:'リアデルトマシン',weight:40,min:12,max:20,sets:2,step:2.5,restSec:90}
   ],
   'Day 4 肩・腕＋上胸':[
     {id:'ex-multiside',name:'Standing Multi Flight サイドレイズ',weight:25,min:12,max:20,sets:4,step:2.5,restSec:90},
+    {id:'ex-side',name:'ダンベルサイドレイズ',weight:8,min:12,max:20,sets:2,step:1,restSec:90},
     {id:'ex-smithshoulder',name:'スミスショルダープレス',weight:40,min:8,max:12,sets:2,step:2.5,restSec:120},
-    {id:'ex-inclineplate',name:'プレートロード・インクラインチェストプレス',weight:60,min:10,max:15,sets:2,step:2.5,restSec:120},
+    {id:'ex-smithincline',name:'スミスインクラインプレス',weight:0,min:10,max:15,sets:2,step:2.5,restSec:120},
     {id:'ex-ohtriceps',name:'OHケーブルトライセプスEX',weight:30,min:10,max:15,sets:3,step:2.5,restSec:90},
     {id:'ex-bbcurl',name:'バーベルカール',weight:30,min:8,max:12,sets:3,step:2.5,restSec:120}
   ],
@@ -258,7 +260,7 @@ const dateText=()=>new Date().toLocaleDateString('ja-JP',{year:'numeric',month:'
 const uid=()=>`w-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,8)}`;
 const hashName=s=>{let h=2166136261;for(const c of String(s)){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return 'ex-'+(h>>>0).toString(36)};
 const temporaryExerciseId=(name,replacedId='')=>'alt-'+hashName(`${replacedId}|${String(name).trim()}`).slice(3);
-function canonicalId(name){const n=String(name||'');if(n==='ベンチプレス')return 'ex-bench';if(n==='ダンベルカール')return 'ex-dbcurl';if(n==='バーベルカール')return 'ex-bbcurl';if(n==='ローマシン')return 'ex-rowmachine';if(n==='シーテッドケーブルロー')return 'ex-cablerow';if(n==='スミスショルダープレス')return 'ex-smithshoulder';if(n==='OHケーブルトライセプスEX')return 'ex-ohtriceps';if(n==='プレートロード・インクラインチェストプレス')return 'ex-inclineplate';if(/インクラインベンチプレス/.test(n))return 'ex-incline';if(n==='ラットプルダウン')return 'ex-lat';if(n==='シーテッドロー')return 'ex-row';if(n==='バーベルスクワット')return 'ex-squat';if(n==='レッグプレス')return 'ex-legpress';if(n==='シーテッドレッグカール')return 'ex-legcurl';if(n==='プローンレッグカール')return 'ex-pronecurl';if(n==='Standing Multi Flight サイドレイズ')return 'ex-multiside';if(/サイドレイズ/.test(n))return 'ex-side';if(n==='リアデルト')return 'ex-rear';if(n==='チェストプレス')return 'ex-chestpress';if(n==='ペックフライ')return 'ex-pecfly';if(n==='プリーチャーカール')return 'ex-preacher';if(n==='デッドリフト')return 'ex-deadlift';if(n==='レッグエクステンション')return 'ex-legext';if(n==='プレートロード・ロー')return 'ex-platerow';if(n==='Standing Multi Flight サイドレイズ')return 'ex-multiside';if(n==='トライセプスプレスダウン')return 'ex-triceps';if(n==='ショルダープレス')return 'ex-shoulderpress';if(n==='スタンディングカーフレイズ')return 'ex-calf';if(n==='ヒップスラストマシン')return 'ex-hipthrust';if(n==='アブドミナル'||n==='アブドミナルマシン')return 'ex-abs';if(n==='ラットプルダウンマシン')return 'ex-lat';if(n==='チェストプレスマシン')return 'ex-chestpress';if(n==='チェストサポート・ロー')return 'ex-chestsupportedrow';if(n==='プリーチャーカールマシン')return 'ex-preacher';if(n==='45°プレートロード・レッグプレス'||n==='45°プレートロード・レッグプレス（足位置高め）')return 'ex-legpress45';if(n==='ヒップスラスト／グルートドライブ')return 'ex-hipthrust';if(n==='プレートロード式プルダウン')return 'ex-platepulldown';if(n==='プレートロード式ロー')return 'ex-platerow';if(n==='ショルダープレスマシン')return 'ex-shoulderpress';if(n==='リアデルトマシン')return 'ex-rear';if(n==='ルーマニアンデッドリフト')return 'ex-rdl';return null}
+function canonicalId(name){const n=String(name||'');if(n==='ベンチプレス')return 'ex-bench';if(n==='ダンベルカール')return 'ex-dbcurl';if(n==='バーベルカール')return 'ex-bbcurl';if(n==='ローマシン')return 'ex-rowmachine';if(n==='シーテッドケーブルロー')return 'ex-cablerow';if(n==='スミスショルダープレス')return 'ex-smithshoulder';if(n==='OHケーブルトライセプスEX')return 'ex-ohtriceps';if(n==='プレートロード・インクラインチェストプレス')return 'ex-inclineplate';if(n==='インクラインダンベルプレス')return 'ex-inclinedb';if(n==='スミスインクラインプレス')return 'ex-smithincline';if(/インクラインベンチプレス/.test(n))return 'ex-incline';if(n==='ラットプルダウン')return 'ex-lat';if(n==='シーテッドロー')return 'ex-row';if(n==='バーベルスクワット')return 'ex-squat';if(n==='レッグプレス')return 'ex-legpress';if(n==='シーテッドレッグカール')return 'ex-legcurl';if(n==='プローンレッグカール')return 'ex-pronecurl';if(n==='Standing Multi Flight サイドレイズ')return 'ex-multiside';if(/サイドレイズ/.test(n))return 'ex-side';if(n==='リアデルト')return 'ex-rear';if(n==='チェストプレス')return 'ex-chestpress';if(n==='ペックフライ')return 'ex-pecfly';if(n==='プリーチャーカール')return 'ex-preacher';if(n==='デッドリフト')return 'ex-deadlift';if(n==='レッグエクステンション')return 'ex-legext';if(n==='プレートロード・ロー')return 'ex-platerow';if(n==='Standing Multi Flight サイドレイズ')return 'ex-multiside';if(n==='トライセプスプレスダウン')return 'ex-triceps';if(n==='ショルダープレス')return 'ex-shoulderpress';if(n==='スタンディングカーフレイズ')return 'ex-calf';if(n==='ヒップスラストマシン')return 'ex-hipthrust';if(n==='アブドミナル'||n==='アブドミナルマシン')return 'ex-abs';if(n==='ラットプルダウンマシン')return 'ex-lat';if(n==='チェストプレスマシン')return 'ex-chestpress';if(n==='チェストサポート・ロー')return 'ex-chestsupportedrow';if(n==='プリーチャーカールマシン')return 'ex-preacher';if(n==='45°プレートロード・レッグプレス'||n==='45°プレートロード・レッグプレス（足位置高め）')return 'ex-legpress45';if(n==='ヒップスラスト／グルートドライブ')return 'ex-hipthrust';if(n==='プレートロード式プルダウン')return 'ex-platepulldown';if(n==='プレートロード式ロー')return 'ex-platerow';if(n==='ショルダープレスマシン')return 'ex-shoulderpress';if(n==='リアデルトマシン')return 'ex-rear';if(n==='ルーマニアンデッドリフト')return 'ex-rdl';return null}
 const trimNum=n=>Number(n).toLocaleString('ja-JP',{maximumFractionDigits:2});
 const fmtTime=sec=>{sec=Math.max(0,Math.round(+sec||0));return `${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`};
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
@@ -266,7 +268,7 @@ function defaultRestSec(name){const n=String(name||'');if(/ベンチ|スクワ�
 
 let raw=null;try{raw=JSON.parse(localStorage.getItem('workout-log-v35')||'null')}catch(_){}
 if(!raw){for(const key of ['workout-log-v34','workout-log-v33','workout-log-v32','workout-log-v31','workout-log-v3','workout-log-v2','workout-log-v1']){try{const x=JSON.parse(localStorage.getItem(key)||'null');if(x){raw=x;break}}catch(_){}}}
-let state={version:374,logs:[],memo:'',program:clone(DEFAULT_PROGRAM),conditions:{},active:null,timer:null,timerSettings:{vibrate:true,sound:false}};
+let state={version:375,logs:[],memo:'',program:clone(DEFAULT_PROGRAM),conditions:{},active:null,timer:null,timerSettings:{vibrate:true,sound:false}};
 if(raw){state.logs=Array.isArray(raw.logs)?raw.logs:[];state.memo=raw.memo||'';state.program=raw.program||clone(DEFAULT_PROGRAM);state.conditions=raw.conditions||{};state.timerSettings=raw.timerSettings||{vibrate:true,sound:false};state.active=raw.active||null;state.timer=raw.timer||null;state.pendingStrengthProgram=!!raw.pendingStrengthProgram}
 if(raw && (+raw.version||0)<371 && !state.active?.startedAt){state.program=clone(DEFAULT_PROGRAM);state.active=null;}
 // v3.7.4: apply the strength/hypertrophy split without discarding old logs.
@@ -274,6 +276,31 @@ if(raw && (+raw.version||0)<371 && !state.active?.startedAt){state.program=clone
 if(raw && (+raw.version||0)<374){
   if(state.active && Object.values(state.active.drafts||{}).some(d=>(d.sets||[]).some(s=>s.done))){state.pendingStrengthProgram=true;}
   else {state.program=clone(DEFAULT_PROGRAM);state.active=null;state.timer=null;state.version=374;}
+}
+// v3.7.5: minimally patch formal exercises, retaining user-set weights and history.
+// An in-progress session is left intact until it finishes.
+function upgrade375Program(){
+  const day1=state.program['Day 1 ベンチ重め＋胸・二頭'];
+  const day3=state.program['Day 3 ベンチ軽め＋スクワット軽め＋背中'];
+  const day4=state.program['Day 4 肩・腕＋上胸'];
+  if(!Array.isArray(day1)||!Array.isArray(day3)||!Array.isArray(day4))return;
+  const d1Old=day1.findIndex(e=>e.id==='ex-inclineplate'||e.name==='プレートロード・インクラインチェストプレス');
+  if(d1Old>=0)day1.splice(d1Old,1,clone(DEFAULT_PROGRAM['Day 1 ベンチ重め＋胸・二頭'][1]));
+  const d4Old=day4.findIndex(e=>e.id==='ex-inclineplate'||e.name==='プレートロード・インクラインチェストプレス');
+  if(d4Old>=0)day4.splice(d4Old,1,clone(DEFAULT_PROGRAM['Day 4 肩・腕＋上胸'].find(e=>e.id==='ex-smithincline')));
+  if(!day3.some(e=>e.id==='ex-lat'||e.name==='ラットプルダウン')){
+    const i=day3.findIndex(e=>e.id==='ex-rowmachine'||e.name==='ローマシン');
+    day3.splice(i>=0?i+1:day3.length,0,clone(DEFAULT_PROGRAM['Day 3 ベンチ軽め＋スクワット軽め＋背中'].find(e=>e.id==='ex-lat')));
+  }
+  if(!day4.some(e=>e.id==='ex-side'||e.name==='ダンベルサイドレイズ')){
+    const i=day4.findIndex(e=>e.id==='ex-multiside');
+    day4.splice(i>=0?i+1:day4.length,0,clone(DEFAULT_PROGRAM['Day 4 肩・腕＋上胸'].find(e=>e.id==='ex-side')));
+  }
+  state.version=375;state.pendingStrengthProgram=false;
+}
+if(raw && (+raw.version||0)<375){
+  if(state.active && Object.values(state.active.drafts||{}).some(d=>(d.sets||[]).some(s=>s.done)))state.pendingStrengthProgram=true;
+  else upgrade375Program();
 }
 // v3.7.1: bodybuilding 5-day split. Preserve history and any workout already in progress; refresh the formal program when safe.
 if(raw && (+raw.version||0)<361){
@@ -433,7 +460,7 @@ $('#restEnd').addEventListener('click',()=>finishRest(true));
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)renderRest()});
 $('#nextExercise').addEventListener('click',()=>{const list=state.program[session]||[],base=list[idx],ex=effectiveExercise(base),d=ensureDraft(ex),done=d.sets.filter(s=>s.done).length,nextIdx=nextIncompleteIndex(idx),currentComplete=done>=d.sets.length;if(!currentComplete&&nextIdx===null){showToast('この種目の残りセットを完了してください');return}if(!currentComplete&&nextIdx!==null&&!confirm(`${done}/${d.sets.length}セット完了です。この種目はあとで戻れます。次へ進みますか？`))return;if(nextIdx!==null){goToExercise(nextIdx)}else finishWorkout(true)});
 $('#previousExercise').addEventListener('click',()=>{if(idx>0)goToExercise(idx-1)});
-function finishWorkout(showSheet=true){if(!state.active)return;const l=activeLog(false);if(l)l.endedAt=Date.now();state.active=null;cancelRest(false);if(state.pendingStrengthProgram){state.program=clone(DEFAULT_PROGRAM);state.version=374;state.pendingStrengthProgram=false;session=Object.keys(state.program)[0];}persist();renderProgress();if(showSheet&&l){showToast('トレーニング完了');openShare()}idx=0}
+function finishWorkout(showSheet=true){if(!state.active)return;const l=activeLog(false);if(l)l.endedAt=Date.now();state.active=null;cancelRest(false);if(state.pendingStrengthProgram){upgrade375Program();session=Object.keys(state.program)[0];}persist();renderProgress();if(showSheet&&l){showToast('トレーニング完了');openShare()}idx=0}
 
 $('#positionText').addEventListener('click',openExercisePicker);
 $('#closeExercisePicker').addEventListener('click',closeExercisePicker);
@@ -480,9 +507,9 @@ $('#editSession').addEventListener('change',()=>{readEditorToDraft(editSessionKe
 $('#addExercise').addEventListener('click',()=>{readEditorToDraft();programEditDraft[editSessionKey].push({id:uid(),name:'新しい種目',weight:0,min:8,max:12,sets:3,step:2.5,restSec:120});renderEditor()});
 $('#saveProgram').addEventListener('click',()=>{if(state.active?.startedAt){showToast('トレーニング終了後に変更できます');return}readEditorToDraft();state.program=clone(programEditDraft);migrate();persist();programEditDraft=null;editSessionKey=null;$('#programEditor').classList.remove('show');renderWorkout();showToast('メニューを反映しました')});
 $('#timerVibrate').checked=!!state.timerSettings.vibrate;$('#timerSound').checked=!!state.timerSettings.sound;$('#timerVibrate').addEventListener('change',()=>{state.timerSettings.vibrate=$('#timerVibrate').checked;persist()});$('#timerSound').addEventListener('change',()=>{state.timerSettings.sound=$('#timerSound').checked;ensureAudio();persist()});
-$('#resetProgram').addEventListener('click',()=>{if(state.active?.startedAt){showToast('トレーニング終了後に変更できます');return}if(confirm('履歴を残したまま、メニューだけ初期状態に戻しますか？')){state.program=clone(DEFAULT_PROGRAM);state.pendingStrengthProgram=false;state.version=374;state.active=null;programEditDraft=null;editSessionKey=null;session='Day 1 ベンチ重め＋胸・二頭';idx=0;persist();renderWorkout();showToast('メニューを初期化しました')}});
+$('#resetProgram').addEventListener('click',()=>{if(state.active?.startedAt){showToast('トレーニング終了後に変更できます');return}if(confirm('履歴を残したまま、メニューだけ初期状態に戻しますか？')){state.program=clone(DEFAULT_PROGRAM);state.pendingStrengthProgram=false;state.version=375;state.active=null;programEditDraft=null;editSessionKey=null;session='Day 1 ベンチ重め＋胸・二頭';idx=0;persist();renderWorkout();showToast('メニューを初期化しました')}});
 $('#exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`workout-backup-${isoToday()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});
-$('#importFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x||!Array.isArray(x.logs))throw new Error();if(!confirm('現在のデータをバックアップ内容で置き換えますか？'))return;state={version:374,logs:x.logs||[],memo:x.memo||'',program:x.program||clone(DEFAULT_PROGRAM),conditions:x.conditions||{},active:null,timer:null,timerSettings:x.timerSettings||{vibrate:true,sound:false}};programEditDraft=null;editSessionKey=null;if((+x.version||0)<374){state.program=clone(DEFAULT_PROGRAM);state.version=374;}migrate();persist();session=Object.keys(state.program)[0]||'Day 1 ベンチ重め＋胸・二頭';idx=0;renderAll();showToast('バックアップを復元しました')}catch(_){alert('このバックアップは読み込めませんでした')}};r.readAsText(f);e.target.value=''});
+$('#importFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x||!Array.isArray(x.logs))throw new Error();if(!confirm('現在のデータをバックアップ内容で置き換えますか？'))return;state={version:375,logs:x.logs||[],memo:x.memo||'',program:x.program||clone(DEFAULT_PROGRAM),conditions:x.conditions||{},active:null,timer:null,timerSettings:x.timerSettings||{vibrate:true,sound:false}};programEditDraft=null;editSessionKey=null;if((+x.version||0)<374){state.program=clone(DEFAULT_PROGRAM);}if((+x.version||0)<375)upgrade375Program();migrate();persist();session=Object.keys(state.program)[0]||'Day 1 ベンチ重め＋胸・二頭';idx=0;renderAll();showToast('バックアップを復元しました')}catch(_){alert('このバックアップは読み込めませんでした')}};r.readAsText(f);e.target.value=''});
 
 document.addEventListener('pointerdown',()=>{if(state.timerSettings.sound)ensureAudio()},{once:true,capture:true});
 
