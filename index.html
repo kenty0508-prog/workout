@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f5f5f7">
 <link rel="manifest" href="manifest.webmanifest">
-<title>Workout Log v3.8.0</title>
+<title>Workout Log v3.8.1</title>
 <style>
 :root{
   --bg:#f5f5f7;--surface:#ffffff;--text:#111111;--muted:#6e6e73;--line:#dedee3;
@@ -120,7 +120,7 @@ button,input,select,textarea{font:inherit;color:inherit}button{border:0;cursor:p
         <button class="groupRow" id="resetProgram" type="button" style="width:100%;background:transparent;text-align:left"><div><div class="groupLabel" style="color:var(--danger)">メニューを初期状態に戻す</div><div class="groupMeta">履歴は残ります</div></div><div class="chev">›</div></button>
       </div>
     </div>
-    <div class="date" style="text-align:center;padding:8px 0 20px">Workout Log v3.8.0 · データは端末内に保存</div>
+    <div class="date" style="text-align:center;padding:8px 0 20px">Workout Log v3.8.1 · データは端末内に保存</div>
   </section>
 </main>
 
@@ -271,44 +271,8 @@ if(!raw){for(const key of ['workout-log-v34','workout-log-v33','workout-log-v32'
 let state={version:380,logs:[],memo:'',program:clone(DEFAULT_PROGRAM),conditions:{},active:null,timer:null,timerSettings:{vibrate:true,sound:false}};
 if(raw){state.logs=Array.isArray(raw.logs)?raw.logs:[];state.memo=raw.memo||'';state.program=raw.program||clone(DEFAULT_PROGRAM);state.conditions=raw.conditions||{};state.timerSettings=raw.timerSettings||{vibrate:true,sound:false};state.active=raw.active||null;state.timer=raw.timer||null;state.pendingStrengthProgram=!!raw.pendingStrengthProgram;state.pendingHypertrophyProgram=!!raw.pendingHypertrophyProgram}
 if(raw && (+raw.version||0)<371 && !state.active?.startedAt){state.program=clone(DEFAULT_PROGRAM);state.active=null;}
-// v3.7.4: apply the strength/hypertrophy split without discarding old logs.
-// Defer the switch if a workout is already underway, preserving its exercise list.
-if(raw && (+raw.version||0)<374){
-  if(state.active && Object.values(state.active.drafts||{}).some(d=>(d.sets||[]).some(s=>s.done))){state.pendingStrengthProgram=true;}
-  else {state.program=clone(DEFAULT_PROGRAM);state.active=null;state.timer=null;state.version=374;}
-}
-// v3.7.5: minimally patch formal exercises, retaining user-set weights and history.
-// An in-progress session is left intact until it finishes.
-function upgrade375Program(){
-  const day1=state.program['Day 1 ベンチ重め＋胸・二頭'];
-  const day3=state.program['Day 3 ベンチ軽め＋スクワット軽め＋背中'];
-  const day4=state.program['Day 4 肩・腕＋上胸'];
-  if(!Array.isArray(day1)||!Array.isArray(day3)||!Array.isArray(day4))return;
-  const d1Old=day1.findIndex(e=>e.id==='ex-inclineplate'||e.name==='プレートロード・インクラインチェストプレス');
-  if(d1Old>=0)day1.splice(d1Old,1,clone(DEFAULT_PROGRAM['Day 1 ベンチ重め＋胸・二頭'][1]));
-  const d4Old=day4.findIndex(e=>e.id==='ex-inclineplate'||e.name==='プレートロード・インクラインチェストプレス');
-  if(d4Old>=0)day4.splice(d4Old,1,clone(DEFAULT_PROGRAM['Day 4 肩・腕＋上胸'].find(e=>e.id==='ex-smithincline')));
-  if(!day3.some(e=>e.id==='ex-lat'||e.name==='ラットプルダウン')){
-    const i=day3.findIndex(e=>e.id==='ex-rowmachine'||e.name==='ローマシン');
-    day3.splice(i>=0?i+1:day3.length,0,clone(DEFAULT_PROGRAM['Day 3 ベンチ軽め＋スクワット軽め＋背中'].find(e=>e.id==='ex-lat')));
-  }
-  if(!day4.some(e=>e.id==='ex-side'||e.name==='ダンベルサイドレイズ')){
-    const i=day4.findIndex(e=>e.id==='ex-multiside');
-    day4.splice(i>=0?i+1:day4.length,0,clone(DEFAULT_PROGRAM['Day 4 肩・腕＋上胸'].find(e=>e.id==='ex-side')));
-  }
-  state.version=375;state.pendingStrengthProgram=false;
-}
-if(raw && (+raw.version||0)<375){
-  if(state.active && Object.values(state.active.drafts||{}).some(d=>(d.sets||[]).some(s=>s.done)))state.pendingStrengthProgram=true;
-  else upgrade375Program();
-}
-// v3.7.1: bodybuilding 5-day split. Preserve history and any workout already in progress; refresh the formal program when safe.
-if(raw && (+raw.version||0)<361){
-  // Upgrade the formal program without discarding an in-progress workout.
-  // Active workout keeps its own exercise snapshot/drafts and can be finished safely.
-  state.program=clone(DEFAULT_PROGRAM);
-  state.version=361;
-}
+// Historical logs are preserved. Legacy program migrations are intentionally
+// skipped: the v3.8 migration below installs the new split in one operation.
 if(state.timerSettings.vibrate===undefined)state.timerSettings.vibrate=true;if(state.timerSettings.sound===undefined)state.timerSettings.sound=false;
 if(state.timer&&!state.active)state.timer=null;
 if(state.timer){const sameDay=state.timer.date===isoToday(),age=Date.now()-(+state.timer.startedAt||0);if(!sameDay||!state.timer.startedAt){state.timer=null}else if(age>20*60*1000){if(confirm('前回の休憩タイマーが20分以上経過しています。破棄しますか？'))state.timer=null}}
@@ -329,7 +293,7 @@ function upgrade380Program(){
   state.active=null;
   state.timer=null;
 }
-if(raw && (+raw.version||0)<380){
+if(raw && ((+raw.version||0)<380 || Object.keys(state.program||{}).some(k=>k.includes('ベンチ重め')))){
   if(state.active && Object.values(state.active.drafts||{}).some(d=>(d.sets||[]).some(s=>s.done))){
     state.pendingHypertrophyProgram=true;
   }else upgrade380Program();
@@ -474,7 +438,7 @@ $('#restEnd').addEventListener('click',()=>finishRest(true));
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)renderRest()});
 $('#nextExercise').addEventListener('click',()=>{const list=state.program[session]||[],base=list[idx],ex=effectiveExercise(base),d=ensureDraft(ex),done=d.sets.filter(s=>s.done).length,nextIdx=nextIncompleteIndex(idx),currentComplete=done>=d.sets.length;if(!currentComplete&&nextIdx===null){showToast('この種目の残りセットを完了してください');return}if(!currentComplete&&nextIdx!==null&&!confirm(`${done}/${d.sets.length}セット完了です。この種目はあとで戻れます。次へ進みますか？`))return;if(nextIdx!==null){goToExercise(nextIdx)}else finishWorkout(true)});
 $('#previousExercise').addEventListener('click',()=>{if(idx>0)goToExercise(idx-1)});
-function finishWorkout(showSheet=true){if(!state.active)return;const l=activeLog(false);if(l)l.endedAt=Date.now();state.active=null;cancelRest(false);if(state.pendingHypertrophyProgram){upgrade380Program();session=Object.keys(state.program)[0];}else if(state.pendingStrengthProgram){upgrade375Program();session=Object.keys(state.program)[0];}persist();renderProgress();if(showSheet&&l){showToast('トレーニング完了');openShare()}idx=0}
+function finishWorkout(showSheet=true){if(!state.active)return;const l=activeLog(false);if(l)l.endedAt=Date.now();state.active=null;cancelRest(false);if(state.pendingHypertrophyProgram){upgrade380Program();session=Object.keys(state.program)[0];}persist();renderProgress();if(showSheet&&l){showToast('トレーニング完了');openShare()}idx=0}
 
 $('#positionText').addEventListener('click',openExercisePicker);
 $('#closeExercisePicker').addEventListener('click',closeExercisePicker);
