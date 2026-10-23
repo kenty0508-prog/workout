@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f5f5f7">
 <link rel="manifest" href="manifest.webmanifest">
-<title>Workout Log v3.9.2</title>
+<title>Workout Log v3.9.3</title>
 <style>
 :root{
   --bg:#f5f5f7;--surface:#ffffff;--text:#111111;--muted:#6e6e73;--line:#dedee3;
@@ -31,6 +31,32 @@ button,input,select,textarea{font:inherit;color:inherit}button{border:0;cursor:p
 .view{display:none}.view.on{display:block}.sectionTitle{font-size:28px;font-weight:760;letter-spacing:-.03em;margin:4px 0 16px}.group{background:var(--surface);border-radius:18px;overflow:hidden;margin-bottom:14px;border:1px solid color-mix(in srgb,var(--line) 72%,transparent)}.groupRow{min-height:58px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line)}.groupRow:last-child{border-bottom:0}.groupLabel{font-size:15px;font-weight:620}.groupMeta{font-size:12px;color:var(--muted);margin-top:2px}.chev{color:var(--muted);font-size:20px}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}.metric{background:var(--surface);border:1px solid color-mix(in srgb,var(--line) 72%,transparent);border-radius:18px;padding:14px}.metric span{font-size:11px;color:var(--muted)}.metric b{display:block;font-size:24px;letter-spacing:-.03em;margin-top:4px}.metric small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.history{background:var(--surface);border-radius:18px;border:1px solid color-mix(in srgb,var(--line) 72%,transparent);overflow:hidden}.historyItem{padding:13px 14px;border-bottom:1px solid var(--line)}.historyItem:last-child{border-bottom:0}.historyHead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.historyTitle{font-size:14px;font-weight:650}.historyMeta{font-size:11px;color:var(--muted);margin-top:4px}.historyDetail{display:none;padding-top:9px;color:var(--muted);font-size:12px;line-height:1.7}.historyDetail.show{display:block}
 .settingSection{margin-bottom:20px}.settingHeader{font-size:12px;color:var(--muted);padding:0 8px 7px}.editor{display:none;padding:10px 14px 14px;background:var(--surface);border-top:1px solid var(--line)}.editor.show{display:block}.editorList{display:grid;gap:9px}.editorItem{border-bottom:1px solid var(--line);padding:4px 0 12px}.editorItem:last-child{border-bottom:0}.editorTop{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}.editorGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:8px}.editorGrid label{font-size:10px;color:var(--muted)}.editorGrid input{margin-top:4px;height:42px}.moveRow{display:flex;gap:6px;margin-top:8px}.moveRow button{flex:1;min-height:44px;border-radius:10px;background:var(--soft);color:var(--muted)}
 .sheet{position:fixed;inset:0;z-index:60;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.35);padding:0}.sheet.show{display:flex}.sheetPanel{width:min(100%,680px);max-height:86%;overflow:auto;background:var(--bg);border-radius:24px 24px 0 0;padding:14px 16px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -10px 40px rgba(0,0,0,.18)}.sheetHandle{width:38px;height:5px;border-radius:999px;background:var(--line);margin:0 auto 12px}.exercisePickerList{background:var(--surface);border:1px solid color-mix(in srgb,var(--line) 72%,transparent);border-radius:18px;overflow:hidden}.exercisePick{width:100%;min-height:64px;padding:10px 14px;background:transparent;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;border-bottom:1px solid var(--line)}.exercisePick:last-child{border-bottom:0}.exercisePick.current{background:var(--accent-soft)}.exercisePickName{font-size:15px;font-weight:650}.exercisePick.current .exercisePickName{color:var(--accent)}.exercisePickStatus{flex:0 0 auto;font-size:12px;color:var(--muted)}.exercisePickStatus.done{color:var(--good);font-weight:650}.exercisePickDot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:6px;vertical-align:1px}.shareCard{background:#0d1117;color:#fff;border-radius:22px;padding:18px}.shareCard .mutedDark{color:#9ca3af;font-size:11px}.shareCard h2{font-size:30px;margin:5px 0 2px;letter-spacing:-.03em}.shareGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:14px 0}.shareMetric{background:#1f2937;border-radius:14px;padding:10px}.shareMetric span{display:block;color:#9ca3af;font-size:11px}.shareMetric b{display:block;font-size:18px;margin-top:3px}.compare{padding:10px 0;border-top:1px solid #374151}.compare:first-of-type{border-top:0}.compare b{font-size:15px}.compare div{font-size:12px;color:#d1d5db;line-height:1.6}.shareHelp{font-size:11px;color:#9ca3af;margin-top:10px}.sheetActions{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:12px}
+/* ChatGPT共有: 全記録を一画面に収めるための専用レイアウト。通常のシートに影響しない。 */
+#shareSheet{background:#0d1117;align-items:stretch;justify-content:center}
+#shareSheet .shareSheetPanel{width:min(100%,720px);height:100%;height:100dvh;max-height:none;min-height:0;overflow:hidden;display:flex;flex-direction:column;background:#0d1117;border-radius:0;padding:calc(6px + env(safe-area-inset-top)) 8px calc(8px + env(safe-area-inset-bottom));box-shadow:none}
+#shareSheet .shareViewport{position:relative;flex:1 1 0;min-height:0;width:100%;overflow:hidden}
+#shareSheet .shareCard{position:absolute;left:0;top:0;transform-origin:top left;width:100%;border-radius:12px;padding:12px 13px;background:#0d1117;color:#fff}
+#shareSheet .shareTop{display:flex;align-items:baseline;gap:10px;justify-content:space-between}
+#shareSheet .shareTop .shareTitle{font-size:21px;line-height:1.2;font-weight:780;letter-spacing:-.03em}
+#shareSheet .shareTop .shareBrand{font-size:10px;color:#9ca3af;font-weight:650;white-space:nowrap}
+#shareSheet .shareInfo{margin-top:4px;color:#d1d5db;font-size:11px;line-height:1.4;overflow-wrap:anywhere}
+#shareSheet .shareSummary{border-top:1px solid #374151;border-bottom:1px solid #374151;padding:5px 0;margin:7px 0 2px;display:grid;gap:3px;font-size:10.5px;line-height:1.35}
+#shareSheet .shareSummaryRow{display:grid;grid-template-columns:90px minmax(0,1fr);gap:5px}
+#shareSheet .shareSummaryRow .shareLabel{color:#9ca3af}
+#shareSheet .shareSummaryRow .shareValue{color:#f9fafb;overflow-wrap:anywhere}
+#shareSheet .compare{padding:7px 0 6px;border-top:1px solid #374151}
+#shareSheet .compare:first-child{border-top:0}
+#shareSheet .shareExHead{display:flex;flex-wrap:wrap;align-items:baseline;gap:3px 8px;margin:0 0 2px}
+#shareSheet .shareExHead b{font-size:12.5px;line-height:1.35;font-weight:750;color:#fff}
+#shareSheet .shareExHead span{font-size:10px;color:#aab6c6}
+#shareSheet .shareResultLine{display:grid;grid-template-columns:29px minmax(0,1fr);gap:5px;line-height:1.35;font-size:11px;padding:1px 0;color:#d1d5db}
+#shareSheet .shareResultLine .shareRowLabel{color:#aab6c6;font-weight:600}
+#shareSheet .shareResultLine .shareResultDetail{overflow-wrap:anywhere}
+#shareSheet .shareResultLine .shareRest{color:#9ca3af;font-size:10px}
+#shareSheet .shareHelp{font-size:9px;color:#9ca3af;margin:6px 0 0;text-align:center}
+#shareSheet .shareActions{flex:0 0 auto;display:flex;align-items:center;gap:8px;margin:4px 2px 0}
+#shareSheet .shareActions button{flex:0 0 94px;width:94px;min-height:43px;margin:0;font-size:13px;border-radius:11px}#shareSheet .shareActions #closeShare2{background:#1f2937;color:#fff}
+#shareSheet .shareActions .shareFitNote{flex:1 1 auto;min-width:0;color:#9ca3af;text-align:center;font-size:10px;line-height:1.3;overflow-wrap:normal}
 .historyEditExercise{background:var(--surface);border:1px solid color-mix(in srgb,var(--line) 72%,transparent);border-radius:18px;padding:14px;margin-bottom:10px}.historyEditExercise h3{font-size:16px;margin:0 0 10px}.historyEditSet{display:grid;grid-template-columns:28px minmax(0,1fr) minmax(0,1fr) 54px;gap:7px;align-items:center;margin-bottom:7px}.historyEditSet input{height:46px}.removeSet{min-height:42px;border-radius:11px;background:color-mix(in srgb,var(--danger) 10%,transparent);color:var(--danger);font-size:12px}.historyRir{margin-top:8px}
 .substituteForm{display:grid;gap:10px}.substituteNote{font-size:12px;color:var(--muted);line-height:1.55}.recentAlt{display:flex;gap:7px;overflow:auto;scrollbar-width:none}.recentAlt::-webkit-scrollbar{display:none}.recentAlt button{flex:0 0 auto;min-height:40px;border-radius:999px;padding:0 12px;background:var(--soft);color:var(--text);font-size:12px;font-weight:650}.tempLabel{font-size:10px;color:var(--accent);font-weight:700;margin-top:2px}.toast{position:fixed;left:50%;bottom:88px;z-index:90;transform:translate(-50%,15px);background:var(--text);color:var(--surface);padding:10px 14px;border-radius:999px;font-size:12px;font-weight:650;opacity:0;pointer-events:none;transition:.18s;box-shadow:var(--shadow);white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}
 .empty{padding:26px 14px;text-align:center;color:var(--muted);font-size:13px}.inlineActions{display:flex;gap:8px;margin-top:10px}.inlineActions>*{flex:1}.hidden{display:none!important}
@@ -181,25 +207,22 @@ button,input,select,textarea{font:inherit;color:inherit}button{border:0;cursor:p
 </div>
 
 <div class="sheet" id="shareSheet" role="dialog" aria-modal="true" aria-label="ChatGPT共有">
-  <div class="sheetPanel">
-    <div class="sheetHandle"></div>
-    <div class="shareCard" id="shareCard">
-      <div class="mutedDark">ChatGPTフィードバック用</div>
-      <h2>前回 → 今回</h2>
-      <div class="mutedDark" id="shareDate"></div>
-      <div class="shareGrid">
-        <div class="shareMetric"><span>直近セッション</span><b id="shareSession">—</b></div>
-        <div class="shareMetric"><span>コンディション</span><b id="shareCondition">—</b></div>
-        <div class="shareMetric"><span>Bench e1RM</span><b id="shareBench">—</b></div>
-        <div class="shareMetric"><span>SQ / DL e1RM</span><b id="shareLower">—</b></div>
+  <div class="sheetPanel shareSheetPanel">
+    <div class="shareViewport" id="shareViewport">
+      <div class="shareCard" id="shareCard">
+        <div class="shareTop"><div class="shareTitle">前回 → 今回</div><div class="shareBrand">WORKOUT LOG</div></div>
+        <div class="shareInfo"><span id="shareDate"></span> · <span id="shareSession"></span></div>
+        <div class="shareSummary">
+          <div class="shareSummaryRow"><span class="shareLabel">コンディション</span><span class="shareValue" id="shareCondition">—</span></div>
+          <div class="shareSummaryRow"><span class="shareLabel">推定1RM</span><span class="shareValue">BP <span id="shareBench">—</span> / SQ・DL <span id="shareLower">—</span>（kg）</span></div>
+        </div>
+        <div id="shareExercises"></div>
+        <div class="shareHelp">重量kg × 回数（同重量の連続セットは / で表記） · 休＝セット後の休憩</div>
       </div>
-      <div id="shareExercises"></div>
-      <div class="shareHelp">このカードをスクリーンショットしてChatGPTに送ってください。</div>
     </div>
-    <div class="sheetActions"><button class="secondaryAction" id="closeShare" type="button">閉じる</button><button class="primaryAction" id="closeShare2" type="button" style="margin-top:0">完了</button></div>
+    <div class="shareActions"><button class="secondaryAction" id="closeShare" type="button">閉じる</button><div class="shareFitNote" id="shareFitNote">画面内に全種目を表示</div><button class="primaryAction" id="closeShare2" type="button">完了</button></div>
   </div>
 </div>
-
 
 <div class="sheet" id="editHistorySheet" role="dialog" aria-modal="true" aria-label="履歴修正">
   <div class="sheetPanel">
@@ -577,9 +600,71 @@ $('#saveHistoryEdit').addEventListener('click',()=>{const l=state.logs.find(x=>x
 $('#deleteHistoryLog').addEventListener('click',()=>{const i=state.logs.findIndex(x=>x.id===editingLogId);if(i<0)return;if(!confirm('このセッション記録を削除しますか？'))return;state.logs.splice(i,1);persist();renderProgress();renderWorkout();closeHistoryEdit();showToast('記録を削除しました')});
 
 function previousBefore(e,currentLog){for(let i=state.logs.indexOf(currentLog)-1;i>=0;i--){const p=(state.logs[i].exercises||[]).find(x=>x.id===e.id||(!x.id&&x.name===e.name));if(p)return p}return null}
-function openShare(){renderShare();$('#shareSheet').classList.add('show')}
+// 同一重量の連続セットを "62.5kg×7/6/6" と表記し、各セットの休憩を残す。
+function compactShareSets(ex){
+  const sets=ex?.sets||[];
+  if(!sets.length)return {main:'記録なし',rest:''};
+  const groups=[];
+  sets.forEach(s=>{
+    const w=(+s.w>0)?`${trimNum(s.w)}kg`:'自重';
+    let g=groups[groups.length-1];
+    if(!g||g.weight!==w){g={weight:w,reps:[]};groups.push(g)}
+    g.reps.push(+s.r||0);
+  });
+  const main=groups.map(g=>`${g.weight}×${g.reps.join('/')}`).join(' · ');
+  const hasRest=sets.some(s=>+s.restAfter>0);
+  const rest=hasRest?'休'+sets.map(s=>(+s.restAfter>0)?fmtTime(s.restAfter):'—').join('/') :'';
+  return {main,rest};
+}
+function shareResultRow(label,ex){
+  if(!ex)return `<div class="shareResultLine"><span class="shareRowLabel">${label}</span><span class="shareResultDetail">記録なし</span></div>`;
+  const x=compactShareSets(ex);
+  return `<div class="shareResultLine"><span class="shareRowLabel">${label}</span><span class="shareResultDetail">${esc(x.main)}${x.rest?` <span class="shareRest">（${esc(x.rest)}）</span>`:''}</span></div>`;
+}
+function fitShareCard(){
+  const sheet=$('#shareSheet'),view=$('#shareViewport'),card=$('#shareCard');
+  if(!sheet.classList.contains('show')||!view.clientHeight||!view.clientWidth)return;
+  const w=view.clientWidth,h=view.clientHeight;
+  // 拡大を解除して自然の高さを測る。収まらなければ可読性を損ねにくい最大倍率を二分探索。
+  let low=.20,high=1,best=.20;
+  for(let i=0;i<14;i++){
+    const scale=(low+high)/2;
+    card.style.width=`${w/scale}px`;
+    const fits=card.scrollHeight*scale<=h-2;
+    if(fits){best=scale;low=scale}else{high=scale}
+  }
+  if(card.scrollHeight*best>h-2)best=.20;
+  const scale=Math.min(1,best);
+  card.style.width=`${w/scale}px`;
+  card.style.transform=`scale(${scale})`;
+  card.style.top='0px';
+  $('#shareFitNote').textContent=scale<.78?`全件表示 · 縮小${Math.round(scale*100)}%`:'画面内に全種目を表示';
+}
+function openShare(){renderShare();$('#shareSheet').classList.add('show');fitShareCard();requestAnimationFrame(fitShareCard)}
 function closeShare(){$('#shareSheet').classList.remove('show')}
-function renderShare(){const l=[...state.logs].reverse().find(x=>(x.exercises||[]).length);$('#shareDate').textContent=l?.date||isoToday();$('#shareSession').textContent=l?.session||'—';const c=l?.condition||{};const bits=[];if(c.bodyweight)bits.push(`${c.bodyweight}kg`);if(c.sleep)bits.push(`${c.sleep}h`);if(c.fatigue)bits.push(`疲労${c.fatigue}/5`);$('#shareCondition').textContent=bits.length?bits.join(' · '):'未入力';const bench=latestE1('ex-bench','ベンチプレス'),sq=latestE1('ex-squat','バーベルスクワット'),dl=latestE1('ex-deadlift','デッドリフト');$('#shareBench').textContent=bench?bench.toFixed(1)+' kg':'—';$('#shareLower').textContent=(sq||dl)?`${sq?sq.toFixed(1):'—'} / ${dl?dl.toFixed(1):'—'}`:'—';const box=$('#shareExercises');if(!l){box.innerHTML='<div class="mutedDark">まだ記録がありません</div>';return}box.innerHTML=(l.exercises||[]).map(e=>{const p=previousBefore(e,l),setText=x=>(x.sets||[]).map(fmtSetWithRest).join(' ｜ ');return `<div class="compare"><b>${esc(e.name)}${e.temporary?'（代替）':''}</b>${e.temporary&&e.replacedName?`<div>元の種目　${esc(e.replacedName)}</div>`:''}${p?`<div>前回　${esc(setText(p))}${p.rir!==''&&p.rir!==undefined?` · 最終RIR ${esc(p.rir)}`:''}</div>`:'<div>前回　記録なし</div>'}<div>今回　${esc(setText(e))}${e.rir!==''&&e.rir!==undefined?` · 最終RIR ${esc(e.rir)}`:''}</div></div>`}).join('')}
+function renderShare(){
+  const l=[...state.logs].reverse().find(x=>(x.exercises||[]).length);
+  $('#shareDate').textContent=l?.date||isoToday();
+  $('#shareSession').textContent=l?.session||'—';
+  const c=l?.condition||{},bits=[];
+  if(c.bodyweight)bits.push(`${c.bodyweight}kg`);
+  if(c.sleep)bits.push(`睡眠${c.sleep}h`);
+  if(c.fatigue)bits.push(`疲労${c.fatigue}/5`);
+  $('#shareCondition').textContent=bits.length?bits.join(' · '):'未入力';
+  const bench=latestE1('ex-bench','ベンチプレス'),sq=latestE1('ex-squat','バーベルスクワット'),dl=latestE1('ex-deadlift','デッドリフト');
+  $('#shareBench').textContent=bench?bench.toFixed(1):'—';
+  $('#shareLower').textContent=(sq||dl)?`${sq?sq.toFixed(1):'—'} / ${dl?dl.toFixed(1):'—'}`:'— / —';
+  const box=$('#shareExercises');
+  if(!l){box.innerHTML='<div class="mutedDark">まだ記録がありません</div>';return}
+  box.innerHTML=(l.exercises||[]).map(e=>{
+    const p=previousBefore(e,l),rir=x=>x&&x.rir!==''&&x.rir!==undefined?String(x.rir):'—';
+    const title=`${esc(e.name)}${e.temporary?'（代替）':''}`;
+    return `<div class="compare"><div class="shareExHead"><b>${title}</b><span>RIR ${esc(rir(p))}→${esc(rir(e))}</span>${e.temporary&&e.replacedName?`<span>元：${esc(e.replacedName)}</span>`:''}</div>${shareResultRow('前回',p)}${shareResultRow('今回',e)}</div>`;
+  }).join('');
+  if($('#shareSheet').classList.contains('show'))requestAnimationFrame(fitShareCard);
+}
+window.addEventListener('resize',()=>{if($('#shareSheet').classList.contains('show'))requestAnimationFrame(fitShareCard)});
+if(window.visualViewport)window.visualViewport.addEventListener('resize',()=>{if($('#shareSheet').classList.contains('show'))requestAnimationFrame(fitShareCard)});
 $('#quickShare').addEventListener('click',openShare);$('#shareFromProgress').addEventListener('click',openShare);$('#closeShare').addEventListener('click',closeShare);$('#closeShare2').addEventListener('click',closeShare);$('#shareSheet').addEventListener('click',e=>{if(e.target===$('#shareSheet'))closeShare()});
 
 function beginProgramEdit(){programEditDraft=clone(state.program);editSessionKey=state.program[session]?session:(Object.keys(state.program)[0]||'Day 1 ベンチ重め＋胸・二頭');renderEditor()}
