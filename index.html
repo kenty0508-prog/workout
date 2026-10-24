@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f5f5f7">
 <link rel="manifest" href="manifest.webmanifest">
-<title>Workout Log v3.9.3</title>
+<title>Workout Log v3.9.4</title>
 <style>
 :root{
   --bg:#f5f5f7;--surface:#ffffff;--text:#111111;--muted:#6e6e73;--line:#dedee3;
@@ -21,7 +21,7 @@
 button,input,select,textarea{font:inherit;color:inherit}button{border:0;cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 45%,transparent);outline-offset:2px}
 .app{max-width:680px;margin:0 auto;padding:18px 16px 118px}.topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:4px 2px 14px}.brand{font-size:28px;letter-spacing:-.03em;font-weight:780}.date{font-size:13px;color:var(--muted)}
 .sessionStrip{display:flex;gap:8px;overflow:auto;padding:0 0 14px;scrollbar-width:none}.sessionStrip::-webkit-scrollbar{display:none}.sessionBtn{flex:0 0 auto;min-height:44px;padding:0 14px;border-radius:999px;background:var(--soft);color:var(--muted);font-size:13px;font-weight:650}.sessionBtn.on{background:var(--text);color:var(--surface)}
-.hero{padding:6px 2px 14px}.eyebrow{font-size:13px;color:var(--muted);font-weight:600}.exercisePickerTrigger{display:inline-flex;align-items:center;gap:5px;min-height:44px;margin:-9px 0 -5px -10px;padding:0 10px;border-radius:11px;background:transparent;color:var(--muted);font-size:13px;font-weight:600}.exercisePickerTrigger:active{background:var(--soft)}.exerciseTitleRow{display:flex;align-items:center;gap:8px}.exerciseName{flex:1;min-width:0;font-size:30px;line-height:1.15;letter-spacing:-.035em;font-weight:760;margin-top:3px}.exerciseMore{flex:0 0 44px;width:44px;height:44px;border-radius:50%;background:transparent;color:var(--muted);font-size:23px;letter-spacing:2px;display:grid;place-items:center}.exerciseMore:active{background:var(--soft)}.temporaryBadge{display:inline-flex;align-items:center;min-height:26px;margin-top:7px;padding:0 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:700}.subline{font-size:13px;color:var(--muted);margin-top:7px;line-height:1.55}.subline strong{color:var(--text);font-weight:650}.targetToggle{display:block;width:100%;padding:0;background:transparent;text-align:left;min-height:32px}.targetReason{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45}
+.hero{padding:6px 2px 14px}.eyebrow{font-size:13px;color:var(--muted);font-weight:600}.exercisePickerTrigger{display:inline-flex;align-items:center;gap:5px;min-height:44px;margin:-9px 0 -5px -10px;padding:0 10px;border-radius:11px;background:transparent;color:var(--muted);font-size:13px;font-weight:600}.exercisePickerTrigger:active{background:var(--soft)}.exerciseTitleRow{display:flex;align-items:center;gap:8px}.exerciseName{flex:1;min-width:0;font-size:30px;line-height:1.15;letter-spacing:-.035em;font-weight:760;margin-top:3px}.exerciseMore{flex:0 0 44px;width:44px;height:44px;border-radius:50%;background:transparent;color:var(--muted);font-size:23px;letter-spacing:2px;display:grid;place-items:center}.exerciseMore:active{background:var(--soft)}.temporaryBadge{display:inline-flex;align-items:center;min-height:26px;margin-top:7px;padding:0 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:700}.subline{font-size:13px;color:var(--muted);margin-top:7px;line-height:1.55}.subline strong{color:var(--text);font-weight:650}.targetToggle{display:block;width:100%;padding:0;background:transparent;text-align:left;min-height:32px}.targetReason{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45}.recalcGoal{background:transparent;color:var(--accent);font-size:12px;font-weight:650;padding:4px 0;text-align:left;min-height:30px}
 .divider{height:1px;background:var(--line);margin:2px 0 14px}.setHeader,.setRow{display:grid;grid-template-columns:30px minmax(0,1fr) minmax(0,1fr) 50px;gap:9px;align-items:center}.setHeader{padding:0 2px 7px;color:var(--muted);font-size:11px;text-align:center}.setHeader span:first-child{text-align:left}.setRows{display:grid;gap:8px}.setRow{min-height:58px}.setIndex{font-size:14px;color:var(--muted);font-weight:650}.num{width:100%;height:54px;border:1px solid var(--line);border-radius:14px;background:var(--surface);text-align:center;font-size:21px;font-weight:650;padding:0 8px;transition:.15s}.num:focus{border-color:var(--accent)}.check{height:50px;width:50px;border-radius:50%;background:var(--soft);color:var(--muted);font-size:21px;font-weight:800;display:grid;place-items:center;transition:.16s}.check.done{background:var(--good);color:#fff;transform:scale(.96)}.check:disabled{opacity:.34;cursor:default}.sessionBtn:active,.primaryAction:active,.secondaryAction:active,.ghostAction:active,.restBtn:active,.rirChoice:active,.navBtn:active{opacity:.68}
 .rirArea{margin-top:12px}.rirSummary{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:46px;border-radius:12px;background:transparent;color:var(--muted);padding:0 2px;font-size:13px}.rirSummary b{color:var(--text);font-weight:650}.rirPicker{display:none;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:7px}.rirPicker.show{display:grid}.rirChoice{min-height:44px;border-radius:11px;background:var(--soft);color:var(--text);font-size:13px}.rirChoice.on{background:var(--text);color:var(--surface)}
 .primaryAction{width:100%;min-height:54px;border-radius:16px;background:var(--text);color:var(--surface);font-size:16px;font-weight:700;margin-top:16px}.secondaryAction{width:100%;min-height:48px;border-radius:14px;background:var(--soft);color:var(--text);font-weight:650}.ghostAction{min-height:44px;border-radius:12px;background:transparent;color:var(--accent);font-weight:650;padding:0 10px}.dangerAction{min-height:44px;border-radius:12px;background:color-mix(in srgb,var(--danger) 11%,transparent);color:var(--danger);font-weight:650;padding:0 12px}
@@ -80,6 +80,7 @@ button,input,select,textarea{font:inherit;color:inherit}button{border:0;cursor:p
       <div class="temporaryBadge hidden" id="temporaryBadge">今日だけ変更</div>
       <div class="subline" id="previousLine">前回 <strong>—</strong></div>
       <button class="subline targetToggle" id="targetLine" type="button">目標 <strong>—</strong></button><div class="targetReason hidden" id="targetReason"></div>
+      <button id="recalcGoal" class="recalcGoal" type="button">↻ 目標の重量・回数を再計算</button>
     </div>
     <div class="divider"></div>
     <div class="setHeader"><span></span><span>重量 kg</span><span>Reps</span><span></span></div>
@@ -301,7 +302,7 @@ function defaultRestSec(name){const n=String(name||'');if(/ベンチ|スクワ�
 
 let raw=null;try{raw=JSON.parse(localStorage.getItem('workout-log-v35')||'null')}catch(_){}
 if(!raw){for(const key of ['workout-log-v34','workout-log-v33','workout-log-v32','workout-log-v31','workout-log-v3','workout-log-v2','workout-log-v1']){try{const x=JSON.parse(localStorage.getItem(key)||'null');if(x){raw=x;break}}catch(_){}}}
-let state={version:392,logs:[],memo:'',program:clone(DEFAULT_PROGRAM),conditions:{},active:null,timer:null,timerSettings:{vibrate:true,sound:false}};
+let state={version:394,logs:[],memo:'',program:clone(DEFAULT_PROGRAM),conditions:{},active:null,timer:null,timerSettings:{vibrate:true,sound:false}};
 if(raw){state.logs=Array.isArray(raw.logs)?raw.logs:[];state.memo=raw.memo||'';state.program=raw.program||clone(DEFAULT_PROGRAM);state.conditions=raw.conditions||{};state.timerSettings=raw.timerSettings||{vibrate:true,sound:false};state.active=raw.active||null;state.timer=raw.timer||null;state.pendingStrengthProgram=!!raw.pendingStrengthProgram;state.pendingPowerbuilding390=!!raw.pendingPowerbuilding390;state.pendingPhysique391=!!raw.pendingPhysique391}
 if(raw && (+raw.version||0)<371 && !state.active?.startedAt){state.program=clone(DEFAULT_PROGRAM);state.active=null;}
 // v3.7.4: apply the strength/hypertrophy split without discarding old logs.
@@ -420,44 +421,93 @@ function findActiveExerciseById(id){
   const list=state.program[state.active?.session]||[];for(const base of list){const ex=effectiveExercise(base);if(ex?.id===id)return ex}return null
 }
 function displayExerciseName(e){return e?.temporary?`${e.name}（代替）`:e?.name||'—'}
+// v3.9.4: 種目IDだけでなく、実際の種目名・代替種目の属性・セッションを一致させる。
+// 同じベンチでも「重め」と「軽め」の重量・回数を混同しない。
+function sameExerciseRecord(record,ex){
+  return !!record && !!ex && (record.id===ex.id||(!record.id&&record.name===ex.name))
+    && record.name===ex.name && !!record.temporary===!!ex.temporary
+    && (!ex.temporary||String(record.replacedId||'')===String(ex.replacedId||''));
+}
 function prevExercise(ex){
-  const activeId=state.active?.id;for(let i=state.logs.length-1;i>=0;i--){const l=state.logs[i];if(l.id===activeId)continue;if(['ex-bench','ex-squat'].includes(ex.id)&&l.session!==session)continue;const e=(l.exercises||[]).find(x=>x.id===ex.id||(!x.id&&x.name===ex.name));if(e&&e.sets?.length)return e}return null
+  const activeId=state.active?.id;
+  for(let i=state.logs.length-1;i>=0;i--){
+    const l=state.logs[i];
+    if(l.id===activeId||l.session!==session)continue;
+    const e=(l.exercises||[]).find(x=>sameExerciseRecord(x,ex));
+    if(e?.sets?.some(set=>set.done!==false))return e;
+  }
+  return null;
 }
 function fmtSet(s){return `${+s.w>0?trimNum(s.w)+'kg':'自重'}×${+s.r||0}`}
 function fmtSetWithRest(s){return `${fmtSet(s)}${s.restAfter?`（休${fmtTime(s.restAfter)}）`:''}`}
 function bestE1(e){if(!e?.sets?.length)return 0;return Math.max(0,...e.sets.map(s=>(+s.w||0)*(1+(+s.r||0)/30)))}
 function latestExerciseById(id,name){for(let i=state.logs.length-1;i>=0;i--){const e=(state.logs[i].exercises||[]).find(x=>x.id===id||(!x.id&&x.name===name));if(e)return e}return null}
+// ダブル・プログレッション：全セットが回数上限かつ十分なRIRでのみ増量。
+// それ以外は前回の重量をセット別に維持し、各セット+1回を目指す。
 function target(ex){
-  const p=prevExercise(ex);if(['ex-bench','ex-squat'].includes(ex.id) && p && (state.logs.slice().reverse().find(l=>(l.exercises||[]).some(e=>e.id===ex.id))?.session!==session))return {weights:Array(ex.sets).fill(+ex.weight||0),reps:Array(ex.sets).fill(ex.min),why:'この日の初回設定',mixed:false,manual:false};if(!p)return {weights:Array(ex.sets).fill(+ex.weight||0),reps:Array(ex.sets).fill(ex.min),why:'初回設定',mixed:false,manual:false};
-  const ps=(p.sets||[]).filter(s=>s.done!==false).slice(0,ex.sets);if(!ps.length)return {weights:Array(ex.sets).fill(+ex.weight||0),reps:Array(ex.sets).fill(ex.min),why:'前回の実績なし',mixed:false,manual:false};
-  const ws=ps.map(s=>+s.w||0),unique=[...new Set(ws.map(x=>String(x)))];
-  if(unique.length>1){return {weights:Array(ex.sets).fill(0),reps:Array(ex.sets).fill(ex.min),why:'前回は重量が混在 · 今回の重量は手動で設定',mixed:true,manual:true}}
-  const w=ws[0]??(+ex.weight||0),reps=Array.from({length:ex.sets},(_,i)=>Math.max(0,+ps[i]?.r||ex.min));
-  const enough=ps.length>=ex.sets,allMax=enough&&reps.every(r=>r>=ex.max);let finalRir=p.rir;if(finalRir===''||finalRir===undefined){const last=ps[ps.length-1];finalRir=last?.rir}
-  const rirNum=parseFloat(finalRir),rirKnown=Number.isFinite(rirNum),minRir=['ex-bench','ex-squat','ex-deadlift'].includes(ex.id)?1:0,safe=rirKnown&&rirNum>=minRir;
-  if(allMax&&safe&&ex.step>0&&w>0)return {weights:Array(ex.sets).fill(Math.round((w+ex.step)*100)/100),reps:Array(ex.sets).fill(ex.min),why:`上限達成 · +${ex.step}kg`,mixed:false,manual:false};
-  if(allMax&&!rirKnown)return {weights:Array(ex.sets).fill(w),reps:Array(ex.sets).fill(ex.max),why:'上限達成 · RIR未入力のため重量維持',mixed:false,manual:false};
-  if(allMax&&rirKnown&&!safe)return {weights:Array(ex.sets).fill(w),reps:Array(ex.sets).fill(ex.max),why:`上限達成 · 同重量でRIR${minRir}以上の余力を作る`,mixed:false,manual:false};
-     const next=Array.from({length:ex.sets},(_,i)=>{
-     const prior=ps[i];
-     if(!prior)return ex.min;
-     const r=Math.max(0,+prior.r||0);
-     return r<ex.min?Math.min(ex.min,r+1):Math.min(ex.max,r+1);
-   });
-   return {weights:Array(ex.sets).fill(w),reps:next,why:'前回の各セット +1回（上限まで）',mixed:false,manual:false}
+  const count=Math.max(1,+ex.sets||1),min=Math.max(1,+ex.min||8),max=Math.max(min,+ex.max||12);
+  const base=+ex.weight||0,initial={weights:Array(count).fill(base),reps:Array(count).fill(min),why:'このセッションの初回設定',mixed:false,manual:false};
+  const p=prevExercise(ex);
+  if(!p)return initial;
+  const ps=(p.sets||[]).filter(x=>x.done!==false).slice(0,count);
+  if(!ps.length)return initial;
+  const ws=ps.map(x=>Number.isFinite(+x.w)?Math.max(0,+x.w):base);
+  const distinct=[...new Set(ws)];
+  const mixed=distinct.length>1;
+  // 前回に記録がない追加セットは当該日の初回重量にする。
+  const weights=Array.from({length:count},(_,i)=>ws[i]??base);
+  const reps=Array.from({length:count},(_,i)=>{
+    const prior=ps[i];if(!prior)return min;
+    const r=Math.max(0,Math.floor(+prior.r||0));
+    if(r===0)return min;
+    return Math.min(max,r<min?Math.min(min,r+1):r+1);
+  });
+  const complete=ps.length>=count;
+  const allMax=complete&&ps.every(x=>(+x.r||0)>=max);
+  let finalRir=p.rir;
+  if(finalRir===''||finalRir===undefined||finalRir===null)finalRir=ps[ps.length-1]?.rir;
+  const rirNum=finalRir===''||finalRir===undefined||finalRir===null?NaN:parseFloat(String(finalRir));
+  const rirKnown=Number.isFinite(rirNum);
+  // 軽めのBIG3は十分な余力を残す。種目名が同じでも重めの日の判定と独立。
+  const lightBig3=/軽め/.test(session)&&['ex-bench','ex-squat','ex-deadlift'].includes(ex.id);
+  const minRir=lightBig3?3:['ex-bench','ex-squat','ex-deadlift'].includes(ex.id)?1:0;
+  const step=Math.max(0,+ex.step||0);
+  const load=weights[0];
+  if(allMax&&!mixed&&load>0&&step>0&&rirKnown&&rirNum>=minRir){
+    return {weights:Array(count).fill(Math.round((load+step)*100)/100),reps:Array(count).fill(min),
+      why:`全${count}セットで${max}回達成・RIR ${String(finalRir)} → +${trimNum(step)}kg、${min}回から再スタート`,mixed:false,manual:false};
+  }
+  let why='前回の各セット +1回（上限まで）';
+  if(mixed)why='重量が混在したため、セットごとの重量を維持して各+1回（増量は保留）';
+  else if(allMax&&!rirKnown)why='全セット上限達成 · RIR未入力なので重量維持';
+  else if(allMax&&rirKnown&&rirNum<minRir)why=`全セット上限達成 · RIR${minRir}以上を確認するまで重量維持`;
+  else if(allMax&&(!step||!load))why='全セット上限達成 · 重量刻み未設定／自重のため重量維持';
+  else if(!complete)why='前回は一部セットのみ記録 · 実施セットは各+1回、未記録は下限回数';
+  return {weights,reps,why,mixed,manual:false};
+}
+// 以前のバージョンで作成した入力欄を自動で上書きしない。
+// 新規のドラフトは計算済みの重量・回数を入力欄に直接反映する。
+function applyTargetToDraft(d,ex,goal){
+  d.sets=Array.from({length:Math.max(1,+ex.sets||1)},(_,i)=>({
+    w:goal.weights[i]??goal.weights[0]??0,r:goal.reps[i]??ex.min,
+    rir:'',done:false,restAfter:null
+  }));
+  d.why=goal.why;d.autoTargetVersion=394;d.dirty=false;
 }
 function ensureDraft(ex){
-  const a=ensureActive();if(!a.drafts)a.drafts={};if(a.drafts[ex.id]){
-     const d=a.drafts[ex.id];
-     if(!d.dirty && !(d.sets||[]).some(x=>x.done)){
-       const t=target(ex);
-       d.sets.forEach((set,i)=>{set.w=t.weights[i]??t.weights[0]??0;set.r=t.reps[i]??ex.min});
-       d.why=t.why;
-     }
-     return d;
-   }const t=target(ex);
-  a.drafts[ex.id]={name:ex.name,sets:Array.from({length:ex.sets},(_,i)=>({w:t.weights[i]??t.weights[0]??0,r:t.reps[i]??ex.min,rir:'',done:false,restAfter:null})),rir:'',why:t.why,dirty:false};persist();return a.drafts[ex.id]
+  const a=ensureActive();if(!a.drafts)a.drafts={};
+  if(a.drafts[ex.id])return a.drafts[ex.id];
+  const goal=target(ex),d={name:ex.name,sets:[],rir:'',why:goal.why,dirty:false};
+  applyTargetToDraft(d,ex,goal);a.drafts[ex.id]=d;persist();return d;
 }
+function recalculateGoal(){
+  const ex=currentEffectiveExercise();if(!ex)return;
+  const d=ensureDraft(ex);
+  if(d.sets.some(s=>s.done)){showToast('完了済みセットがあるため再計算できません');return}
+  if(d.dirty&&!confirm('入力した重量・回数を、新しい目標値に置き換えますか？'))return;
+  applyTargetToDraft(d,ex,target(ex));persist();renderWorkout();showToast('目標の重量・回数を更新しました');
+}
+$('#recalcGoal').addEventListener('click',recalculateGoal);
 function syncActiveExercise(ex){
   const a=ensureActive(),d=a.drafts[ex.id],completed=(d?.sets||[]).filter(s=>s.done);const l=activeLog(completed.length>0);if(!l)return;
   const pos=l.exercises.findIndex(x=>x.id===ex.id);if(!completed.length){if(pos>=0)l.exercises.splice(pos,1)}else{const item={id:ex.id,name:ex.name,temporary:!!ex.temporary,replacedId:ex.replacedId||null,replacedName:ex.replacedName||null,sets:completed.map(s=>({w:+s.w||0,r:+s.r||0,rir:s.rir||'',restAfter:s.restAfter||null,done:true})),rir:d.rir||''};if(pos>=0)l.exercises[pos]=item;else l.exercises.push(item)}
@@ -516,10 +566,10 @@ function renderWorkout(){
   const baseEx=list[idx],ex=effectiveExercise(baseEx),p=prevExercise(ex),t=target(ex),d=ensureDraft(ex);state.active.currentIndex=idx;persist();
   $('#topTitle').textContent=session;$('#positionText').textContent=`${idx+1} / ${list.length}　種目一覧`;$('#exerciseName').textContent=ex.name;$('#temporaryBadge').classList.toggle('hidden',!ex.temporary);
   $('#previousLine').innerHTML=`前回 <strong>${p?(p.sets||[]).map(fmtSet).join(' / '):'未記録'}</strong>`;
-  $('#targetLine').innerHTML=`目標 <strong>${t.manual?'手動調整':`${d.sets[0]?.w?trimNum(d.sets[0].w)+'kg':'自重'} × ${d.sets.map(x=>x.r).join(' / ')}回`}</strong>`;$('#targetReason').textContent=t.why;$('#targetReason').classList.add('hidden');
+  $('#targetLine').innerHTML=`目標 <strong>${d.sets.map(x=>fmtSet(x)).join(' / ')}</strong>`;$('#targetReason').textContent=d.why||t.why;$('#targetReason').classList.add('hidden');$('#recalcGoal').classList.toggle('hidden',d.sets.some(x=>x.done));
   const rows=$('#setRows');rows.innerHTML='';
   const nextIncomplete=d.sets.findIndex(s=>!s.done);d.sets.forEach((s,i)=>{const row=document.createElement('div');row.className='setRow';const disabled=!s.done&&nextIncomplete>=0&&i!==nextIncomplete;row.innerHTML=`<div class="setIndex">${i+1}</div><input class="num weightInput" data-i="${i}" type="number" inputmode="decimal" step=".25" min="0" value="${s.w||''}" aria-label="${i+1}セット目 重量"><input class="num repsInput" data-i="${i}" type="number" inputmode="numeric" min="0" max="100" value="${s.r||''}" aria-label="${i+1}セット目 回数"><button class="check${s.done?' done':''}" data-i="${i}" type="button" aria-label="${i+1}セット目 完了"${disabled?' disabled':''}>${s.done?'✓':'○'}</button>`;rows.appendChild(row)});
-  $$('.weightInput,.repsInput').forEach(inp=>inp.addEventListener('input',()=>{const i=+inp.dataset.i,s=d.sets[i];if(inp.classList.contains('weightInput'))s.w=Math.max(0,+inp.value||0);else s.r=Math.max(0,+inp.value||0);d.dirty=true;persist();if(s.done)syncActiveExercise(ex)}));
+  $$('.weightInput,.repsInput').forEach(inp=>inp.addEventListener('input',()=>{const i=+inp.dataset.i,s=d.sets[i];if(inp.classList.contains('weightInput'))s.w=Math.max(0,+inp.value||0);else s.r=Math.max(0,+inp.value||0);d.dirty=true;d.why='手動入力した重量・回数を表示中（必要なら再計算できます）';$('#targetLine').querySelector('strong').textContent=d.sets.map(fmtSet).join(' / ');$('#targetReason').textContent=d.why;persist();if(s.done)syncActiveExercise(ex)}));
   $$('.check').forEach(b=>b.addEventListener('click',()=>toggleSet(ex,+b.dataset.i)));
   $('#rirValue').textContent=d.rir===''?'未入力':`RIR ${d.rir}`;renderRirPicker(d,ex);
   const nextIdx=nextIncompleteIndex(idx),currentComplete=exerciseIsComplete(ex),remain=remainingSetCount();$('#nextExercise').textContent=!currentComplete&&nextIdx===null?'残りセットを実施':remain===0?'トレーニング完了':'次の種目';$('#previousExercise').classList.toggle('hidden',idx===0);renderCondition();renderRest();
@@ -599,7 +649,7 @@ $('#editHistorySheet').addEventListener('click',e=>{if(e.target===$('#editHistor
 $('#saveHistoryEdit').addEventListener('click',()=>{const l=state.logs.find(x=>x.id===editingLogId);if(!l)return;const c={bodyweight:Math.max(0,+$('#historyBodyweight').value||0)||'',sleep:Math.max(0,Math.min(24,+$('#historySleep').value||0))||'',fatigue:$('#historyFatigue').value||''};state.conditions[l.date]=c;state.logs.filter(x=>x.date===l.date).forEach(x=>x.condition=c);const cards=[...$('#editHistoryBody').children];cards.forEach(card=>{const ei=+card.dataset.ei,e=l.exercises[ei];if(!e)return;e.sets=[...card.querySelectorAll('.historyEditSet')].map(row=>({w:Math.max(0,+row.querySelector('.heWeight').value||0),r:Math.max(0,+row.querySelector('.heReps').value||0),rir:'',restAfter:e.sets?.[+row.dataset.si]?.restAfter||null,done:true}));e.rir=card.querySelector('.heRir').value||'';if(e.sets.length&&e.rir!=='')e.sets[e.sets.length-1].rir=e.rir});l.exercises=l.exercises.filter(e=>e.sets?.length);persist();renderProgress();renderWorkout();closeHistoryEdit();showToast('記録を修正しました')});
 $('#deleteHistoryLog').addEventListener('click',()=>{const i=state.logs.findIndex(x=>x.id===editingLogId);if(i<0)return;if(!confirm('このセッション記録を削除しますか？'))return;state.logs.splice(i,1);persist();renderProgress();renderWorkout();closeHistoryEdit();showToast('記録を削除しました')});
 
-function previousBefore(e,currentLog){for(let i=state.logs.indexOf(currentLog)-1;i>=0;i--){const p=(state.logs[i].exercises||[]).find(x=>x.id===e.id||(!x.id&&x.name===e.name));if(p)return p}return null}
+function previousBefore(e,currentLog){for(let i=state.logs.indexOf(currentLog)-1;i>=0;i--){const l=state.logs[i];if(l.session!==currentLog.session)continue;const p=(l.exercises||[]).find(x=>sameExerciseRecord(x,e));if(p)return p}return null}
 // 同一重量の連続セットを "62.5kg×7/6/6" と表記し、各セットの休憩を残す。
 function compactShareSets(ex){
   const sets=ex?.sets||[];
@@ -675,7 +725,7 @@ $('#editSession').addEventListener('change',()=>{readEditorToDraft(editSessionKe
 $('#addExercise').addEventListener('click',()=>{readEditorToDraft();programEditDraft[editSessionKey].push({id:uid(),name:'新しい種目',weight:0,min:8,max:12,sets:3,step:2.5,restSec:120});renderEditor()});
 $('#saveProgram').addEventListener('click',()=>{if(state.active?.startedAt){showToast('トレーニング終了後に変更できます');return}readEditorToDraft();state.program=clone(programEditDraft);migrate();persist();programEditDraft=null;editSessionKey=null;$('#programEditor').classList.remove('show');renderWorkout();showToast('メニューを反映しました')});
 $('#timerVibrate').checked=!!state.timerSettings.vibrate;$('#timerSound').checked=!!state.timerSettings.sound;$('#timerVibrate').addEventListener('change',()=>{state.timerSettings.vibrate=$('#timerVibrate').checked;persist()});$('#timerSound').addEventListener('change',()=>{state.timerSettings.sound=$('#timerSound').checked;ensureAudio();persist()});
-$('#resetProgram').addEventListener('click',()=>{if(state.active?.startedAt){showToast('トレーニング終了後に変更できます');return}if(confirm('履歴を残したまま、メニューだけ初期状態に戻しますか？')){state.program=clone(DEFAULT_PROGRAM);state.pendingStrengthProgram=false;state.version=391;state.pendingPhysique391=false;state.active=null;programEditDraft=null;editSessionKey=null;session='Day 1 ベンチ重め＋胸・二頭';idx=0;persist();renderWorkout();showToast('メニューを初期化しました')}});
+$('#resetProgram').addEventListener('click',()=>{if(state.active?.startedAt){showToast('トレーニング終了後に変更できます');return}if(confirm('履歴を残したまま、メニューだけ初期状態に戻しますか？')){state.program=clone(DEFAULT_PROGRAM);state.pendingStrengthProgram=false;state.version=394;state.pendingPhysique391=false;state.active=null;programEditDraft=null;editSessionKey=null;session='Day 1 ベンチ重め＋胸・二頭';idx=0;persist();renderWorkout();showToast('メニューを初期化しました')}});
 $('#exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`workout-backup-${isoToday()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});
 $('#importFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x||!Array.isArray(x.logs))throw new Error();if(!confirm('現在のデータをバックアップ内容で置き換えますか？'))return;state={version:392,logs:x.logs||[],memo:x.memo||'',program:x.program||clone(DEFAULT_PROGRAM),conditions:x.conditions||{},active:null,timer:null,timerSettings:x.timerSettings||{vibrate:true,sound:false}};programEditDraft=null;editSessionKey=null;if((+x.version||0)<374){state.program=clone(DEFAULT_PROGRAM);}installPhysique391();migrate();persist();session=Object.keys(state.program)[0]||'Day 1 ベンチ重め＋胸・二頭';idx=0;renderAll();showToast('バックアップを復元しました')}catch(_){alert('このバックアップは読み込めませんでした')}};r.readAsText(f);e.target.value=''});
 
