@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f5f5f7">
 <link rel="manifest" href="manifest.webmanifest">
-<title>Workout Log v3.9.5</title>
+<title>Workout Log v3.9.6</title>
 <style>
 :root{
   --bg:#f5f5f7;--surface:#ffffff;--text:#111111;--muted:#6e6e73;--line:#dedee3;
@@ -143,7 +143,8 @@ button,input,select,textarea{font:inherit;color:inherit}button{border:0;cursor:p
       <div class="settingHeader">タイマー</div>
       <div class="group">
         <label class="groupRow"><div><div class="groupLabel">振動</div><div class="groupMeta">休憩終了を知らせる</div></div><input id="timerVibrate" type="checkbox" style="width:22px;height:22px"></label>
-        <label class="groupRow"><div><div class="groupLabel">音</div><div class="groupMeta">休憩終了を知らせる</div></div><input id="timerSound" type="checkbox" style="width:22px;height:22px"></label>
+        <label class="groupRow"><div><div class="groupLabel">音</div><div class="groupMeta">休憩終了を知らせる（iPhoneは画面表示中のみ保証）</div></div><input id="timerSound" type="checkbox" style="width:22px;height:22px"></label>
+        <div class="groupRow"><div><div class="groupLabel">通知音テスト</div><div class="groupMeta">iPhoneでは一度タップして音声を有効化</div></div><button id="testTimerSound" class="restBtn go" type="button" style="min-width:82px">音を確認</button></div>
       </div>
     </div>
 
@@ -155,7 +156,7 @@ button,input,select,textarea{font:inherit;color:inherit}button{border:0;cursor:p
         <button class="groupRow" id="resetProgram" type="button" style="width:100%;background:transparent;text-align:left"><div><div class="groupLabel" style="color:var(--danger)">メニューを初期状態に戻す</div><div class="groupMeta">履歴は残ります</div></div><div class="chev">›</div></button>
       </div>
     </div>
-    <div class="date" style="text-align:center;padding:8px 0 20px">Workout Log v3.9.5 · データは端末内に保存</div>
+    <div class="date" style="text-align:center;padding:8px 0 20px">Workout Log v3.9.6 · データは端末内に保存</div>
   </section>
 </main>
 
@@ -628,15 +629,42 @@ function toggleSet(ex,i){const d=ensureDraft(ex),s=d.sets[i];d.dirty=true;ensure
 
 function startRest(ex,setIndex){cancelRest(false);const sec=Math.max(30,Math.min(600,+ex.restSec||defaultRestSec(ex.name))),now=Date.now();state.timer={startedAt:now,endAt:now+sec*1000,plannedSec:sec,exerciseId:ex.id,exerciseName:ex.name,setIndex,session,date:isoToday(),alerted:false};persist();startRestTicker();renderRest()}
 function cancelRest(save=true){if(restTick){clearInterval(restTick);restTick=null}state.timer=null;if(save)persist();renderRest()}
-function ensureAudio(){if(!state.timerSettings.sound)return;try{if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume()}catch(_){audioCtx=null}}
-function alarmRest(){if(!state.timer||state.timer.alerted)return;state.timer.alerted=true;if(state.timerSettings.vibrate&&navigator.vibrate)navigator.vibrate([140,90,140]);if(state.timerSettings.sound){try{ensureAudio();if(audioCtx){const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=880;g.gain.setValueAtTime(.055,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.2);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+.2)}}catch(_){}}persist()}
+function ensureAudio(){
+  if(!state.timerSettings.sound)return Promise.resolve(false);
+  try{
+    if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    return audioCtx.state==='suspended'?audioCtx.resume().then(()=>audioCtx.state==='running').catch(()=>false):Promise.resolve(audioCtx.state==='running');
+  }catch(_){audioCtx=null;return Promise.resolve(false)}
+}
+function playTimerTone(){
+  if(!audioCtx||audioCtx.state!=='running')return false;
+  try{const start=audioCtx.currentTime;
+    for(let i=0;i<3;i++){
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain(),t=start+i*.25;
+      o.type='sine';o.frequency.value=880;
+      g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.11,t+.018);g.gain.exponentialRampToValueAtTime(.0001,t+.19);
+      o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+.20);
+    }return true;
+  }catch(_){return false}
+}
+function alarmRest(){
+  if(!state.timer||state.timer.alerted||document.hidden)return;
+  // iOS suspends JavaScript and AudioContext in the background. Alert on return only.
+  const ready=state.timerSettings.sound&&audioCtx?.state==='running';
+  if(state.timerSettings.vibrate&&navigator.vibrate)navigator.vibrate([140,90,140]);
+  if(ready)playTimerTone();
+  state.timer.alerted=true;persist();
+  showToast('休憩終了：次のセットを開始できます');
+}
 function finishRest(checkSuspicious=false){if(!state.timer)return true;const t=state.timer,elapsed=Math.max(0,Math.round((Date.now()-t.startedAt)/1000));if(checkSuspicious&&elapsed<30&&!confirm(`休憩 ${elapsed}秒で記録しますか？`))return false;const a=state.active,d=a?.drafts?.[t.exerciseId],s=d?.sets?.[t.setIndex];if(s)s.restAfter=elapsed;state.timer=null;if(restTick){clearInterval(restTick);restTick=null}if(a){const ex=findActiveExerciseById(t.exerciseId);if(ex)syncActiveExercise(ex)}persist();renderRest();showToast(`休憩 ${fmtTime(elapsed)}`);return true}
 function renderRest(){const p=$('#restPill');if(!state.timer){p.classList.remove('show');return}const t=state.timer,now=Date.now(),remain=Math.ceil((t.endAt-now)/1000);p.classList.add('show');$('#restClock').textContent=remain>0?fmtTime(remain):`+${fmtTime(-remain)}`;$('#restTitle').textContent=remain>0?'休憩中':'次セットOK';$('#restMeta').textContent=`${t.exerciseName} · ${t.setIndex+1}セット後 · 目安${fmtTime(t.plannedSec)}`;if(remain<=0)alarmRest()}
 function startRestTicker(){if(restTick)clearInterval(restTick);restTick=setInterval(()=>{if(!state.timer){clearInterval(restTick);restTick=null;return}renderRest()},500)}
 $('#restPlus').addEventListener('click',()=>{if(!state.timer)return;state.timer.endAt+=30000;state.timer.plannedSec+=30;state.timer.alerted=false;persist();renderRest()});
 $('#restEnd').addEventListener('click',()=>finishRest(true));
 
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)renderRest()});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){if(state.timer)startRestTicker();renderRest()}});
+window.addEventListener('pageshow',()=>{if(state.timer){startRestTicker();renderRest()}});
+window.addEventListener('focus',()=>{if(state.timer)renderRest()});
 $('#nextExercise').addEventListener('click',()=>{const list=state.program[session]||[],base=list[idx],ex=effectiveExercise(base),d=ensureDraft(ex),done=d.sets.filter(s=>s.done).length,nextIdx=nextIncompleteIndex(idx),currentComplete=done>=d.sets.length;if(!currentComplete&&nextIdx===null){showToast('この種目の残りセットを完了してください');return}if(!currentComplete&&nextIdx!==null&&!confirm(`${done}/${d.sets.length}セット完了です。この種目はあとで戻れます。次へ進みますか？`))return;if(nextIdx!==null){goToExercise(nextIdx)}else finishWorkout(true)});
 $('#previousExercise').addEventListener('click',()=>{if(idx>0)goToExercise(idx-1)});
 function finishWorkout(showSheet=true){if(!state.active)return;const l=activeLog(false);if(l)l.endedAt=Date.now();state.active=null;cancelRest(false);if(state.pendingPhysique391){installPhysique391();session=Object.keys(state.program)[0];}else if(state.pendingPowerbuilding390){restorePowerbuilding390();session=Object.keys(state.program)[0];}else if(state.pendingStrengthProgram){upgrade375Program();session=Object.keys(state.program)[0];}if(state.pendingProgram395)upgrade395Program();persist();renderProgress();if(showSheet&&l){showToast('トレーニング完了');openShare()}idx=0}
@@ -747,7 +775,8 @@ $('#programToggle').addEventListener('click',()=>{if(state.active?.startedAt){sh
 $('#editSession').addEventListener('change',()=>{readEditorToDraft(editSessionKey);editSessionKey=$('#editSession').value;renderEditor()});
 $('#addExercise').addEventListener('click',()=>{readEditorToDraft();programEditDraft[editSessionKey].push({id:uid(),name:'新しい種目',weight:0,min:8,max:12,sets:3,step:2.5,restSec:120});renderEditor()});
 $('#saveProgram').addEventListener('click',()=>{if(state.active?.startedAt){showToast('トレーニング終了後に変更できます');return}readEditorToDraft();state.program=clone(programEditDraft);migrate();persist();programEditDraft=null;editSessionKey=null;$('#programEditor').classList.remove('show');renderWorkout();showToast('メニューを反映しました')});
-$('#timerVibrate').checked=!!state.timerSettings.vibrate;$('#timerSound').checked=!!state.timerSettings.sound;$('#timerVibrate').addEventListener('change',()=>{state.timerSettings.vibrate=$('#timerVibrate').checked;persist()});$('#timerSound').addEventListener('change',()=>{state.timerSettings.sound=$('#timerSound').checked;ensureAudio();persist()});
+$('#timerVibrate').checked=!!state.timerSettings.vibrate;$('#timerSound').checked=!!state.timerSettings.sound;$('#timerVibrate').addEventListener('change',()=>{state.timerSettings.vibrate=$('#timerVibrate').checked;persist()});$('#timerSound').addEventListener('change',()=>{state.timerSettings.sound=$('#timerSound').checked;ensureAudio();persist();if(state.timerSettings.sound)showToast('「音を確認」で通知音をテストしてください')});
+$('#testTimerSound').addEventListener('click',async()=>{if(!state.timerSettings.sound){state.timerSettings.sound=true;$('#timerSound').checked=true;persist()}const ok=await ensureAudio();if(ok&&playTimerTone())showToast('音が鳴らない場合は音量・消音モードをご確認ください');else showToast('音声の有効化に失敗しました。Safariで再度お試しください')});
 $('#resetProgram').addEventListener('click',()=>{if(state.active?.startedAt){showToast('トレーニング終了後に変更できます');return}if(confirm('履歴を残したまま、メニューだけ初期状態に戻しますか？')){state.program=clone(DEFAULT_PROGRAM);state.pendingStrengthProgram=false;state.version=395;state.pendingProgram395=false;state.pendingPhysique391=false;state.active=null;programEditDraft=null;editSessionKey=null;session='Day 1 ベンチ重め＋胸・二頭';idx=0;persist();renderWorkout();showToast('メニューを初期化しました')}});
 $('#exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`workout-backup-${isoToday()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});
 $('#importFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x||!Array.isArray(x.logs))throw new Error();if(!confirm('現在のデータをバックアップ内容で置き換えますか？'))return;localStorage.setItem('workout-log-v35',JSON.stringify(x));location.reload()}catch(_){alert('このバックアップは読み込めませんでした')}};r.readAsText(f);e.target.value=''});
