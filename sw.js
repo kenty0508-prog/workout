@@ -1,7 +1,7 @@
-// Workout Log service worker v3.9.9
+// Workout Log service worker v4.1.0
 // ネットワーク優先（常に最新版を取得）＋オフライン時・電波が弱い時はキャッシュで起動。
 // 記録データは localStorage にあり、ここでは一切扱わない。
-const CACHE='workout-log-shell-v399';
+const CACHE='workout-log-shell-v410';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg','./apple-touch-icon.png','./icon-192.png','./icon-512.png'];
 const TIMEOUT_MS=4000;
 
