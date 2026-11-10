@@ -9,7 +9,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<title>Workout Log v4.3.0</title>
+<title>Workout Log v4.5.0</title>
 <style>
 :root{
   --bg:#f5f5f7;--surface:#ffffff;--text:#111111;--muted:#6e6e73;--line:#dedee3;
@@ -112,6 +112,15 @@ body:has(.restPill.show) .toast{bottom:auto}
 .restBtn.go{background:var(--brand);color:var(--brand-ink)}
 .metric b .unit{display:inline;font-size:13px;font-weight:650;color:var(--muted);margin-left:3px;letter-spacing:0}
 @media(max-width:380px){.restRing{flex-basis:56px;width:56px;height:56px}.restPill .restClock{font-size:15px}}
+/* v4.4.0 */
+.plateLine{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6;font-variant-numeric:tabular-nums}.plateLine b{color:var(--text);font-weight:650}
+.rirArea.ask .rirSummary{color:var(--accent);font-weight:650}.rirArea.ask .rirSummary b{color:var(--accent)}
+.histSum{margin-top:7px;font-size:12px;line-height:1.65;color:var(--text);font-variant-numeric:tabular-nums}.histSum span{color:var(--muted)}
+.restoreHint{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.overviewBtn.on{background:var(--brand);color:var(--brand-ink)}
+.dayCard .cardBtns{display:flex;gap:6px;flex:0 0 auto}
+.skipBadge{background:color-mix(in srgb,#ff9f0a 18%,transparent)!important;color:#c77700!important}
+@media(prefers-color-scheme:dark){.skipBadge{color:#ffb340!important}}
 </style>
 </head>
 <body data-view="workoutView">
@@ -122,21 +131,22 @@ body:has(.restPill.show) .toast{bottom:auto}
   </header>
 
   <section id="workoutView" class="view on">
+    <div class="notice restoreHint hidden" id="restoreHint"><span>記録がまだありません。以前のバックアップがあれば復元できます。</span><span style="display:flex;gap:2px"><button class="ghostAction" id="restoreNow" type="button">復元する</button><button class="ghostAction" id="restoreDismiss" type="button" aria-label="閉じる">×</button></span></div>
     <div class="sessionStrip" id="sessionStrip"></div>
     <div class="dayCard">
       <div class="dayCardMain"><div class="dayStats" id="dayStats"><span>—</span><span></span></div><div class="bar" id="dayBar"><i></i></div></div>
-      <button class="overviewBtn" id="openDailyOverview" type="button" aria-label="今日のワークアウト一覧">☷ 一覧</button>
+      <div class="cardBtns"><button class="overviewBtn" id="shortModeBtn" type="button" aria-pressed="false">時短</button><button class="overviewBtn" id="openDailyOverview" type="button" aria-label="今日のワークアウト一覧">☷ 一覧</button></div>
     </div>
     <div class="hero">
       <button class="exercisePickerTrigger" id="positionText" type="button" aria-label="種目を選ぶ">1 / 4　種目一覧</button>
       <div class="exerciseTitleRow"><div class="exerciseName" id="exerciseName">—</div><button class="exerciseMore" id="exerciseMore" type="button" aria-label="この種目のオプション">•••</button></div>
-      <div class="temporaryBadge hidden" id="temporaryBadge">今日だけ変更</div>
+      <div class="temporaryBadge hidden" id="temporaryBadge">今日だけ変更</div><div class="temporaryBadge skipBadge hidden" id="skipBadge">今日はスキップ（記録すると取り消し）</div>
       <div class="subline" id="previousLine">前回 <strong>—</strong></div>
-      <button class="subline targetToggle" id="targetLine" type="button">目標 <strong>—</strong></button><div class="targetReason hidden" id="targetReason"></div>
+      <button class="subline targetToggle" id="targetLine" type="button">目標 <strong>—</strong></button><div class="targetReason hidden" id="targetReason"></div><div class="plateLine hidden" id="plateLine"></div>
       <button id="recalcGoal" class="recalcGoal" type="button">↻ 目標の重量・回数を再計算</button>
     </div>
     <div class="divider"></div>
-    <div class="setHeader"><span></span><span>重量 kg</span><span>Reps</span><span></span></div>
+    <div class="setHeader"><span></span><span id="weightHead">重量 kg</span><span>Reps</span><span></span></div>
     <div class="setRows" id="setRows"></div>
 
     <div class="rirArea">
@@ -218,7 +228,7 @@ body:has(.restPill.show) .toast{bottom:auto}
         <button class="groupRow" id="resetProgram" type="button" style="width:100%;background:transparent;text-align:left"><div><div class="groupLabel" style="color:var(--danger)">メニューを初期状態に戻す</div><div class="groupMeta">履歴は残ります</div></div><div class="chev">›</div></button>
       </div>
     </div>
-    <div class="date" style="text-align:center;padding:8px 0 20px">Workout Log v4.3.0 · データは端末内に保存</div>
+    <div class="date" style="text-align:center;padding:8px 0 20px">Workout Log v4.5.0 · データは端末内に保存</div>
   </section>
 </main>
 
@@ -267,6 +277,7 @@ body:has(.restPill.show) .toast{bottom:auto}
     </div>
     <button class="primaryAction" id="applySubstitute" type="button">今日だけ変更</button>
     <button class="secondaryAction hidden" id="restoreOriginal" type="button" style="margin-top:8px">元の種目に戻す</button>
+    <button class="secondaryAction" id="skipExercise" type="button" style="margin-top:8px">今日はこの種目をスキップ</button>
     <button class="ghostAction" id="closeSubstitute" type="button" style="width:100%;margin-top:4px">キャンセル</button>
   </div>
 </div>
@@ -817,9 +828,15 @@ function activeLog(create=false){
   if(!l&&create){l={id:a.id,date:a.date,session:a.session,startedAt:a.startedAt||Date.now(),endedAt:null,exercises:[],condition:state.conditions[a.date]||{}};state.logs.push(l)}
   return l
 }
+// v4.5.0: 時短モード（メイン種目は最大2セット減・最低3セット、他の種目は2セットまで）とスキップ。
+function shortSets(n,isMain){n=Math.max(1,+n||1);return isMain?(n>3?Math.max(3,n-2):n):Math.min(n,2)}
 function effectiveExercise(baseEx){
-  const sub=state.active?.substitutions?.[baseEx?.id];return sub||baseEx
+  const sub=state.active?.substitutions?.[baseEx?.id];let ex=sub||baseEx;const a=state.active;
+  if(ex&&a?.shortMode&&a.session){const list=state.program[a.session]||[],i=list.indexOf(baseEx);if(i>=0){const n=shortSets(ex.sets,i===0);if(n!==(+ex.sets||1))ex={...ex,sets:n}}}
+  return ex
 }
+function baseIdOf(ex){return ex?.temporary?ex.replacedId:ex?.id}
+function isSkipped(baseEx){const a=state.active;return !!(baseEx&&a?.skipped?.[baseEx.id]&&a.session===session&&activeIsCurrent(a))}
 function findActiveExerciseById(id){
   const list=state.program[state.active?.session]||[];for(const base of list){const ex=effectiveExercise(base);if(ex?.id===id)return ex}return null
 }
@@ -859,7 +876,7 @@ function target(ex){
   const distinct=[...new Set(ws)];
   const mixed=distinct.length>1;
   // 前回に記録がない追加セットは当該日の初回重量にする。
-  const weights=Array.from({length:count},(_,i)=>ws[i]??base);
+  const weights=Array.from({length:count},(_,i)=>ws[i]??ws[ws.length-1]??base);
   const reps=Array.from({length:count},(_,i)=>{
     const prior=ps[i];if(!prior)return min;
     const r=Math.max(0,Math.floor(+prior.r||0));
@@ -900,7 +917,11 @@ function applyTargetToDraft(d,ex,goal){
 }
 function ensureDraft(ex){
   const a=ensureActive();if(!a.drafts)a.drafts={};
-  if(a.drafts[ex.id])return a.drafts[ex.id];
+  if(a.drafts[ex.id]){const d=a.drafts[ex.id];if(!d.dirty&&!(d.sets||[]).some(x=>x.done)){applyTargetToDraft(d,ex,target(ex));return d}
+    const n=Math.max(1,+ex.sets||1);if(!Array.isArray(d.sets))d.sets=[];
+    if(d.sets.length>n){while(d.sets.length>n&&!d.sets[d.sets.length-1].done)d.sets.pop()}
+    else if(d.sets.length<n){const g=target(ex);for(let i=d.sets.length;i<n;i++)d.sets.push({w:g.weights[i]??d.sets[d.sets.length-1]?.w??0,r:g.reps[i]??ex.min,rir:'',done:false,restAfter:null})}
+    return d}
   const goal=target(ex),d={name:ex.name,sets:[],rir:'',why:goal.why,dirty:false};
   applyTargetToDraft(d,ex,goal);a.drafts[ex.id]=d;persist();return d;
 }
@@ -915,15 +936,15 @@ $('#recalcGoal').addEventListener('click',recalculateGoal);
 function syncActiveExercise(ex){
   const a=ensureActive(),d=a.drafts[ex.id],completed=(d?.sets||[]).filter(s=>s.done);const l=activeLog(completed.length>0);if(!l)return;
   const pos=l.exercises.findIndex(x=>x.id===ex.id);if(!completed.length){if(pos>=0)l.exercises.splice(pos,1)}else{const item={id:ex.id,name:ex.name,temporary:!!ex.temporary,replacedId:ex.replacedId||null,replacedName:ex.replacedName||null,sets:completed.map(s=>({w:+s.w||0,r:+s.r||0,rir:s.rir||'',restAfter:s.restAfter||null,done:true})),rir:d.rir||''};if(pos>=0)l.exercises[pos]=item;else l.exercises.push(item)}
-  l.condition=state.conditions[a.date]||{};persist();renderProgress()
+  l.condition=state.conditions[a.date]||{};if(a.shortMode)l.shortMode=true;else delete l.shortMode;persist();renderProgress()
 }
 function hasWork(a=state.active){if(!a)return false;return Object.values(a.drafts||{}).some(d=>d.dirty||(d.sets||[]).some(s=>s.done))}
 function exerciseDoneCount(baseEx){const ex=effectiveExercise(baseEx),d=state.active?.drafts?.[ex.id];return (d?.sets||[]).filter(s=>s.done).length}
-function exerciseIsComplete(baseEx){const ex=effectiveExercise(baseEx);return exerciseDoneCount(baseEx)>=Math.max(1,+ex.sets||1)}
+function exerciseIsComplete(baseEx){if(isSkipped(baseEx))return true;const ex=effectiveExercise(baseEx);return exerciseDoneCount(baseEx)>=Math.max(1,+ex.sets||1)}
 function nextIncompleteIndex(fromIdx){const list=state.program[session]||[];if(list.length<=1)return null;for(let step=1;step<list.length;step++){const j=(fromIdx+step)%list.length;if(!exerciseIsComplete(list[j]))return j}return null}
-function remainingSetCount(){const list=state.program[session]||[];return list.reduce((sum,base)=>{const ex=effectiveExercise(base);return sum+Math.max(0,(+ex.sets||0)-exerciseDoneCount(base))},0)}
+function remainingSetCount(){const list=state.program[session]||[];return list.reduce((sum,base)=>{if(isSkipped(base))return sum;const ex=effectiveExercise(base);return sum+Math.max(0,(+ex.sets||0)-exerciseDoneCount(base))},0)}
 function goToExercise(newIdx){const list=state.program[session]||[];if(newIdx<0||newIdx>=list.length||newIdx===idx)return;idx=newIdx;ensureActive().currentIndex=idx;persist();rirOpen=false;closeExercisePicker();renderWorkout()}
-function renderExercisePicker(){const list=state.program[session]||[],box=$('#exercisePickerList');box.innerHTML='';list.forEach((base,i)=>{const ex=effectiveExercise(base),done=exerciseDoneCount(base),total=Math.max(1,+ex.sets||1),complete=done>=total,b=document.createElement('button');b.type='button';b.className='exercisePick'+(i===idx?' current':'');const status=complete?'完了':done>0?`${done}/${total}セット`:'未着手';b.innerHTML=`<div><div class="exercisePickName">${i===idx?'<span class="exercisePickDot"></span>':''}${esc(ex.name)}</div>${ex.temporary?'<div class="tempLabel">今日だけ変更</div>':''}</div><div class="exercisePickStatus${complete?' done':''}">${complete?'✓ ':''}${status}</div>`;b.addEventListener('click',()=>{if(i===idx){closeExercisePicker();return}goToExercise(i)});box.appendChild(b)});const remain=remainingSetCount();$('#exercisePickerHint').textContent=remain?`残り ${remain}セット · 空いている種目から選べます`:'すべての予定セットが完了しています'}
+function renderExercisePicker(){const list=state.program[session]||[],box=$('#exercisePickerList');box.innerHTML='';list.forEach((base,i)=>{const ex=effectiveExercise(base),done=exerciseDoneCount(base),total=Math.max(1,+ex.sets||1),complete=done>=total,b=document.createElement('button');b.type='button';b.className='exercisePick'+(i===idx?' current':'');const skipped=isSkipped(base),status=skipped?(done?`${done}セットで終了`:'スキップ'):complete?'完了':done>0?`${done}/${total}セット`:'未着手';b.innerHTML=`<div><div class="exercisePickName">${i===idx?'<span class="exercisePickDot"></span>':''}${esc(ex.name)}</div>${ex.temporary?'<div class="tempLabel">今日だけ変更</div>':''}</div><div class="exercisePickStatus${complete?' done':''}">${complete?'✓ ':''}${status}</div>`;b.addEventListener('click',()=>{if(i===idx){closeExercisePicker();return}goToExercise(i)});box.appendChild(b)});const remain=remainingSetCount();$('#exercisePickerHint').textContent=remain?`残り ${remain}セット · 空いている種目から選べます`:'すべての予定セットが完了しています'}
 function openExercisePicker(){renderExercisePicker();$('#exercisePickerSheet').classList.add('show')}
 function closeExercisePicker(){$('#exercisePickerSheet').classList.remove('show')}
 
@@ -938,6 +959,7 @@ function openSubstituteSheet(){
   $('#substituteOriginal').textContent=`元の種目：${base.name}`;
   $('#substituteName').value=isTemp?ex.name:'';$('#substituteWeight').value=isTemp?(+ex.weight||''):(+base.weight||'');
   $('#restoreOriginal').classList.toggle('hidden',!isTemp);
+  $('#skipExercise').textContent=isSkipped(base)?'スキップを取り消す':'今日はこの種目をスキップ';
   const recent=recentTemporaryExercises().filter(x=>x.name!==ex.name),wrap=$('#recentAltWrap'),list=$('#recentAltList');list.innerHTML='';
   recent.forEach(e=>{const b=document.createElement('button');b.type='button';b.textContent=e.name;b.addEventListener('click',()=>{$('#substituteName').value=e.name;const last=prevExercise({id:e.id,name:e.name});if(last?.sets?.length)$('#substituteWeight').value=+last.sets[0].w||''}) ;list.appendChild(b)});
   wrap.classList.toggle('hidden',!recent.length);$('#substituteSheet').classList.add('show');setTimeout(()=>$('#substituteName').focus(),80)
@@ -962,12 +984,25 @@ $('#closeSubstitute').addEventListener('click',closeSubstituteSheet);
 $('#substituteSheet').addEventListener('click',e=>{if(e.target===$('#substituteSheet'))closeSubstituteSheet()});
 $('#applySubstitute').addEventListener('click',applySubstitute);
 $('#restoreOriginal').addEventListener('click',restoreOriginalExercise);
+$('#skipExercise').addEventListener('click',()=>{
+  const base=currentBaseExercise();if(!base)return;const a=ensureActive();if(!a.skipped)a.skipped={};
+  if(a.skipped[base.id]){delete a.skipped[base.id];persist();closeSubstituteSheet();renderWorkout();showToast('スキップを取り消しました');return}
+  const ex=effectiveExercise(base),d=a.drafts?.[ex.id];if(d&&!(d.sets||[]).some(x=>x.done))delete a.drafts[ex.id];
+  a.skipped[base.id]=true;persist();closeSubstituteSheet();rirOpen=false;
+  const next=nextIncompleteIndex(idx);if(next!==null)goToExercise(next);else renderWorkout();
+  showToast('今日はスキップしました。次回の目標は前回の記録から計算します',3000);
+});
+$('#shortModeBtn').addEventListener('click',()=>{
+  const a=ensureActive();a.shortMode=!a.shortMode;persist();renderWorkout();
+  showToast(a.shortMode?`時短モード：メイン種目優先・残り約${Math.round(workoutStats().remainSec/60)}分`:`時短モードを解除しました（残り約${Math.round(workoutStats().remainSec/60)}分）`,3000);
+});
 
 let lastStripSession=null;
 function renderSessions(){const strip=$('#sessionStrip'),rec=suggestedSession();strip.innerHTML='';Object.keys(state.program).forEach(name=>{const b=document.createElement('button');b.className='sessionBtn'+(name===session?' on':'');b.type='button';b.title=name;b.setAttribute('aria-label',name+(name===rec&&name!==session?'（次の予定）':''));const m=name.match(/^(Day\s*\d+)\s*(.*)$/);b.innerHTML=`${name===rec&&name!==session?'<i class="sessNext" aria-hidden="true"></i>':''}${m?`<b>${esc(m[1])}</b>${m[2]?`<span class="sessSub">${esc(m[2])}</span>`:''}`:esc(name)}`;b.addEventListener('click',()=>switchSession(name));strip.appendChild(b)});if(lastStripSession!==session){lastStripSession=session;const on=strip.querySelector('.on');if(on)strip.scrollLeft=Math.max(0,on.offsetLeft-strip.clientWidth/2+on.offsetWidth/2)}}
 // v3.9.8: 進捗（セット数）・経過時間・残り時間の目安。1セット45秒＋設定休憩で概算。
-function workoutStats(){const list=state.program[session]||[];let total=0,done=0,remainSec=0;list.forEach(base=>{const ex=effectiveExercise(base),n=Math.max(1,+ex.sets||1),d=Math.min(n,exerciseDoneCount(base));total+=n;done+=d;remainSec+=(n-d)*(45+(+ex.restSec||defaultRestSec(ex.name)))});return {total,done,remainSec}}
+function workoutStats(){const list=state.program[session]||[];let total=0,done=0,remainSec=0;list.forEach(base=>{const ex=effectiveExercise(base),d0=exerciseDoneCount(base),n=isSkipped(base)?d0:Math.max(1,+ex.sets||1),d=Math.min(n,d0);total+=n;done+=d;remainSec+=(n-d)*(45+(+ex.restSec||defaultRestSec(ex.name)))});return {total,done,remainSec}}
 function renderDayCard(){
+  const sb=$('#shortModeBtn');if(sb){const on=!!(state.active?.shortMode&&state.active.session===session&&activeIsCurrent());sb.classList.toggle('on',on);sb.setAttribute('aria-pressed',String(on));sb.textContent=on?'時短 ON':'時短'}
   const box=$('#dayStats');if(!box)return;const {total,done,remainSec}=workoutStats(),a=state.active;
   const started=activeIsCurrent(a)&&a.session===session&&a.startedAt;const elapsed=started?Math.max(0,Math.round((Date.now()-a.startedAt)/60000)):0;const remain=Math.round(remainSec/60);
   let right;if(done>=total&&total)right=started?`完了 · <b>${elapsed}分</b>`:'完了';else if(started)right=`経過 <b>${elapsed}分</b> · <span class="${elapsed+remain>65?'warn':''}">残り約${remain}分</span>`;else right=`予定 約${remain}分`;
@@ -976,18 +1011,38 @@ function renderDayCard(){
 }
 setInterval(()=>{if(!document.hidden&&$('#workoutView').classList.contains('on'))renderDayCard()},20000);
 function switchSession(name){if(name===session)return;if(activeIsCurrent()&&hasWork(state.active)){if(!confirm('現在のトレーニングを終了してセッションを切り替えますか？'))return;finishWorkout(false)}session=state.program[name]?name:suggestedSession();idx=0;state.active=null;cancelRest();renderWorkout()}
+// v4.4.0: BIG3のプレート（片側）とアップの目安。
+const PLATES=[25,20,15,10,5,2.5,1.25];
+function platesFor(w){let side=(+w-20)/2;if(!(side>0))return null;const out=[];for(const p of PLATES){while(side>=p-1e-9){out.push(p);side=Math.round((side-p)*100)/100}}return {out,rest:side}}
+const round25=x=>Math.round(x/2.5)*2.5;
+function warmupText(w){const steps=[[20,10]];for(const [f,r] of [[.5,5],[.7,3],[.85,1]]){const v=round25(w*f);if(v>steps[steps.length-1][0]&&v<w)steps.push([v,r])}return steps.map(([v,r])=>`${trimNum(v)}×${r}`).join(' → ')}
+function renderPlateLine(ex,d){
+  const el=$('#plateLine');if(!el)return;
+  if(!BIG3_IDS.includes(ex?.id)||ex.temporary){el.classList.add('hidden');return}
+  const next=d.sets.find(x=>!x.done)||d.sets[d.sets.length-1],w=+next?.w||0;
+  if(w<20){el.classList.add('hidden');return}
+  const pl=platesFor(w),plate=pl?`片側 <b>${pl.out.map(trimNum).join(' + ')}</b>${pl.rest>0?'（端数あり）':''}`:'<b>バーのみ</b>';
+  const warm=!d.sets.some(x=>x.done)&&w>=40?`<br>アップ ${warmupText(w)}`:'';
+  el.innerHTML=`${trimNum(w)}kg：${plate}（20kgバー）${warm}`;el.classList.remove('hidden');
+}
+function renderRestoreHint(){
+  const el=$('#restoreHint');if(!el)return;
+  const empty=!state.logs.some(l=>(l.exercises||[]).length);
+  el.classList.toggle('hidden',!(empty&&!state.restoreHintDismissed&&!hasWork(state.active)));
+}
+function backupOverdue(){const n=daysSince(state.lastBackupAt);return state.logs.some(l=>(l.exercises||[]).length)&&(n===null||n>=7)}
 function renderWorkout(){
   renderSessions();$('#topTitle').textContent=session;const list=state.program[session]||[];if(!list.length){$('#exerciseName').textContent='種目がありません';$('#setRows').innerHTML='';return}if(idx>=list.length)idx=list.length-1;if(idx<0)idx=0;
   const baseEx=list[idx],ex=effectiveExercise(baseEx),pr=prevRecord(ex),p=pr?.e||null,t=target(ex),d=ensureDraft(ex);state.active.currentIndex=idx;persist();
-  $('#topTitle').textContent=session;$('#positionText').textContent=`${idx+1} / ${list.length}　種目一覧`;$('#exerciseName').textContent=ex.name;$('#temporaryBadge').classList.toggle('hidden',!ex.temporary);
-  $('#previousLine').innerHTML=`前回${pr?`（${esc(shortDate(pr.l.date))}）`:''} <strong>${p?(p.sets||[]).map(fmtSet).join(' / '):'未記録'}</strong>${p&&p.rir!==''&&p.rir!=null?` <span class="nw">· RIR ${esc(p.rir)}</span>`:''}`;
-  $('#targetLine').innerHTML=`目標 <strong>${d.sets.map(x=>fmtSet(x)).join(' / ')}</strong>`;$('#targetReason').textContent=d.why||t.why;$('#targetReason').classList.add('hidden');$('#recalcGoal').classList.toggle('hidden',d.sets.some(x=>x.done));
+  $('#topTitle').textContent=session;$('#positionText').textContent=`${idx+1} / ${list.length}　種目一覧`;$('#exerciseName').textContent=ex.name;$('#temporaryBadge').classList.toggle('hidden',!ex.temporary);$('#skipBadge').classList.toggle('hidden',!isSkipped(baseEx));
+  $('#previousLine').innerHTML=`前回${pr?`（${esc(shortDate(pr.l.date))}）`:''} <strong>${p?esc(compactShareSets(p).main):'未記録'}</strong>${p&&p.rir!==''&&p.rir!=null?` <span class="nw">· RIR ${esc(p.rir)}</span>`:''}`;
+  $('#targetLine').innerHTML=`目標 <strong>${esc(compactShareSets({id:ex.id,sets:d.sets}).main)}</strong>`;$('#weightHead').textContent=BW_IDS.has(ex.id)?'加重 kg':'重量 kg';renderPlateLine(ex,d);$('#targetReason').textContent=d.why||t.why;$('#targetReason').classList.add('hidden');$('#recalcGoal').classList.toggle('hidden',d.sets.some(x=>x.done));
   const rows=$('#setRows');rows.innerHTML='';
   const nextIncomplete=d.sets.findIndex(s=>!s.done);d.sets.forEach((s,i)=>{const row=document.createElement('div');row.className='setRow'+(s.done?' isDone':'')+(i===nextIncomplete?' current':'');const disabled=!s.done&&nextIncomplete>=0&&i!==nextIncomplete;row.innerHTML=`<div class="setIndex">${i+1}</div><input class="num weightInput" data-i="${i}" type="number" inputmode="decimal" step=".25" min="0" value="${s.w||''}" aria-label="${i+1}セット目 重量"><input class="num repsInput" data-i="${i}" type="number" inputmode="numeric" min="0" max="100" value="${s.r||''}" aria-label="${i+1}セット目 回数"><button class="check${s.done?' done':''}" data-i="${i}" type="button" aria-label="${i+1}セット目 完了"${disabled?' disabled':''}>${s.done?'✓':'○'}</button>`;rows.appendChild(row)});
-  $$('.weightInput,.repsInput').forEach(inp=>inp.addEventListener('input',()=>{const i=+inp.dataset.i,s=d.sets[i];if(inp.classList.contains('weightInput'))s.w=Math.max(0,+inp.value||0);else s.r=Math.max(0,+inp.value||0);d.dirty=true;d.why='手動入力した重量・回数を表示中（必要なら再計算できます）';$('#targetLine').querySelector('strong').textContent=d.sets.map(fmtSet).join(' / ');$('#targetReason').textContent=d.why;persist();if(s.done)syncActiveExercise(ex)}));
+  $$('.weightInput,.repsInput').forEach(inp=>inp.addEventListener('input',()=>{const i=+inp.dataset.i,s=d.sets[i];if(inp.classList.contains('weightInput')){const old=+s.w||0;s.w=Math.max(0,+inp.value||0);if(!s.done)d.sets.forEach((x,j)=>{if(j>i&&!x.done&&(+x.w||0)===old){x.w=s.w;const el=document.querySelector(`.weightInput[data-i="${j}"]`);if(el)el.value=s.w||''}})}else s.r=Math.max(0,+inp.value||0);d.dirty=true;d.why='手動入力した重量・回数を表示中（必要なら再計算できます）';$('#targetLine').querySelector('strong').textContent=compactShareSets({id:ex.id,sets:d.sets}).main;renderPlateLine(ex,d);$('#targetReason').textContent=d.why;persist();if(s.done)syncActiveExercise(ex)}));
   $$('.check').forEach(b=>b.addEventListener('click',()=>toggleSet(ex,+b.dataset.i)));
-  $('#rirValue').textContent=d.rir===''?'未入力':`RIR ${d.rir}`;renderRirPicker(d,ex);
-  const nextIdx=nextIncompleteIndex(idx),currentComplete=exerciseIsComplete(ex),remain=remainingSetCount();$('#nextExercise').textContent=!currentComplete&&nextIdx===null?'残りセットを実施':remain===0?'トレーニング完了':'次の種目';$('#previousExercise').classList.toggle('hidden',idx===0);renderCondition();renderRest();renderDayCard();
+  const allDone=d.sets.length>0&&d.sets.every(x=>x.done);$('.rirArea').classList.toggle('ask',allDone&&d.rir==='');$('#rirValue').textContent=d.rir===''?(allDone?'選んでください（重量アップの判定に使用）':'未入力'):`RIR ${d.rir}`;renderRirPicker(d,ex);renderRestoreHint();
+  const nextIdx=nextIncompleteIndex(idx),currentComplete=exerciseIsComplete(ex),remain=remainingSetCount();$('#nextExercise').textContent=!currentComplete&&nextIdx===null?'トレーニングを終了':remain===0?'トレーニング完了':'次の種目';$('#previousExercise').classList.toggle('hidden',idx===0);renderCondition();renderRest();renderDayCard();
 }
 function showAppView(viewId){
   document.body.dataset.view=viewId;
@@ -1000,23 +1055,24 @@ function renderDailyOverview(){
   $('#dailyOverviewList').innerHTML=list.map((base,i)=>{
     const ex=effectiveExercise(base),previous=prevExercise(ex),draft=activeIsCurrent()&&state.active?.session===session?state.active?.drafts?.[ex.id]:null;
     const t=target(ex),sets=draft?.sets||t.reps.map((r,j)=>({w:t.weights[j]??0,r,done:false}));
-    const prior=previous?.sets?.map(fmtSet).join(' / ')||'記録なし';
-    const planned=sets.map(x=>`${trimNum(x.w||0)}kg × ${x.r}回`).join(' / ');
-    const finished=sets.filter(x=>x.done).map(fmtSet).join(' / ');
-    return `<div class="group" style="padding:14px"><button class="groupLabel" type="button" data-overview-index="${i}" style="background:transparent;text-align:left;width:100%">${i+1}. ${esc(ex.name)} <span style="color:var(--accent);float:right">開く ›</span></button><div class="groupMeta">${sets.filter(x=>x.done).length}/${sets.length}セット完了${ex.temporary?' · 今日だけ変更':''}</div><div style="margin-top:10px;font-size:13px;line-height:1.9"><div>前回：${esc(prior)}</div><div><b>今回目標：${esc(planned)}</b></div><div>完了：${esc(finished||'未実施')}</div></div></div>`;
+    const prior=previous?.sets?.length?compactShareSets(previous).main:'記録なし';
+    const planned=compactShareSets({id:ex.id,sets}).main;
+    const doneSets=sets.filter(x=>x.done),finished=doneSets.length?compactShareSets({id:ex.id,sets:doneSets}).main:'';
+    return `<div class="group" style="padding:14px"><button class="groupLabel" type="button" data-overview-index="${i}" style="background:transparent;text-align:left;width:100%">${i+1}. ${esc(ex.name)} <span style="color:var(--accent);float:right">開く ›</span></button><div class="groupMeta">${sets.filter(x=>x.done).length}/${sets.length}セット完了${ex.temporary?' · 今日だけ変更':''}${isSkipped(base)?' · スキップ':''}</div><div style="margin-top:10px;font-size:13px;line-height:1.9"><div>前回：${esc(prior)}</div><div><b>今回目標：${esc(planned)}</b></div><div>完了：${esc(finished||'未実施')}</div></div></div>`;
   }).join('');
   $$('[data-overview-index]').forEach(b=>b.addEventListener('click',()=>{goToExercise(+b.dataset.overviewIndex);showAppView('workoutView')}));
 }
 $('#openDailyOverview').addEventListener('click',()=>{renderDailyOverview();showAppView('dailyOverviewView')});
 $('#backToWorkout').addEventListener('click',()=>showAppView('workoutView'));
 
-function renderRirPicker(d,ex){const box=$('#rirPicker');box.innerHTML='';['','0','1','2','3','4+'].forEach(v=>{const b=document.createElement('button');b.type='button';b.className='rirChoice'+(String(d.rir)===v?' on':'');b.textContent=v===''?'—':v;b.addEventListener('click',()=>{d.rir=v;d.dirty=true;const done=d.sets.filter(s=>s.done);if(done.length)done[done.length-1].rir=v;persist();syncActiveExercise(ex);rirOpen=false;$('#rirPicker').classList.remove('show');$('#rirValue').textContent=v===''?'未入力':`RIR ${v}`});box.appendChild(b)});box.classList.toggle('show',rirOpen)}
+function renderRirPicker(d,ex){const box=$('#rirPicker');box.innerHTML='';['','0','1','2','3','4+'].forEach(v=>{const b=document.createElement('button');b.type='button';b.className='rirChoice'+(String(d.rir)===v?' on':'');b.textContent=v===''?'—':v;b.addEventListener('click',()=>{d.rir=v;d.dirty=true;const done=d.sets.filter(s=>s.done);if(done.length)done[done.length-1].rir=v;persist();syncActiveExercise(ex);rirOpen=false;$('#rirPicker').classList.remove('show');$('#rirValue').textContent=v===''?'未入力':`RIR ${v}`;$('.rirArea').classList.toggle('ask',v===''&&d.sets.every(x=>x.done))});box.appendChild(b)});box.classList.toggle('show',rirOpen)}
 $('#rirSummary').addEventListener('click',()=>{rirOpen=!rirOpen;$('#rirPicker').classList.toggle('show',rirOpen)});
 $('#targetLine').addEventListener('click',()=>$('#targetReason').classList.toggle('hidden'));
 
-function toggleSet(ex,i){const d=ensureDraft(ex),s=d.sets[i];d.dirty=true;ensureAudio();if(s.done){if(d.sets.slice(i+1).some(x=>x.done)){showToast('後のセットを先に取り消してください');return}if(state.timer&&state.timer.exerciseId===ex.id&&state.timer.setIndex===i)cancelRest();s.done=false;s.restAfter=null;if(d.rir!==''){d.rir='';d.sets.forEach(x=>x.rir='')}syncActiveExercise(ex);renderWorkout();showToast('完了を取り消しました');return}
-  if(state.timer){if(!confirm('休憩タイマーが進行中です。今の時点で休憩終了として記録しますか？'))return;if(!finishRest(true))return}
-  const a=ensureActive();if(!a.startedAt)a.startedAt=Date.now();if(d.rir!==''){d.rir='';d.sets.forEach(x=>x.rir='')}s.done=true;syncActiveExercise(ex);const isLast=i===d.sets.length-1;const hasNextExercise=nextIncompleteIndex(idx)!==null;if(!isLast||hasNextExercise)startRest(ex,i);renderWorkout();showToast(`${i+1}セット目を記録`)
+function toggleSet(ex,i){if(state.active?.skipped?.[baseIdOf(ex)]){delete state.active.skipped[baseIdOf(ex)];persist()}const d=ensureDraft(ex),s=d.sets[i];d.dirty=true;ensureAudio();if(s.done){if(d.sets.slice(i+1).some(x=>x.done)){showToast('後のセットを先に取り消してください');return}if(state.timer&&state.timer.exerciseId===ex.id&&state.timer.setIndex===i)cancelRest();s.done=false;s.restAfter=null;if(d.rir!==''){d.rir='';d.sets.forEach(x=>x.rir='')}syncActiveExercise(ex);renderWorkout();showToast('完了を取り消しました');return}
+  if(!(+s.r>0)){showToast('回数を入力してから記録してください');const ri=document.querySelector(`.repsInput[data-i="${i}"]`);if(ri)ri.focus();return}
+  if(state.timer){if(!finishRest(true))return}
+  const a=ensureActive();if(!a.startedAt)a.startedAt=Date.now();if(d.rir!==''){d.rir='';d.sets.forEach(x=>x.rir='')}s.done=true;syncActiveExercise(ex);if(d.sets.every(x=>x.done)&&d.rir==='')rirOpen=true;const isLast=i===d.sets.length-1;const hasNextExercise=nextIncompleteIndex(idx)!==null;if(!isLast||hasNextExercise)startRest(ex,i);renderWorkout();showToast(`${i+1}セット目を記録`)
 }
 
 // v3.9.8: 休憩中は画面スリープを防ぐ（Screen Wake Lock API）。iOSのJSは画面オフ・バックグラウンドで止まるため、
@@ -1068,17 +1124,17 @@ $('#restEnd').addEventListener('click',()=>finishRest(true));
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){if(state.timer){startRestTicker();requestWakeLock()}renderRest();renderDayCard()}});
 window.addEventListener('pageshow',()=>{if(state.timer){startRestTicker();renderRest()}});
 window.addEventListener('focus',()=>{if(state.timer)renderRest()});
-$('#nextExercise').addEventListener('click',()=>{const list=state.program[session]||[],base=list[idx],ex=effectiveExercise(base),d=ensureDraft(ex),done=d.sets.filter(s=>s.done).length,nextIdx=nextIncompleteIndex(idx),currentComplete=done>=d.sets.length;if(!currentComplete&&nextIdx===null){showToast('この種目の残りセットを完了してください');return}if(!currentComplete&&nextIdx!==null&&!confirm(`${done}/${d.sets.length}セット完了です。この種目はあとで戻れます。次へ進みますか？`))return;if(nextIdx!==null){goToExercise(nextIdx)}else finishWorkout(true)});
+$('#nextExercise').addEventListener('click',()=>{const list=state.program[session]||[],base=list[idx],ex=effectiveExercise(base),d=ensureDraft(ex),done=d.sets.filter(s=>s.done).length,nextIdx=nextIncompleteIndex(idx),currentComplete=done>=d.sets.length;if(!currentComplete&&nextIdx===null){const r=remainingSetCount();if(!confirm(`残り${r}セットを実施せずにトレーニングを終了しますか？\n記録したセットは保存され、やらなかった種目の次回の目標は前回の記録から計算されます。`))return;finishWorkout(true);return}if(!currentComplete&&nextIdx!==null&&!confirm(`${done}/${d.sets.length}セット完了です。この種目はあとで戻れます。次へ進みますか？`))return;if(nextIdx!==null){goToExercise(nextIdx)}else finishWorkout(true)});
 $('#previousExercise').addEventListener('click',()=>{if(idx>0)goToExercise(idx-1)});
 function finishWorkout(showSheet=true){if(!state.active)return;const l=activeLog(false);if(l)l.endedAt=Date.now();state.active=null;cancelRest(false);if(state.pendingPhysique391){installPhysique391();session=Object.keys(state.program)[0];}else if(state.pendingPowerbuilding390){restorePowerbuilding390();session=Object.keys(state.program)[0];}else if(state.pendingStrengthProgram){upgrade375Program();session=Object.keys(state.program)[0];}if(state.pendingProgram395)upgrade395Program();if(state.pendingProgram399&&!state.program400Applied)applyProgram399();if(state.pendingProgram400)applyProgram400();if(state.pendingProgram420)applyProgram420();if(state.pendingProgram430)applyProgram430();if(!state.program[session])session=suggestedSession();idx=0;
   // v3.9.8: 完了後は次のDayを表示（セッション切替時の終了では切り替え先を優先）。
   if(showSheet){session=suggestedSession();renderWorkout()}
-  persist();renderProgress();if(showSheet&&l){showToast('トレーニング完了');openShare()}}
+  persist();renderProgress();if(showSheet&&l){showToast(backupOverdue()?'完了 · 7日以上バックアップなし（設定から書き出し）':'トレーニング完了',backupOverdue()?4000:1500);openShare()}}
 
 $('#positionText').addEventListener('click',openExercisePicker);
 $('#closeExercisePicker').addEventListener('click',closeExercisePicker);
 $('#exercisePickerSheet').addEventListener('click',e=>{if(e.target===$('#exercisePickerSheet'))closeExercisePicker()});
-$('#finishFromPicker').addEventListener('click',()=>{const remain=remainingSetCount();if(remain>0&&!confirm(`予定セットがあと${remain}セット残っています。トレーニングを終了しますか？`))return;closeExercisePicker();finishWorkout(true)});
+$('#finishFromPicker').addEventListener('click',()=>{const remain=remainingSetCount();if(remain>0&&!confirm(`予定セットがあと${remain}セット残っています。トレーニングを終了しますか？\n記録したセットは保存され、やらなかった種目の次回の目標は前回の記録から計算されます。`))return;closeExercisePicker();finishWorkout(true)});
 
 function renderCondition(){const c=state.conditions[isoToday()]||{};$('#bodyweight').value=c.bodyweight??'';$('#waist').value=c.waist??'';$('#sleep').value=c.sleep??'';$('#fatigue').value=c.fatigue??'';const bits=[];if(c.bodyweight)bits.push(`${c.bodyweight}kg`);if(c.sleep)bits.push(`${c.sleep}h`);if(c.fatigue)bits.push(`疲労${c.fatigue}`);if(c.waist)bits.push(`W${c.waist}cm`);$('#conditionSummary').textContent=bits.length?bits.join(' · '):'未入力'}
 function saveCondition(){const c={...(state.conditions[isoToday()]||{}),waist:Math.max(0,Math.min(200,+$('#waist').value||0))||'',bodyweight:Math.max(0,+$('#bodyweight').value||0)||'',sleep:Math.max(0,Math.min(24,+$('#sleep').value||0))||'',fatigue:$('#fatigue').value||''};state.conditions[isoToday()]=c;state.logs.filter(l=>l.date===isoToday()).forEach(l=>l.condition=c);persist();renderCondition();renderProgress()}
@@ -1147,10 +1203,10 @@ function renderProgress(){
   renderStalls();
   const ws=weekStartIso(),weekDates=new Set(logged.filter(l=>l.date>=ws).map(l=>l.date+'|'+l.session));
   $('#weekMetric').textContent=`${weekDates.size}回`;$('#sessionMetric').textContent=`目標${Object.keys(state.program).length}回 · 累計${logged.length}セッション`;
-  const n=daysSince(state.lastBackupAt),needBackup=logged.length>0&&(n===null||n>=14);$('#backupNotice').classList.toggle('hidden',!needBackup);if(needBackup)$('#backupNoticeText').textContent=n===null?'バックアップがまだありません。端末の故障やアプリ削除に備えて書き出しておきましょう。':`前回のバックアップから${n}日経過しています。`;
+  const n=daysSince(state.lastBackupAt),needBackup=logged.length>0&&(n===null||n>=7);$('#backupNotice').classList.toggle('hidden',!needBackup);if(needBackup)$('#backupNoticeText').textContent=n===null?'バックアップがまだありません。端末の故障やアプリ削除に備えて書き出しておきましょう。':`前回のバックアップから${n}日経過しています。`;
   renderBackupMeta();
   const box=$('#historyList'),all=logged.slice().reverse(),items=all.slice(0,historyLimit);box.innerHTML=items.length?'':'<div class="empty">まだ記録がありません</div>';$('#moreHistory').classList.toggle('hidden',all.length<=historyLimit);
-  items.forEach(l=>{const el=document.createElement('div');el.className='historyItem';const mins=l.startedAt&&l.endedAt?Math.max(1,Math.round((l.endedAt-l.startedAt)/60000)):null;const isActive=l.id===state.active?.id;const detail=(l.exercises||[]).map(e=>`<div><b>${esc(e.name)}${e.temporary?' <span class="tempLabel">代替</span>':''}</b>　${(e.sets||[]).map(fmtSetWithRest).join(' / ')}${e.rir!==''&&e.rir!==undefined?` · RIR ${esc(e.rir)}`:''}</div>`).join('');el.innerHTML=`<div class="historyHead"><div><div class="historyTitle">${esc(l.date)} · ${esc(l.session)}</div><div class="historyMeta">${(l.exercises||[]).length}種目${mins?` · ${mins}分`:''}${isActive?' · 進行中':''}</div></div><button class="ghostAction detailBtn" type="button">詳細</button></div><div class="historyDetail">${detail}${isActive?'<div class="date" style="margin-top:8px">進行中の記録は終了後に修正できます</div>':'<button class="ghostAction editLogBtn" type="button" style="margin-top:6px">記録を修正</button>'}</div>`;el.querySelector('.detailBtn').addEventListener('click',()=>el.querySelector('.historyDetail').classList.toggle('show'));const edit=el.querySelector('.editLogBtn');if(edit)edit.addEventListener('click',()=>openHistoryEdit(l.id));box.appendChild(el)});
+  items.forEach(l=>{const el=document.createElement('div');el.className='historyItem';const mins=l.startedAt&&l.endedAt?Math.max(1,Math.round((l.endedAt-l.startedAt)/60000)):null;const isActive=l.id===state.active?.id;const detail=(l.exercises||[]).map(e=>`<div><b>${esc(e.name)}${e.temporary?' <span class="tempLabel">代替</span>':''}</b>　${(e.sets||[]).map(fmtSetWithRest).join(' / ')}${e.rir!==''&&e.rir!==undefined?` · RIR ${esc(e.rir)}`:''}</div>`).join('');const sum=(l.exercises||[]).map(e=>`<div>${esc(e.name)}${e.temporary?'（代替）':''} <span>${esc(compactShareSets(e).main)}</span></div>`).join('');el.innerHTML=`<div class="historyHead"><div><div class="historyTitle">${esc(l.date)} · ${esc(l.session)}</div><div class="historyMeta">${(l.exercises||[]).length}種目${mins?` · ${mins}分`:''}${l.shortMode?' · 時短':''}${isActive?' · 進行中':''}</div><div class="histSum">${sum}</div></div><button class="ghostAction detailBtn" type="button">詳細</button></div><div class="historyDetail">${detail}${isActive?'<div class="date" style="margin-top:8px">進行中の記録は終了後に修正できます</div>':'<button class="ghostAction editLogBtn" type="button" style="margin-top:6px">記録を修正</button>'}</div>`;el.querySelector('.detailBtn').addEventListener('click',()=>el.querySelector('.historyDetail').classList.toggle('show'));const edit=el.querySelector('.editLogBtn');if(edit)edit.addEventListener('click',()=>openHistoryEdit(l.id));box.appendChild(el)});
 }
 
 
@@ -1168,17 +1224,18 @@ $('#deleteHistoryLog').addEventListener('click',()=>{const i=state.logs.findInde
 
 function previousBefore(e,currentLog){for(let i=state.logs.indexOf(currentLog)-1;i>=0;i--){const l=state.logs[i];if(!carriedSession(l.session,currentLog.session,e))continue;const p=(l.exercises||[]).find(x=>sameExerciseRecord(x,e));if(p)return p}return null}
 // 同一重量の連続セットを "62.5kg×7/6/6" と表記し、各セットの休憩を残す。
+const BW_IDS=new Set(['ex-chinup','ex-dip']);
 function compactShareSets(ex){
-  const sets=ex?.sets||[];
+  const sets=ex?.sets||[],bw=BW_IDS.has(ex?.id);
   if(!sets.length)return {main:'記録なし',rest:''};
   const groups=[];
   sets.forEach(s=>{
-    const w=(+s.w>0)?`${trimNum(s.w)}kg`:'自重';
+    const w=(+s.w>0)?`${bw?'+':''}${trimNum(s.w)}kg`:'自重';
     let g=groups[groups.length-1];
     if(!g||g.weight!==w){g={weight:w,reps:[]};groups.push(g)}
     g.reps.push(+s.r||0);
   });
-  const main=groups.map(g=>`${g.weight}×${g.reps.join('/')}`).join(' · ');
+  const main=groups.map(g=>`${g.weight}×${g.reps.join('/')}`).join('、');
   const hasRest=sets.some(s=>+s.restAfter>0);
   const rest=hasRest?'休'+sets.map(s=>(+s.restAfter>0)?fmtTime(s.restAfter):'—').join('/') :'';
   return {main,rest};
@@ -1283,6 +1340,8 @@ $('#importFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f
 document.addEventListener('pointerdown',()=>{if(state.timerSettings.sound&&audioCtx?.state!=='running')ensureAudio()},{capture:true,passive:true});
 
 $$('.navBtn').forEach(b=>b.addEventListener('click',()=>{document.body.dataset.view=b.dataset.view;$$('.view').forEach(v=>v.classList.remove('on'));$('#'+b.dataset.view).classList.add('on');$$('.navBtn').forEach(x=>x.classList.toggle('on',x===b));if(b.dataset.view==='progressView')renderProgress();if(b.dataset.view==='settingsView'&&$('#programEditor').classList.contains('show'))beginProgramEdit()}));
+$('#restoreNow').addEventListener('click',()=>$('#importFile').click());
+$('#restoreDismiss').addEventListener('click',()=>{state.restoreHintDismissed=true;persist();renderRestoreHint()});
 $('#moreHistory').addEventListener('click',()=>{historyLimit+=20;renderProgress()});
 function renderAll(){renderWorkout();renderProgress();renderShare();renderCondition();renderRest()}
 renderAll();persist();if(state.timer){startRestTicker();requestWakeLock()}
