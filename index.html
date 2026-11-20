@@ -9,7 +9,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<title>Workout Log v4.5.0</title>
+<title>Workout Log v4.6.0</title>
 <style>
 :root{
   --bg:#f5f5f7;--surface:#ffffff;--text:#111111;--muted:#6e6e73;--line:#dedee3;
@@ -228,7 +228,7 @@ body:has(.restPill.show) .toast{bottom:auto}
         <button class="groupRow" id="resetProgram" type="button" style="width:100%;background:transparent;text-align:left"><div><div class="groupLabel" style="color:var(--danger)">メニューを初期状態に戻す</div><div class="groupMeta">履歴は残ります</div></div><div class="chev">›</div></button>
       </div>
     </div>
-    <div class="date" style="text-align:center;padding:8px 0 20px">Workout Log v4.5.0 · データは端末内に保存</div>
+    <div class="date" style="text-align:center;padding:8px 0 20px">Workout Log v4.6.0 · データは端末内に保存</div>
   </section>
 </main>
 
@@ -454,7 +454,7 @@ const PROGRAM_420={
   ]
 };
 // v4.3.0: BIG3＋チンニングを軸に、各日3種目に絞ったメニュー（ボディメイク用にサイドレイズ・上胸を残す）。
-const DEFAULT_PROGRAM={
+const PROGRAM_430={
   'Day 1 ベンチ＋上胸':[
     {id:'ex-bench',name:'ベンチプレス',weight:75,min:4,max:6,sets:5,step:2.5,restSec:240},
     {id:'ex-smithincline',name:'スミスインクラインプレス',weight:0,min:6,max:10,sets:4,step:2.5,restSec:150},
@@ -481,8 +481,50 @@ const DEFAULT_PROGRAM={
     {id:'ex-bbcurl',name:'バーベルカール',weight:30,min:8,max:12,sets:4,step:2.5,restSec:90}
   ]
 };
+// v4.6.0: BIG3は3セット、ベンチ週2回（木曜は中重量）、肩の中部・後部を強化、RDL→シーテッドレッグカール、金曜はラットプルダウン。
+const DEFAULT_PROGRAM={
+  'Day 1 ベンチ＋上胸':[
+    {id:'ex-bench',name:'ベンチプレス',weight:75,min:4,max:6,sets:3,step:2.5,restSec:240},
+    {id:'ex-smithincline',name:'スミスインクラインプレス',weight:0,min:8,max:12,sets:3,step:2.5,restSec:180},
+    {id:'ex-seatedside',name:'シーテッドダンベルサイドレイズ',weight:0,min:12,max:20,sets:4,step:1,restSec:90}
+  ],
+  'Day 2 スクワット＋脚':[
+    {id:'ex-squat',name:'バーベルスクワット',weight:77.5,min:4,max:6,sets:3,step:2.5,restSec:240},
+    {id:'ex-legcurl',name:'シーテッドレッグカール',weight:50,min:10,max:15,sets:3,step:2.5,restSec:120},
+    {id:'ex-side',name:'ダンベルサイドレイズ',weight:0,min:12,max:20,sets:3,step:1,restSec:90},
+    {id:'ex-rear',name:'リアデルトマシン',weight:0,min:15,max:20,sets:3,step:2.5,restSec:60}
+  ],
+  'Day 3 チンニング＋ベンチ軽め':[
+    {id:'ex-chinup',name:'チンニング',weight:0,min:6,max:10,sets:4,step:2.5,restSec:150},
+    {id:'ex-bench',name:'ベンチプレス',weight:62.5,min:6,max:8,sets:3,step:2.5,restSec:180},
+    {id:'ex-inclinedb',name:'インクラインダンベルプレス',weight:20,min:8,max:12,sets:2,step:2,restSec:150},
+    {id:'ex-lyingside',name:'ライイングサイドレイズ',weight:0,min:12,max:20,sets:4,step:1,restSec:60}
+  ],
+  'Day 4 デッドリフト＋背中':[
+    {id:'ex-deadlift',name:'デッドリフト',weight:85,min:3,max:5,sets:3,step:2.5,restSec:240},
+    {id:'ex-lat',name:'ラットプルダウン',weight:0,min:8,max:12,sets:3,step:2.5,restSec:150},
+    {id:'ex-row',name:'シーテッドロウ',weight:0,min:8,max:12,sets:4,step:2.5,restSec:150},
+    {id:'ex-inclinerear',name:'インクラインリアレイズ',weight:0,min:15,max:20,sets:3,step:1,restSec:60}
+  ],
+  'Day 5 肩・腕':[
+    {id:'ex-smithshoulder',name:'スミスショルダープレス',weight:0,min:6,max:10,sets:3,step:2.5,restSec:150},
+    {id:'ex-side',name:'ダンベルサイドレイズ',weight:0,min:12,max:20,sets:4,step:1,restSec:90},
+    {id:'ex-rear',name:'リアデルトマシン',weight:0,min:15,max:20,sets:3,step:2.5,restSec:60},
+    {id:'ex-dip',name:'ディップス',weight:0,min:6,max:12,sets:2,step:2.5,restSec:90},
+    {id:'ex-bbcurl',name:'バーベルカール',weight:30,min:8,max:12,sets:2,step:2.5,restSec:60}
+  ]
+};
 // v4.3.0: 旧Day（v3.9.9・v4.x）の記録を「前回」に使う。BIG3は重め／軽めの日を混同しない。
 const V4_KEYS=Object.keys(PROGRAM_400);
+const V43_KEYS=Object.keys(PROGRAM_430),DEFAULT_KEYS=Object.keys(DEFAULT_PROGRAM);
+const PRIOR_KEYS460=new Set([...Object.keys(PROGRAM_399),...V4_KEYS,...V43_KEYS].filter(k=>!DEFAULT_KEYS.includes(k)));
+// BIG3は同じ役割の旧Dayの記録だけを「前回」に使う（ベンチは重め／軽めを混同しない）。
+const BIG3_PRIOR460={
+  'Day 1 ベンチ＋上胸':{'ex-bench':[V4_KEYS[0],'Day 1 ベンチ重め＋胸・二頭']},
+  'Day 2 スクワット＋脚':{'ex-squat':[V4_KEYS[1],'Day 2 スクワット重め＋脚A']},
+  'Day 3 チンニング＋ベンチ軽め':{'ex-bench':[V4_KEYS[4],'Day 3 ベンチ軽め＋スクワット軽め＋背中']},
+  'Day 4 デッドリフト＋背中':{'ex-deadlift':['Day 5 デッドリフト＋脚B']}
+};
 const BIG3_PRIOR430={'ex-bench':[V4_KEYS[0],'Day 1 ベンチ重め＋胸・二頭'],'ex-squat':[V4_KEYS[1],'Day 2 スクワット重め＋脚A'],'ex-deadlift':[V4_KEYS[3],'Day 5 デッドリフト＋脚B']};
 // 旧メニューから引き継ぐ種目：新Day→種目ID→{day:旧Day番号, strict:BIG3は重め/軽めの日を混同しない}
 const PROGRAM400_SOURCE={
@@ -497,7 +539,12 @@ const BIG3_IDS=['ex-bench','ex-squat','ex-deadlift'];
 // 新メニューの前回記録・目標計算に、旧メニュー時代の同じ種目の記録を使えるようにする。
 function carriedSession(logSession,day,ex){
   if(logSession===day)return true;
-  if(typeof DEFAULT_PROGRAM!=='undefined'&&DEFAULT_PROGRAM[day]&&!PROGRAM_400[day]){
+  if(DEFAULT_PROGRAM[day]){
+    if(!PRIOR_KEYS460.has(logSession))return false;
+    if(BIG3_IDS.includes(ex?.id))return (BIG3_PRIOR460[day]?.[ex.id]||[]).includes(logSession);
+    return true;
+  }
+  if(PROGRAM_430[day]&&!PROGRAM_400[day]){
     if(!OLD399_KEYS.includes(logSession)&&!V4_KEYS.includes(logSession))return false;
     if(BIG3_IDS.includes(ex?.id))return (BIG3_PRIOR430[ex.id]||[]).includes(logSession);
     return true;
@@ -514,7 +561,7 @@ const dateText=()=>new Date().toLocaleDateString('ja-JP',{year:'numeric',month:'
 const uid=()=>`w-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,8)}`;
 const hashName=s=>{let h=2166136261;for(const c of String(s)){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return 'ex-'+(h>>>0).toString(36)};
 const temporaryExerciseId=(name,replacedId='')=>'alt-'+hashName(`${replacedId}|${String(name).trim()}`).slice(3);
-const CANON400={'チンニング':'ex-chinup','ディップス':'ex-dip','ライイングサイドレイズ':'ex-lyingside','シーテッドチェストプレス':'ex-seatedchest','ライイングトライセプスEX':'ex-lyingtri','ワイドプルダウン':'ex-widepulldown','アシストディップス':'ex-assistdip','シーテッドロウ':'ex-row','ラテラルレイズマシン':'ex-lateralmachine','ブルガリアンスクワット':'ex-bulgarian','ドンキーカーフ':'ex-donkeycalf','アイソラテラルロウ':'ex-isorow','ケーブルフライ（ロー→ハイ）':'ex-cablefly','インクラインレバーロウ':'ex-inclinelever','ケーブルサイドレイズ':'ex-cableside','アシストチン':'ex-assistchin','ケーブルプルオーバー':'ex-pullover'};
+const CANON400={'シーテッドダンベルサイドレイズ':'ex-seatedside','インクラインリアレイズ':'ex-inclinerear','チンニング':'ex-chinup','ディップス':'ex-dip','ライイングサイドレイズ':'ex-lyingside','シーテッドチェストプレス':'ex-seatedchest','ライイングトライセプスEX':'ex-lyingtri','ワイドプルダウン':'ex-widepulldown','アシストディップス':'ex-assistdip','シーテッドロウ':'ex-row','ラテラルレイズマシン':'ex-lateralmachine','ブルガリアンスクワット':'ex-bulgarian','ドンキーカーフ':'ex-donkeycalf','アイソラテラルロウ':'ex-isorow','ケーブルフライ（ロー→ハイ）':'ex-cablefly','インクラインレバーロウ':'ex-inclinelever','ケーブルサイドレイズ':'ex-cableside','アシストチン':'ex-assistchin','ケーブルプルオーバー':'ex-pullover'};
 function canonicalId(name){const n=String(name||'');if(CANON400[n])return CANON400[n];if(n==='インクラインダンベルカール')return 'ex-inclinecurl';if(n==='ベンチプレス')return 'ex-bench';if(n==='ダンベルカール')return 'ex-dbcurl';if(n==='バーベルカール')return 'ex-bbcurl';if(n==='ローマシン')return 'ex-rowmachine';if(n==='シーテッドケーブルロー')return 'ex-cablerow';if(n==='スミスショルダープレス')return 'ex-smithshoulder';if(n==='OHケーブルトライセプスEX')return 'ex-ohtriceps';if(n==='プレートロード・インクラインチェストプレス')return 'ex-inclineplate';if(n==='インクラインダンベルプレス')return 'ex-inclinedb';if(n==='スミスインクラインプレス')return 'ex-smithincline';if(/インクラインベンチプレス/.test(n))return 'ex-incline';if(n==='ラットプルダウン')return 'ex-lat';if(n==='シーテッドロー')return 'ex-row';if(n==='バーベルスクワット')return 'ex-squat';if(n==='レッグプレス')return 'ex-legpress';if(n==='シーテッドレッグカール')return 'ex-legcurl';if(n==='プローンレッグカール')return 'ex-pronecurl';if(n==='Standing Multi Flight サイドレイズ')return 'ex-multiside';if(/サイドレイズ/.test(n))return 'ex-side';if(n==='リアデルト')return 'ex-rear';if(n==='チェストプレス')return 'ex-chestpress';if(n==='ペックフライ')return 'ex-pecfly';if(n==='プリーチャーカール')return 'ex-preacher';if(n==='デッドリフト')return 'ex-deadlift';if(n==='レッグエクステンション')return 'ex-legext';if(n==='プレートロード・ロー')return 'ex-platerow';if(n==='Standing Multi Flight サイドレイズ')return 'ex-multiside';if(n==='トライセプスプレスダウン')return 'ex-triceps';if(n==='ショルダープレス')return 'ex-shoulderpress';if(n==='スタンディングカーフレイズ')return 'ex-calf';if(n==='ヒップスラストマシン')return 'ex-hipthrust';if(n==='アブドミナル'||n==='アブドミナルマシン')return 'ex-abs';if(n==='ラットプルダウンマシン')return 'ex-lat';if(n==='チェストプレスマシン')return 'ex-chestpress';if(n==='チェストサポート・ロー')return 'ex-chestsupportedrow';if(n==='プリーチャーカールマシン')return 'ex-preacher';if(n==='45°プレートロード・レッグプレス'||n==='45°プレートロード・レッグプレス（足位置高め）')return 'ex-legpress45';if(n==='ヒップスラスト／グルートドライブ')return 'ex-hipthrust';if(n==='プレートロード式プルダウン')return 'ex-platepulldown';if(n==='プレートロード式ロー')return 'ex-platerow';if(n==='ショルダープレスマシン')return 'ex-shoulderpress';if(n==='リアデルトマシン')return 'ex-rear';if(n==='ルーマニアンデッドリフト')return 'ex-rdl';return null}
 const trimNum=n=>Number(n).toLocaleString('ja-JP',{maximumFractionDigits:2});
 const fmtTime=sec=>{sec=Math.max(0,Math.round(+sec||0));return `${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`};
@@ -524,7 +571,7 @@ function defaultRestSec(name){const n=String(name||'');if(/ベンチ|スクワ�
 let raw=null;try{raw=JSON.parse(localStorage.getItem('workout-log-v35')||'null')}catch(_){}
 if(!raw){for(const key of ['workout-log-v34','workout-log-v33','workout-log-v32','workout-log-v31','workout-log-v3','workout-log-v2','workout-log-v1']){try{const x=JSON.parse(localStorage.getItem(key)||'null');if(x){raw=x;break}}catch(_){}}}
 let state={version:396,logs:[],memo:'',program:clone(DEFAULT_PROGRAM),conditions:{},active:null,timer:null,timerSettings:{vibrate:false,sound:true},lastBackupAt:null};
-if(raw){state.lastBackupAt=+raw.lastBackupAt||null;state.program399Applied=!!raw.program399Applied;state.program400Applied=!!raw.program400Applied;state.pendingProgram400=!!raw.pendingProgram400;state.program420Applied=!!raw.program420Applied;state.pendingProgram420=!!raw.pendingProgram420;state.program430Applied=!!raw.program430Applied;state.pendingProgram430=!!raw.pendingProgram430;state.pendingProgram399=!!raw.pendingProgram399;state.logs=Array.isArray(raw.logs)?raw.logs:[];state.memo=raw.memo||'';state.program=raw.program||clone(DEFAULT_PROGRAM);state.conditions=raw.conditions||{};state.timerSettings=raw.timerSettings||{vibrate:false,sound:true};state.active=raw.active||null;state.timer=raw.timer||null;state.pendingStrengthProgram=!!raw.pendingStrengthProgram;state.pendingPowerbuilding390=!!raw.pendingPowerbuilding390;state.pendingPhysique391=!!raw.pendingPhysique391;state.pendingProgram395=!!raw.pendingProgram395}
+if(raw){state.lastBackupAt=+raw.lastBackupAt||null;state.program399Applied=!!raw.program399Applied;state.program400Applied=!!raw.program400Applied;state.pendingProgram400=!!raw.pendingProgram400;state.program420Applied=!!raw.program420Applied;state.pendingProgram420=!!raw.pendingProgram420;state.program430Applied=!!raw.program430Applied;state.pendingProgram430=!!raw.pendingProgram430;state.program460Applied=!!raw.program460Applied;state.pendingProgram460=!!raw.pendingProgram460;state.pendingProgram399=!!raw.pendingProgram399;state.logs=Array.isArray(raw.logs)?raw.logs:[];state.memo=raw.memo||'';state.program=raw.program||clone(DEFAULT_PROGRAM);state.conditions=raw.conditions||{};state.timerSettings=raw.timerSettings||{vibrate:false,sound:true};state.active=raw.active||null;state.timer=raw.timer||null;state.pendingStrengthProgram=!!raw.pendingStrengthProgram;state.pendingPowerbuilding390=!!raw.pendingPowerbuilding390;state.pendingPhysique391=!!raw.pendingPhysique391;state.pendingProgram395=!!raw.pendingProgram395}
 // v3.9.7: enable timer sound for users migrating from v3.9.6, where it defaulted off.
 // Preserve an explicitly enabled sound setting; old false values were the prior default.
 if(raw && (+raw.version||0)<396){state.timerSettings=state.timerSettings||{};state.timerSettings.sound=true;state.timerSettings.vibrate=false;state.version=396;}
@@ -755,7 +802,7 @@ function applyProgram430(){
   const prior=state.program||{};
   const priorKeyByNum=n=>Object.keys(prior).find(k=>new RegExp('^Day\\s*'+n+'(\\D|$)').test(k));
   const strictDay={'ex-bench':1,'ex-squat':2,'ex-deadlift':4};
-  const updated=clone(DEFAULT_PROGRAM);
+  const updated=clone(PROGRAM_430);
   for(const list of Object.values(updated)){
     for(const ex of list){
       let m=null;
@@ -781,6 +828,45 @@ if(!state.program430Applied){
     const a=state.active;
     const busy=a&&activeIsCurrent(a)&&(!!a.startedAt||Object.values(a.drafts||{}).some(d=>d.dirty||(d.sets||[]).some(x=>x.done)));
     if(busy||state.pendingProgram400||state.pendingProgram420)state.pendingProgram430=true;else applyProgram430();
+  }
+}
+// v4.6.0: メニュー更新。Day1・2・4・5の名前は変えない（前回の記録はそのまま表示）。Day3は「チンニング＋ベンチ軽め」に。
+//  同じ名前の種目は、ユーザーが設定した重量・重量刻み・休憩を引き継ぐ（セット数・回数は新メニューの値）。
+let program460JustApplied=false;
+function applyProgram460(){
+  const prior=state.program||{};
+  const keyByNum=n=>Object.keys(prior).find(k=>new RegExp('^Day\\s*'+n+'(\\D|$)').test(k));
+  const dayList=n=>{const k=keyByNum(n);return k&&Array.isArray(prior[k])?prior[k]:[]};
+  const findName=(name,pref)=>{let m=pref&&dayList(pref).find(p=>p&&p.name===name);if(m)return m;for(const l of Object.values(prior)){m=(Array.isArray(l)?l:[]).find(p=>p&&p.name===name&&+p.weight>0);if(m)return m}for(const l of Object.values(prior)){m=(Array.isArray(l)?l:[]).find(p=>p&&p.name===name);if(m)return m}return null};
+  const r25=x=>Math.round(x/2.5)*2.5;
+  const updated=clone(DEFAULT_PROGRAM),keys=Object.keys(updated);
+  keys.forEach((day,di)=>{
+    const n=di+1;
+    for(const ex of updated[day]){
+      let m=null;
+      if(ex.id==='ex-bench'&&n===3){const hb=dayList(1).find(p=>p&&p.id==='ex-bench'||p&&p.name==='ベンチプレス');if(+hb?.weight>0)ex.weight=r25(+hb.weight*0.8);if(+hb?.step>=0&&hb?.step!==undefined)ex.step=+hb.step;continue}
+      if(BIG3_IDS.includes(ex.id))m=dayList(n).find(p=>p&&p.name===ex.name);
+      else m=findName(ex.name,n);
+      if(m){if(+m.weight>0)ex.weight=+m.weight;if(m.step!==undefined&&Number.isFinite(+m.step)&&+m.step>=0)ex.step=+m.step;if(+m.restSec>=30)ex.restSec=Math.min(600,+m.restSec);continue}
+      if(BIG3_IDS.includes(ex.id))continue;
+      const w=lastLoggedWeight(ex.id);if(w>0){ex.weight=w;continue}
+      const side=findName('ダンベルサイドレイズ',1)||findName('ダンベルサイドレイズ',3);
+      if(ex.id==='ex-seatedside'&&+side?.weight>0)ex.weight=+side.weight;
+      if(ex.id==='ex-lyingside'&&+side?.weight>0)ex.weight=Math.max(1,Math.round(+side.weight*0.65));
+    }
+  });
+  state.program=updated;
+  state.active=null;state.timer=null;
+  state.program460Applied=true;state.pendingProgram460=false;
+  state.version=Math.max(+state.version||0,460);
+  program460JustApplied=true;
+}
+if(!state.program460Applied){
+  if(!raw){state.program460Applied=true}
+  else{
+    const a=state.active;
+    const busy=a&&activeIsCurrent(a)&&(!!a.startedAt||Object.values(a.drafts||{}).some(d=>d.dirty||(d.sets||[]).some(x=>x.done)));
+    if(busy||state.pendingProgram400||state.pendingProgram420||state.pendingProgram430)state.pendingProgram460=true;else applyProgram460();
   }
 }
 if((+state.version||0)<399)state.version=399;
@@ -1126,7 +1212,7 @@ window.addEventListener('pageshow',()=>{if(state.timer){startRestTicker();render
 window.addEventListener('focus',()=>{if(state.timer)renderRest()});
 $('#nextExercise').addEventListener('click',()=>{const list=state.program[session]||[],base=list[idx],ex=effectiveExercise(base),d=ensureDraft(ex),done=d.sets.filter(s=>s.done).length,nextIdx=nextIncompleteIndex(idx),currentComplete=done>=d.sets.length;if(!currentComplete&&nextIdx===null){const r=remainingSetCount();if(!confirm(`残り${r}セットを実施せずにトレーニングを終了しますか？\n記録したセットは保存され、やらなかった種目の次回の目標は前回の記録から計算されます。`))return;finishWorkout(true);return}if(!currentComplete&&nextIdx!==null&&!confirm(`${done}/${d.sets.length}セット完了です。この種目はあとで戻れます。次へ進みますか？`))return;if(nextIdx!==null){goToExercise(nextIdx)}else finishWorkout(true)});
 $('#previousExercise').addEventListener('click',()=>{if(idx>0)goToExercise(idx-1)});
-function finishWorkout(showSheet=true){if(!state.active)return;const l=activeLog(false);if(l)l.endedAt=Date.now();state.active=null;cancelRest(false);if(state.pendingPhysique391){installPhysique391();session=Object.keys(state.program)[0];}else if(state.pendingPowerbuilding390){restorePowerbuilding390();session=Object.keys(state.program)[0];}else if(state.pendingStrengthProgram){upgrade375Program();session=Object.keys(state.program)[0];}if(state.pendingProgram395)upgrade395Program();if(state.pendingProgram399&&!state.program400Applied)applyProgram399();if(state.pendingProgram400)applyProgram400();if(state.pendingProgram420)applyProgram420();if(state.pendingProgram430)applyProgram430();if(!state.program[session])session=suggestedSession();idx=0;
+function finishWorkout(showSheet=true){if(!state.active)return;const l=activeLog(false);if(l)l.endedAt=Date.now();state.active=null;cancelRest(false);if(state.pendingPhysique391){installPhysique391();session=Object.keys(state.program)[0];}else if(state.pendingPowerbuilding390){restorePowerbuilding390();session=Object.keys(state.program)[0];}else if(state.pendingStrengthProgram){upgrade375Program();session=Object.keys(state.program)[0];}if(state.pendingProgram395)upgrade395Program();if(state.pendingProgram399&&!state.program400Applied)applyProgram399();if(state.pendingProgram400)applyProgram400();if(state.pendingProgram420)applyProgram420();if(state.pendingProgram430)applyProgram430();if(state.pendingProgram460)applyProgram460();if(!state.program[session])session=suggestedSession();idx=0;
   // v3.9.8: 完了後は次のDayを表示（セッション切替時の終了では切り替え先を優先）。
   if(showSheet){session=suggestedSession();renderWorkout()}
   persist();renderProgress();if(showSheet&&l){showToast(backupOverdue()?'完了 · 7日以上バックアップなし（設定から書き出し）':'トレーニング完了',backupOverdue()?4000:1500);openShare()}}
@@ -1324,7 +1410,7 @@ $('#timerSilent').addEventListener('change',()=>{state.timerSettings.silentOverr
 $('#timerVibrate').checked=!!state.timerSettings.vibrate;$('#timerSound').checked=!!state.timerSettings.sound;$('#timerVibrate').addEventListener('change',()=>{state.timerSettings.vibrate=$('#timerVibrate').checked;persist()});$('#timerSound').addEventListener('change',()=>{state.timerSettings.sound=$('#timerSound').checked;ensureAudio();persist();if(state.timerSettings.sound)showToast('「音を確認」で通知音をテストしてください')});
 $('#testTimerSound').addEventListener('click',async()=>{if(!state.timerSettings.sound){state.timerSettings.sound=true;$('#timerSound').checked=true;persist()}const ok=await ensureAudio();if(ok&&playTimerTone())showToast('音が鳴らない場合は音量・消音モードをご確認ください');else showToast('音声の有効化に失敗しました。Safariで再度お試しください')});
 $('#testTimerVibrate').addEventListener('click',()=>{if(typeof navigator.vibrate!=='function'){showToast('このiPhone環境ではWebアプリの振動に対応していません');return}try{const ok=navigator.vibrate([180,100,180]);showToast(ok===false?'振動を開始できません。iOSの制限の可能性があります':'振動テストを実行しました')}catch(_){showToast('このiPhone環境では振動を利用できません')}});
-$('#resetProgram').addEventListener('click',()=>{if(state.active?.startedAt){showToast('トレーニング終了後に変更できます');return}if(confirm('履歴を残したまま、メニューだけ初期状態に戻しますか？')){state.program=clone(DEFAULT_PROGRAM);state.pendingStrengthProgram=false;state.version=Math.max(+state.version||0,399);state.pendingProgram395=false;state.pendingPhysique391=false;state.pendingPowerbuilding390=false;state.program399Applied=true;state.pendingProgram399=false;state.program400Applied=true;state.pendingProgram400=false;state.program420Applied=true;state.pendingProgram420=false;state.program430Applied=true;state.pendingProgram430=false;state.version=Math.max(+state.version||0,430);state.active=null;programEditDraft=null;editSessionKey=null;session=Object.keys(DEFAULT_PROGRAM)[0];idx=0;persist();renderWorkout();showToast('メニューを初期化しました')}});
+$('#resetProgram').addEventListener('click',()=>{if(state.active?.startedAt){showToast('トレーニング終了後に変更できます');return}if(confirm('履歴を残したまま、メニューだけ初期状態に戻しますか？')){state.program=clone(DEFAULT_PROGRAM);state.pendingStrengthProgram=false;state.version=Math.max(+state.version||0,399);state.pendingProgram395=false;state.pendingPhysique391=false;state.pendingPowerbuilding390=false;state.program399Applied=true;state.pendingProgram399=false;state.program400Applied=true;state.pendingProgram400=false;state.program420Applied=true;state.pendingProgram420=false;state.program430Applied=true;state.pendingProgram430=false;state.program460Applied=true;state.pendingProgram460=false;state.version=Math.max(+state.version||0,460);state.active=null;programEditDraft=null;editSessionKey=null;session=Object.keys(DEFAULT_PROGRAM)[0];idx=0;persist();renderWorkout();showToast('メニューを初期化しました')}});
 // v3.9.8: iPhoneでは共有シート（「ファイルに保存」等）で書き出す。非対応ならダウンロード。
 function markBackup(){state.lastBackupAt=Date.now();persist();renderBackupMeta();renderProgress()}
 async function exportBackup(){
@@ -1346,7 +1432,7 @@ $('#moreHistory').addEventListener('click',()=>{historyLimit+=20;renderProgress(
 function renderAll(){renderWorkout();renderProgress();renderShare();renderCondition();renderRest()}
 renderAll();persist();if(state.timer){startRestTicker();requestWakeLock()}
 try{navigator.storage?.persist?.().catch(()=>{})}catch(_){}
-if(program430JustApplied&&raw)setTimeout(()=>showToast('メニュー更新：BIG3＋チンニング中心の各日3種目に切り替えました（履歴・重量は引き継ぎ）',5000),400);else if(program420JustApplied&&raw)setTimeout(()=>showToast('メニュー更新：ケーブル種目なし・肩プレス／ディップス／チェストプレスを追加（履歴・重量は引き継ぎ）',5000),400);else if(program400JustApplied&&raw)setTimeout(()=>showToast('メニュー更新：GEEKFIT. MEIKE用の5日メニューに切り替えました（履歴・重量は引き継ぎ）',5000),400);else if(program399JustApplied&&raw)setTimeout(()=>showToast('メニュー更新：Day1に背中・二頭、Day4は上部胸を3セットに',4500),400);if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+if(program460JustApplied&&raw)setTimeout(()=>showToast('メニュー更新：BIG3は3セット・ベンチ週2回・肩の中部／後部を強化（履歴・重量は引き継ぎ）',5000),400);else if(program430JustApplied&&raw)setTimeout(()=>showToast('メニュー更新：BIG3＋チンニング中心の各日3種目に切り替えました（履歴・重量は引き継ぎ）',5000),400);else if(program420JustApplied&&raw)setTimeout(()=>showToast('メニュー更新：ケーブル種目なし・肩プレス／ディップス／チェストプレスを追加（履歴・重量は引き継ぎ）',5000),400);else if(program400JustApplied&&raw)setTimeout(()=>showToast('メニュー更新：GEEKFIT. MEIKE用の5日メニューに切り替えました（履歴・重量は引き継ぎ）',5000),400);else if(program399JustApplied&&raw)setTimeout(()=>showToast('メニュー更新：Day1に背中・二頭、Day4は上部胸を3セットに',4500),400);if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script>
 </body>
 </html>
